@@ -19,7 +19,6 @@
 locals {
   _prefix = var.project_id
   _prefix_first_element           =  local._prefix #element(split("-", local._prefix), 0)
-  #_useradmin_fqn                  = format("admin@%s", var.org_id)
   _data_gen_git_repo              = "https://github.com/mansim07/datamesh-datagenerator"
   _metastore_service_name         = "metastore-service"
   _customers_bucket_name          = format("%s_customers_raw_data", local._prefix_first_element)
@@ -31,6 +30,7 @@ locals {
   _merchants_curated_bucket_name  = format("%s_merchants_curated_data", local._prefix_first_element)
   _dataplex_process_bucket_name   = format("%s_dataplex_process", local._prefix_first_element) 
   _dataplex_bqtemp_bucket_name    = format("%s_dataplex_temp", local._prefix_first_element) 
+  _bucket_prefix = var.project_id
 }
 
 provider "google" {
@@ -47,7 +47,9 @@ locals {
 
 
 
-
+##########################################################################################################
+# This module runs the data generator, creates the gcs buckets and bq datasets and stages the data in the raw layer
+##########################################################################################################
 
 module "stage_data" {
   # Run this as the currently logged in user or the service account (assuming DevOps)
@@ -65,6 +67,25 @@ module "stage_data" {
   transactions_curated_bucket_name      = local._transactions_curated_bucket_name
   transactions_ref_bucket_name          = local._transactions_ref_bucket_name
 
-  #depends_on = [time_sleep.sleep_after_network_and_iam_steps]
 }
+
+
+module "iam_setup" {
+  # Run this as the currently logged in user or the service account (assuming DevOps)
+  source                                = "./modules/iam"
+  project_id                            = var.project_id
+
+  depends_on = [module.stage_data]
+}
+
+module "stage_code" {
+ project_id                            = var.project_id
+ location                              = var.location
+ dataplex_process_bucket_name = local._dataplex_process_bucket_name
+ dataplex_bqtemp_bucket_name = local._dataplex_bqtemp_bucket_name  
+ depends_on = [module.iam_setup]
+
+}
+
+
 

@@ -1,9 +1,9 @@
 #!/bin/bash
 #set -x
-if [ "$#" -ne 4 ]; then
+if [ "$#" -ne 2 ]; then
     echo "Illegal number of parameters"
     echo "Usage: ./deploy_helper.sh <project-d> <ldap>"
-    echo "Example: ./deploy_helper.sh my-datastore my-datagov jayoleary 123"
+    echo "Example: ./deploy_helper.sh my-datastore jayoleary"
     exit 1
 fi
 GCP_PROJECT_ID=$1

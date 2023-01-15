@@ -76,7 +76,7 @@ For Argolis, use your-corp-email-without-@google.com
 7. Trigger the terraform script to setup the infrastructure 
 
     ```bash 
-    cd ~/dataplex-labs/oneclick/
+    cd ~/dataplex-labs/setup/
     source ~/.profile
     bash deploy-helper.sh ${PROJECT_ID} ${USERNAME}
     ```
