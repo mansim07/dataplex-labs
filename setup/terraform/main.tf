@@ -69,6 +69,9 @@ module "stage_data" {
 
 }
 
+####################################################################################
+# Compute IAM Setup 
+####################################################################################
 
 module "iam_setup" {
   # Run this as the currently logged in user or the service account (assuming DevOps)
@@ -78,14 +81,83 @@ module "iam_setup" {
   depends_on = [module.stage_data]
 }
 
+####################################################################################
+# Stage the code artifacts 
+# 1. Create the tag templates 
+# 2. Copy all all dq configs and common libraries
+####################################################################################
+
 module "stage_code" {
+ source                                = "./modules/stage_code"
  project_id                            = var.project_id
  location                              = var.location
  dataplex_process_bucket_name = local._dataplex_process_bucket_name
  dataplex_bqtemp_bucket_name = local._dataplex_bqtemp_bucket_name  
+ 
  depends_on = [module.iam_setup]
 
 }
 
 
+####################################################################################
+# Organize the Data
+####################################################################################
+module "organize_data" {
+  # Run this as the currently logged in user or the service account (assuming DevOps)
+  source                 = "./modules/organize_data"
+  #metastore_service_name = local._metastore_service_name
+  project_id             = var.project_id
+  location               = var.location
+  lake_name              = var.lake_name
+  project_number         = local._project_number
+  datastore_project_id   = var.project_id
+   
+  depends_on = [module.stage_code]
 
+}
+
+
+####################################################################################
+# Register the Data Assets in Dataplex
+####################################################################################
+module "register_assets" {
+  # Run this as the currently logged in user or the service account (assuming DevOps)
+  source                                = "./modules/register_assets"
+  project_id                            = var.project_id
+  project_number                        = local._project_number
+  location                              = var.location
+  lake_name                             = var.lake_name
+  customers_bucket_name                 = local._customers_bucket_name
+  merchants_bucket_name                 = local._merchants_bucket_name
+  transactions_bucket_name              = local._transactions_bucket_name
+  transactions_ref_bucket_name          = local._transactions_ref_bucket_name
+  customers_curated_bucket_name         = local._customers_curated_bucket_name
+  merchants_curated_bucket_name         = local._merchants_curated_bucket_name
+  transactions_curated_bucket_name      = local._transactions_curated_bucket_name
+  datastore_project_id                  = var.project_id
+ 
+  depends_on = [module.organize_data]
+
+}
+
+####################################################################################
+# Setup Composer
+# Will need to create a network first for Composer
+# Network is also required for Dataplex jobs 
+# Recommend creating a network with the name "default"
+####################################################################################
+
+module "composer" {
+  # Run this as the currently logged in user or the service account (assuming DevOps)
+  source                        = "./modules/composer"
+  location                      = var.location
+  #network_id                    = google_compute_network.default_network.id
+  #network_id                    = data.google_compute_network.default_network.id
+  project_id                    = var.project_id
+  datastore_project_id          = var.project_id
+  project_number                = local._project_number
+  prefix                        = local._prefix_first_element
+  dataplex_process_bucket_name  = local._dataplex_process_bucket_name
+  
+  depends_on = [module.register_assets]
+} 
