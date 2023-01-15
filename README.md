@@ -56,7 +56,7 @@ In cloud shell, declare the following variables after substituting with yours.
     ```
 
 You should use your fully qualified email address (e.g. joe.user@gmail.com)
-For Argolis, use your-corp-email-without-@google.com 
+For Argolis, use fully qualified corporate email address
 
 5. To get the currently logged in email address, run: 'gcloud auth list as' below:
 

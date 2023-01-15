@@ -86,7 +86,7 @@ resource "google_project_iam_member" "cloudcomposer_act_as" {
   member   = "serviceAccount:${google_service_account.composer_service_account.email}"
 
   depends_on = [
-    google_service_account.composer_service_account_impersonation
+    google_service_account.composer_service_account
   ]
 }
 

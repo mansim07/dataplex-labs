@@ -30,7 +30,8 @@ locals {
   _merchants_curated_bucket_name  = format("%s_merchants_curated_data", local._prefix_first_element)
   _dataplex_process_bucket_name   = format("%s_dataplex_process", local._prefix_first_element) 
   _dataplex_bqtemp_bucket_name    = format("%s_dataplex_temp", local._prefix_first_element) 
-  _bucket_prefix = var.project_id
+  _bucket_prefix                  = var.project_id
+  _vpc_nm                          = "dataplex-labs-network"
 }
 
 provider "google" {
@@ -140,6 +141,80 @@ module "register_assets" {
 
 }
 
+
+####################################################################################
+# Resource for Network Creation                                                    #
+# The project was not created with the default network.                            #
+# This creates just the network/subnets we need.                                   #
+####################################################################################
+
+resource "google_compute_network" "default_network" {
+  project                 = var.project_id
+  name                    = "default"
+  description             = "Default network"
+  auto_create_subnetworks = false
+  mtu                     = 1460
+
+  depends_on = [module.register_assets]
+}
+
+
+####################################################################################
+# Resource for Subnet                                                              #
+#This creates just the subnets we need                                             #
+####################################################################################
+
+resource "google_compute_subnetwork" "main_subnet" {
+  project       = var.project_id
+  name          = "default"       #format("%s-misc-subnet", local._prefix)
+  ip_cidr_range = var.ip_range
+  region        = var.location
+  network       = google_compute_network.default_network.id
+  private_ip_google_access = true
+  depends_on = [
+    google_compute_network.default_network,
+  ]
+}
+
+####################################################################################
+# Resource for Firewall rule                                                       #
+####################################################################################
+
+resource "google_compute_firewall" "firewall_rule" {
+  project  = var.project_id
+  name     = "allow-intra-default"                    # format("allow-intra-%s-misc-subnet", local._prefix)
+  network  = google_compute_network.default_network.id
+
+  direction = "INGRESS"
+
+  allow {
+    protocol = "all"
+  }
+  
+  source_ranges = [ var.ip_range ]
+  depends_on = [
+    google_compute_subnetwork.main_subnet
+  ]
+}
+
+resource "google_compute_firewall" "user_firewall_rule" {
+  project  = var.project_id
+  name     = "allow-ingress-from-office-default"  #format("allow-ingress-from-office-%s", local._prefix)
+  network  = google_compute_network.default_network.id
+
+  direction = "INGRESS"
+
+  allow {
+    protocol = "all"
+  }
+
+  source_ranges = [ var.user_ip_range ]
+  depends_on = [
+    google_compute_subnetwork.main_subnet
+  ]
+}
+
+
 ####################################################################################
 # Setup Composer
 # Will need to create a network first for Composer
@@ -147,11 +222,12 @@ module "register_assets" {
 # Recommend creating a network with the name "default"
 ####################################################################################
 
+
 module "composer" {
   # Run this as the currently logged in user or the service account (assuming DevOps)
   source                        = "./modules/composer"
   location                      = var.location
-  #network_id                    = google_compute_network.default_network.id
+  network_id                    = google_compute_network.default_network.id
   #network_id                    = data.google_compute_network.default_network.id
   project_id                    = var.project_id
   datastore_project_id          = var.project_id
@@ -159,5 +235,5 @@ module "composer" {
   prefix                        = local._prefix_first_element
   dataplex_process_bucket_name  = local._dataplex_process_bucket_name
   
-  depends_on = [module.register_assets]
+  depends_on = [google_compute_firewall.user_firewall_rule]
 } 
