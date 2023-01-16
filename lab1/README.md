@@ -20,17 +20,16 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
 - **Step1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
 
-    Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset
+    - Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset
 
+        ```bash 
 
-    ```bash 
+        export PROJECT_ID=$(gcloud config get-value project)
 
-    export PROJECT_ID=$(gcloud config get-value project)
-
-    curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
-    ```
-    Sample output: 
-    ![permission denied](/lab1/resources/imgs/permission-dnied.png)
+        curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
+        ```
+        Sample output: 
+        ![permission denied](/lab1/resources/imgs/permission-dnied.png)
 
 - **Step2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
 
@@ -105,27 +104,30 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
 
 - **Step1:** Provide Data writer access to all the domain service accounts((customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed dq reports. This will allow them to publish the data product dq results centrally. 
+    - Open Cloud Shell and execute the below command 
+        ```bash
+        export PROJECT_ID=$(gcloud config get-value project)
 
-    ```bash
-    export PROJECT_ID=$(gcloud config get-value project)
-
-    export central_dq_policy="{\"policy\":{
-    \"bindings\": [
-    {
-        \"role\": \"roles/dataplex.dataOwner\",
-        \"members\": [
-        \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
-    \"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com\"
+        export central_dq_policy="{\"policy\":{
+        \"bindings\": [
+        {
+            \"role\": \"roles/dataplex.dataOwner\",
+            \"members\": [
+            \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
+        \"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com\"
+            ]
+        }
         ]
-    }
-    ]
-    }
-    }"
+        }
+        }"
 
-    echo $central_dq_policy
+        echo $central_dq_policy
 
-    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dq-reports:setIamPolicy -d "${central_dq_policy}"
-    ```
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dq-reports:setIamPolicy -d "${central_dq_policy}"
+        ```
+        Sample Output: 
+
+        ![successful_policy](/lab1/resources/imgs/etag_successful.png)
 
 - **Step2:**  Define and provide security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
 
