@@ -49,22 +49,22 @@ We will grant the credit card transaction consumer (user managed) service accoun
     
     - **Method1:** Using Dataplex UI 
 
-        Go to Dataplex -> Manage sub menu -> Go to "Consumer Banking - Customer Domain" lake --> Click on "Customer Raw Zone" --> Click on the Customer Raw Data Asset
-        ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-ui.png)
+        - Go to Dataplex -> Manage sub menu -> Go to "Consumer Banking - Customer Domain" lake --> Click on "Customer Raw Zone" --> Click on the Customer Raw Data Asset
+            ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-ui.png)
 
-        You can also look at the Asset Status section at the lake level. 
+            You can also look at the Asset Status section at the lake level. 
 
-        ![dataplex security status lake](/lab1/resources/imgs/dataplex-security-status-lake.png)
+            ![dataplex security status lake](/lab1/resources/imgs/dataplex-security-status-lake.png)
 
     -  **Method2:** Using Dataplex APIs
 
-        Open Cloud Shell and execute the below command: 
+        - Open Cloud Shell and execute the below command: 
 
-        ```bash 
-        curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/_project_datgov_/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/audit-data
-        ```
-        
-        ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
+            ```bash 
+            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/_project_datgov_/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/audit-data
+            ```
+            
+            ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
 
     - **Method3:** Check the permissions of the underlying asset
 
