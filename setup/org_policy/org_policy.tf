@@ -58,5 +58,61 @@ module "activate_service_apis" {
 }
 
 /******************************************
-1. Uncomment the below for Argolis
+1. Uncomment the below for Argolis Else comment from line #63 - line#119
  *****************************************/
+
+/*******************************************
+Introducing sleep to minimize errors from
+dependencies having not completed
+********************************************/
+resource "time_sleep" "sleep_after_activate_service_apis" {
+  create_duration = "60s"
+
+  depends_on = [
+    module.activate_service_apis
+  ]
+}
+
+/******************************************
+2. Project-scoped Org Policy Relaxing
+*****************************************/
+
+resource "google_project_organization_policy" "bool-policies-ds" {
+  for_each = {
+    "compute.requireOsLogin" : false,
+    "compute.disableSerialPortLogging" : false,
+    "compute.requireShieldedVm" : false
+  }
+  project    = var.project_id
+  constraint = format("constraints/%s", each.key)
+  boolean_policy {
+    enforced = each.value
+  }
+
+  depends_on = [
+    time_sleep.sleep_after_activate_service_apis
+  ]
+
+}
+
+resource "google_project_organization_policy" "list_policies-ds" {
+  for_each = {
+    "compute.vmCanIpForward" : true,
+    "compute.vmExternalIpAccess" : true,
+    "compute.restrictVpcPeering" : true
+    "compute.trustedImageProjects" : true
+  }
+  project     = var.project_id
+  constraint = format("constraints/%s", each.key)
+  list_policy {
+    allow {
+      all = each.value
+    }
+  }
+
+  depends_on = [
+    time_sleep.sleep_after_activate_service_apis
+  ]
+
+}
+

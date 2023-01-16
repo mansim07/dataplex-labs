@@ -322,7 +322,7 @@ resource "google_bigquery_job" "job" {
     skip_leading_rows = 1
     schema_update_options = ["ALLOW_FIELD_RELAXATION", "ALLOW_FIELD_ADDITION"]
 
-    write_disposition = "WRITE_APPEND"
+    write_disposition = "WRITE_TRUNCATE"
     autodetect = true
     }
 
