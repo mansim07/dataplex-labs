@@ -174,14 +174,14 @@ resource "google_storage_bucket_object" "gcs_customers_objects" {
 #Adding empty directory so it can be discovered by Dataplex and does not conflict with BQ 
 
 resource "google_storage_bucket_object" "cc_cust_folder" {
-  name          = format("cc_customers_data/dt=%s",var.date_partition)
+  name          = format("cc_customers_data/dt=%s/",var.date_partition)
   content       = "Not really a directory, but it's empty."
   bucket        = var.customers_curated_bucket_name
   depends_on = [time_sleep.sleep_after_storage]
 }
 
 resource "google_storage_bucket_object" "cust_folder" {
-  name          = format("customers_data/dt=%s",var.date_partition)
+  name          = format("customers_data/dt=%s/",var.date_partition)
   content       = "Not really a directory, but it's empty."
   bucket        = var.customers_curated_bucket_name
   depends_on = [time_sleep.sleep_after_storage]
@@ -206,7 +206,7 @@ resource "google_storage_bucket_object" "gcs_merchants_objects" {
 #Adding Empty Directory for Curated to avoid Dataplex entity conflicts
 
 resource "google_storage_bucket_object" "merchant_folder" {
-  name          =  format("merchants_data/date=%s",var.date_partition)
+  name          =  format("merchants_data/date=%s/",var.date_partition)
   content       = "Not really a directory, but it's empty."
   bucket        = var.merchants_curated_bucket_name
   depends_on = [time_sleep.sleep_after_storage]
@@ -228,7 +228,7 @@ resource "google_storage_bucket_object" "gcs_transaction_objects" {
 }
 
 resource "google_storage_bucket_object" "auth_folder" {
-  name          = format("auth_data/date=%s",var.date_partition)
+  name          = format("auth_data/date=%s/",var.date_partition)
   content       = "Not really a directory, but it's empty."
   bucket        = var.transactions_curated_bucket_name
   depends_on = [time_sleep.sleep_after_storage]

@@ -203,7 +203,7 @@ resource "google_composer_environment" "composer_env" {
         AIRFLOW_VAR_TRANSACTIONS_DP_INFO_INPUT_PATH = "gs://${var.dataplex_process_bucket_name}/transactions-source-configs",
         AIRFLOW_VAR_TRANSACTIONS_DPLX_LAKE_ID = "consumer-banking--creditcards--transaction--domain",
         AIRFLOW_VAR_TRANSACTIONS_DPLX_REGION = "us-central1",
-        AIRFLOW_VAR_TRANSACTIONS_DPLX_ZONE_ID = "transactions-data-product-zone",
+        AIRFLOW_VAR_TRANSACTIONS_DPLX_ZONE_ID = "authorizations-data-product-zone",
         AIRFLOW_VAR_TRANSACTIONS_DQ_INFO_INPUT_FILE = "data-product-quality-tag-auto.yaml",
         AIRFLOW_VAR_TRANSACTIONS_DQ_INFO_INPUT_PATH = "gs://${var.dataplex_process_bucket_name}/transactions-source-configs",
         AIRFLOW_VAR_TRANSACTIONS_DQ_INPUT_FILE = "data-product-quality-tag-auto.yaml",

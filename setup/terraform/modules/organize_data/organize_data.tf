@@ -112,7 +112,7 @@ resource "google_dataplex_lake" "create_merchant_lakes" {
   
   project = var.project_id
 
-  depends_on  = [google_dataplex_lake.create_customer_zones]
+  depends_on  = [google_dataplex_zone.create_customer_zones]
 }
 
 resource "google_dataplex_zone" "create_merchant_zones" {
@@ -167,7 +167,7 @@ resource "google_dataplex_lake" "create_cc_transaction_lakes" {
   depends_on  = [google_dataplex_zone.create_merchant_zones]
 }
 
-resource "google_dataplex_zone" "create_cc_transaction_lakes" {
+resource "google_dataplex_zone" "create_cc_transaction_zones" {
  for_each = {
 
     "authorization-curated-zone/Authorizations Curated Zone/consumer-banking--creditcards--transaction--domain/CURATED" : "data_product_category=raw_data",
@@ -204,7 +204,7 @@ resource "google_dataplex_zone" "create_cc_transaction_lakes" {
 # Create Domain4: CreditCards Analytics Lakes and Zones                            #
 ####################################################################################
 
-resource "google_dataplex_lake" "create_cc_transaction_lakes" {
+resource "google_dataplex_lake" "create_cc_analytics_lakes" {
   location     = var.location
   name         = "consumer-banking--creditcards--analytics--domain"
   description  = "Consumer Banking CreditCards Analytics Domain"
@@ -216,11 +216,11 @@ resource "google_dataplex_lake" "create_cc_transaction_lakes" {
   
   project = var.project_id
 
-  depends_on  = [google_dataplex_zone.create_cc_transaction_lakes]
+  depends_on  = [google_dataplex_zone.create_cc_transaction_zones]
 
 }
 
-resource "google_dataplex_zone" "create_cc_transaction_zones" {
+resource "google_dataplex_zone" "create_cc_analytics_zones" {
  for_each = {
        "data-product-zone/Data Product Zone/consumer-banking--creditcards--analytics--domain/CURATED" : "data_product_category=master_data",
 
@@ -247,7 +247,7 @@ resource "google_dataplex_zone" "create_cc_transaction_zones" {
   }
   project      = var.project_id
 
-  depends_on  = [google_dataplex_lake.create_cc_transaction_lakes]
+  depends_on  = [google_dataplex_lake.create_cc_analytics_lakes]
 }
 
 
@@ -267,10 +267,10 @@ resource "google_dataplex_lake" "create_central_ops_lakes" {
   
   project = var.project_id
 
-  depends_on  = [google_dataplex_zone.create_cc_transaction_zones]
+  depends_on  = [google_dataplex_zone.create_cc_analytics_zones]
 }
 
-resource "google_dataplex_zone" "create_zones" {
+resource "google_dataplex_zone" "create_central_ops_zones" {
  for_each = {
     "common-utilities/Common Utilities/central-operations--domain/CURATED" : "",
     "operations-data-product-zone/Data Product Zone/central-operations--domain/CURATED" : "",   
@@ -296,6 +296,33 @@ resource "google_dataplex_zone" "create_zones" {
   project      = var.project_id
 
   depends_on  = [google_dataplex_lake.create_central_ops_lakes]
+}
+
+
+
+####################################################################################
+# Dataplex Service Account 
+####################################################################################
+
+
+resource "null_resource" "dataplex_permissions_1" {
+  provisioner "local-exec" {
+    command = format("gcloud projects add-iam-policy-binding %s --member=\"serviceAccount:service-%s@gcp-sa-dataplex.iam.gserviceaccount.com\" --role=\"roles/dataplex.dataReader\"", 
+                      var.project_id,
+                      var.project_number)
+  }
+
+  depends_on = [google_dataplex_zone.create_central_ops_zones]
+}
+
+resource "null_resource" "dataplex_permissions_2" {
+  provisioner "local-exec" {
+    command = format("gcloud projects add-iam-policy-binding %s --member=\"serviceAccount:service-%s@gcp-sa-dataplex.iam.gserviceaccount.com\" --role=\"roles/dataplex.serviceAgent\"", 
+                      var.project_id,
+                      var.project_number)
+  }
+
+  depends_on = [null_resource.dataplex_permissions_1]
 }
 
 #sometimes we get API rate limit errors for dataplex; add wait until this is resolved.

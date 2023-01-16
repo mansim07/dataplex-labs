@@ -26,7 +26,7 @@ resource "null_resource" "curate_data" {
     #format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/cc_customers_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/assets/customer-curated-data",var.project_id, var.location),
     #format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-raw-zone/entities/entities/merchants_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/assets/merchant-curated-data",var.project_id, var.location),
     #format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-raw-zone/entities/entities/merchants_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/assets/mcc_codes",var.project_id, var.location),
-    #format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/transactions-raw-zone/entities/auth_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/transactions-curated-zone/assets/transactions-curated-data",var.project_id, var.location)
+    #format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/authorizations-raw-zone/entities/auth_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/authorization-curated-zone/assets/transactions-curated-data",var.project_id, var.location)
   }  
 
   provisioner "local-exec" {
@@ -79,7 +79,7 @@ resource "null_resource" "copy_asset" {
     #format("prod_customer_refined_data/customer-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/entities/cc_customers_data",var.project_id, var.location),
     #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/entities/merchants_data",var.project_id, var.location),
     #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/entities/mcc_codes",var.project_id, var.location),
-    #format("prod_pos_auth_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/transactions-curated-zone/entities/merchants_data",var.project_id, var.location)
+    #format("prod_pos_auth_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/authorization-curated-zone/entities/merchants_data",var.project_id, var.location)
   }
 
   provisioner "local-exec" {

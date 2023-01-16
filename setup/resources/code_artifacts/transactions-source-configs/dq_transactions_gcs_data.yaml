@@ -3,7 +3,7 @@ metadata_registry_defaults:
    projects: _project_datagov_
    locations: us-central1
    lakes: consumer-banking--creditcards--transaction--domain
-   zones: transactions-raw-zone
+   zones: authorizations-raw-zone
 
 row_filters:
  NONE:

@@ -32,8 +32,8 @@ variable "datastore_project_id" {}
 
 resource "google_dataplex_asset" "register_gcs_assets1" {
  for_each = {
-    "transactions-ref-raw-data/Transactions Ref Raw Data/transactions-raw-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_ref_bucket_name,
-    "transactions-raw-data/Transactions Raw Data/transactions-raw-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_bucket_name,
+    "authorizations-ref-raw-data/Authorization Ref Raw Data/authorizations-raw-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_ref_bucket_name,
+    "transactions-raw-data/Authorization Raw Data/authorizations-raw-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_bucket_name,
     "merchant-raw-data/Merchant Raw Data/merchant-raw-zone/consumer-banking--merchant--domain" : var.merchants_bucket_name,
   }
   name          = element(split("/", each.key), 0)
@@ -69,7 +69,7 @@ resource "time_sleep" "sleep_after_assets" {
 resource "google_dataplex_asset" "register_gcs_assets2" {
  for_each = {
     "customer-raw-data/Customer Raw Data/customer-raw-zone/consumer-banking--customer--domain" : var.customers_bucket_name
-    "transactions-curated-data/Transactions Curated Data/transactions-curated-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_curated_bucket_name,
+    "transactions-curated-data/Transactions Curated Data/authorization-curated-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_curated_bucket_name,
     "merchant-curated-data/Merchant Curated Data/merchant-curated-zone/consumer-banking--merchant--domain" : var.merchants_curated_bucket_name,
     "customer-curated-data/Customer Curated Data/customer-curated-zone/consumer-banking--customer--domain" : var.customers_curated_bucket_name
   }
@@ -111,7 +111,7 @@ resource "google_dataplex_asset" "register_bq_assets1" {
     "customer-data-product-reference/Customer Reference Data Product/customer-data-product-zone/consumer-banking--customer--domain" : "customer_ref_data" ,
      "customer-refined-data/Customer Refined Data/customer-curated-zone/consumer-banking--customer--domain" : "customer_refined_data" ,
     "merchant-refined-data/Merchant Refined Data/merchant-curated-zone/consumer-banking--merchant--domain" : "merchants_refined_data",
-     "auth-refined-data/Authorization Refined Data/transactions-curated-zone/consumer-banking--creditcards--transaction--domain" : "pos_auth_refined_data"
+     "auth-refined-data/Authorization Refined Data/authorization-curated-zone/consumer-banking--creditcards--transaction--domain" : "pos_auth_refined_data"
   }
   name          = element(split("/", each.key), 0)
   display_name  = element(split("/", each.key), 1)
@@ -137,8 +137,8 @@ resource "google_dataplex_asset" "register_bq_assets2" {
  for_each = {
     "merchant-data-products/Merchant Data Product/merchant-data-product-zone/consumer-banking--merchant--domain" : "merchants_data_product",
     "merchant-ref-product/Merchant Data Product Reference/merchant-data-product-zone/consumer-banking--merchant--domain" : "merchants_ref_data",
-    "transactions-data-product/Transactions Data Product/transactions-data-product-zone/consumer-banking--creditcards--transaction--domain" : "auth_data_product",
-    "transaction-ref-product/Transactions Data Product Reference/transactions-data-product-zone/consumer-banking--creditcards--transaction--domain" : "auth_ref_data",
+    "authorizations-data-product/Auhorization Data Product/authorizations-data-product-zone/consumer-banking--creditcards--transaction--domain" : "auth_data_product",
+    "authorizations-ref-product/Authorization Data Product Reference/authorizations-data-product-zone/consumer-banking--creditcards--transaction--domain" : "auth_ref_data",
      "cc-analytics-data-product/CCA Data Product/data-product-zone/consumer-banking--creditcards--analytics--domain" : "cc_analytics_data_product"
   }
   name          = element(split("/", each.key), 0)
