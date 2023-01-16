@@ -19,7 +19,7 @@ variable "project_id" {}
 variable "location" {}
 variable "dataplex_process_bucket_name" {}
 variable "dataplex_bqtemp_bucket_name" {}
-
+/*
 resource "null_resource" "curate_data" {
  for_each = {
     format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/customers_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/assets/customer-curated-data",var.project_id, var.location)
@@ -39,6 +39,7 @@ resource "null_resource" "curate_data" {
                      )
   }
 }
+*/
 
 resource "random_id" "rng" {
   keepers = {
@@ -73,13 +74,9 @@ gcloud dataplex tasks create %s \
 EOT
 }
 
-resource "null_resource" "copy_asset" {
+resource "null_resource" "copy_merchant_data_asset" {
   for_each = {
-    format("prod_customer_refined_data/customer-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/entities/customers_data",var.project_id, var.location)
-    #format("prod_customer_refined_data/customer-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/entities/cc_customers_data",var.project_id, var.location),
-    #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/entities/merchants_data",var.project_id, var.location),
-    #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/entities/mcc_codes",var.project_id, var.location),
-    #format("prod_pos_auth_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/authorization-curated-zone/entities/merchants_data",var.project_id, var.location)
+    format("merchants_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-raw-zone/entities/merchants_data",var.project_id, var.location),
   }
 
   provisioner "local-exec" {
@@ -87,7 +84,7 @@ resource "null_resource" "copy_asset" {
                 format("DATAPLEXGCSTOBQ-%s-%s", element(split("/", each.key), 0), random_id.rng.hex), 
                 var.project_id,
                 var.location,
-                format("regions/us-central1/subnetworks/%s-misc-subnet", var.project_id),
+                format("regions/us-central1/subnetworks/default", var.project_id),
                 element(split("/", each.value), 5),
                 element(split("/", each.key), 1),
                 var.dataplex_process_bucket_name,
@@ -100,3 +97,31 @@ resource "null_resource" "copy_asset" {
                 )
   }
 }
+
+resource "null_resource" "copy_trans_data_asset" {
+  for_each = {
+    format("pos_auth_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/authorizations-raw-zone/entities/auth_data",var.project_id, var.location)
+  }
+
+  provisioner "local-exec" {
+    command = format(var.command_string,
+                format("DATAPLEXGCSTOBQ-%s-%s", element(split("/", each.key), 0), random_id.rng.hex), 
+                var.project_id,
+                var.location,
+                format("regions/us-central1/subnetworks/default", var.project_id),
+                element(split("/", each.value), 5),
+                element(split("/", each.key), 1),
+                var.dataplex_process_bucket_name,
+                var.dataplex_process_bucket_name,
+                var.project_id,
+                element(split("/", each.key), 0),
+                var.dataplex_bqtemp_bucket_name,
+                each.value,
+                var.dataplex_process_bucket_name
+                )
+  }
+  depends_on = [
+    null_resource.copy_merchant_data_asset
+  ]
+}
+
