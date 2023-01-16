@@ -100,7 +100,7 @@ Using “Secure View” to provide the credit card analytics consumer domain acc
 9. Click on the Save button 
 10. Verify Dataplex Data Reader roles appear for the principal. 
 
-## Task 2: Grant Access to the Central Operations domain(through APIs)
+## Task 2: Grant Access to the Central Operations domain(through Dataplex APIs)
 In this lab task we will -
 - (Lake->Zone->)Asset Level Security Pushdown: 
 Grant all the 4 user managed security accounts/domain service accounts (customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) Dataplex Data Owner role to the Central Operations Domain lake->Data Product zone->DQ Reports asset, specifically
@@ -113,7 +113,9 @@ Grant all the 4 user managed security accounts (customer-sa@, cc-trans-consumer-
 
 **Step1:** Provide editor access to all the domain service accounts to central managed dq reports. This will allow them to publish the data product dq results centrally.   
 
-```bash 
+```bash
+export PROJECT_ID=$(gcloud config get-value project)
+
 export central_dq_policy="{\"policy\":{
 \"bindings\": [
    {
@@ -134,71 +136,84 @@ curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Co
 
 **Step2:**  Define and provide security policy to grant read access to all the domain service accounts to central managed common utilities housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
 
-```bash 
-# 1. CREATE POLICY
-export central_common_util_policy="{\"policy\":{
-\"bindings\": [
-   {
-     \"role\": \"roles/dataplex.dataReader\",
-     \"members\": [
-       \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
-\"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_DATAGOV}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_DATAGOV}.iam.gserviceaccount.com\"
-     ]
-   }
- ]
- }
-}"
+- Open Cloud shell and execute the below commands: 
 
-echo " "
-# 2. VIEW POLICY
-echo "==========="
-echo "The policy we just created is "
-echo "==========="
-echo " "
-echo $central_common_util_policy
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
+
+    # 1. CREATE POLICY
+    export central_common_util_policy="{\"policy\":{
+    \"bindings\": [
+    {
+        \"role\": \"roles/dataplex.dataReader\",
+        \"members\": [
+        \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
+    \"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_DATAGOV}.iam.gserviceaccount.com\"
+        ]
+    }
+    ]
+    }
+    }"
+
+    echo " "
+    # 2. VIEW POLICY
+    echo "==========="
+    echo "The policy we just created is "
+    echo "==========="
+    echo " "
+    echo $central_common_util_policy
 
 
-echo " "
-# 3. APPLY POLICY
-echo "==========="
-curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/common-utilities:setIamPolicy -d "${central_common_util_policy}"
-echo " "
-echo "==========="
-```
+    echo " "
+    # 3. APPLY POLICY
+    echo "==========="
+    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/common-utilities:setIamPolicy -d "${central_common_util_policy}"
+    echo " "
+    echo "==========="
+    ```
 
-Step4: Create a Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports 
+**Step3:**  Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports 
 Run the below command
 
-Step 4.1: gcloud logging --project=${PROJECT_DATAGOV} sinks create audits-to-bq bigquery.googleapis.com/projects/${PROJECT_DATAGOV}/datasets/central_audit_data --log-filter='resource.type="audited_resource" AND resource.labels.service="dataplex.googleapis.com" AND protoPayload.serviceName="dataplex.googleapis.com"'
+- **Step 3.1:**  Create the Cloud Logging sink to capture the Dataplex Audit logs into a BigQuery  table
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
+    gcloud logging --project=${PROJECT_ID} sinks create audits-to-bq bigquery.googleapis.com/projects/${PROJECT_ID}/datasets/central_audit_data --log-filter='resource.type="audited_resource" AND resource.labels.service="dataplex.googleapis.com" AND protoPayload.serviceName="dataplex.googleapis.com"'
+    ```
 
+- Sample output of the author: 
 
-Sample output of the author: 
-Created [https://logging.googleapis.com/v2/projects/mbdatagov-05/sinks/audits-to-bq].
-Please remember to grant `serviceAccount:p52065135315-549975@gcp-sa-logging.iam.gserviceaccount.com` the BigQuery Data Editor role on the dataset.
-More information about sinks can be found at https://cloud.google.com/logging/docs/export/configure_export
+    ```
+    Created [https://logging.googleapis.com/v2/projects/mbdatagov-05/sinks/audits-to-bq].
+    Please remember to grant `serviceAccount:p52065135315-549975@gcp-sa-logging.iam.gserviceaccount.com` the BigQuery Data Editor role on the dataset.
+    More information about sinks can be found at https://cloud.google.com/logging/docs/export/configure_export
+    ```
+- Validate: Go to Cloud Logging -> Logs Router and you should see a sink called “audits-to-bq” as shown below
 
-Step 4.2. Capture the auto-created Google Managed Cloud Logging Sink Service Account
+ - **Step 3.2:** Grant the Google Managed Cloud Logging Sink Service Account requisite permissions through Dataplex 
+    - Open Cloud Shell execute the below command: 
+        ```bash 
+        export PROJECT_ID=$(gcloud config get-value project)
 
-LOGGING_GMSA=`gcloud logging sinks describe audits-to-bq | grep writerIdentity | grep serviceAccount | cut -d":" -f3`
-echo $LOGGING_GMSA
+        LOGGING_GMSA=`gcloud logging sinks describe audits-to-bq | grep writerIdentity | grep serviceAccount | cut -d":" -f3`
+        echo $LOGGING_GMSA
 
-Validate: Go to Cloud Logging -> Logs Router and you should see a sink called “audits-to-bq” as shown below
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
+        ```
 
-Step 4.3: Grant the Google Managed Cloud Logging Sink Service Account requisite permissions
+**Step4:**  We will be using DLP for Data Classification in the later lab, here we will grant access service account access to the DLP datasets managed by central operations team 
 
-curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_DATAGOV}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
+- Open cloud shell and execute the below command
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
+    export PROJECT_NBR=$(gcloud projects list --filter="${PROJECT_DATASTO}" --format="value(PROJECT_NUMBER)")
+    echo $PROJECT_NBR
 
+    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
+    ```
 
-Step 5: Run the below commands to grant the above DLP service account access to the DLP datasets 
-export PROJECT_NBR=$(gcloud projects list --filter="${PROJECT_DATASTO}" --format="value(PROJECT_NUMBER)")
-echo $PROJECT_NBR
+- Sample output of the author:
 
-
-curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_DATAGOV}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
-
-Sample output of the author:
-
-Review the permissions in the Dataplex UI:
 
 ### Task 3: Execute the below script to grant all the other access 
 
