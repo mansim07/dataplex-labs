@@ -2,7 +2,7 @@ metadata_registry_defaults:
  dataplex:
    projects: _project_datagov_
    locations: us-central1
-   lakes: prod-transactions-source-domain
+   lakes: consumer-banking--creditcards--transaction--domain
    zones: transactions-data-product-zone
 
 row_filters:

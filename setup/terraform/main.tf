@@ -78,6 +78,7 @@ module "iam_setup" {
   # Run this as the currently logged in user or the service account (assuming DevOps)
   source                                = "./modules/iam"
   project_id                            = var.project_id
+  project_number                = local._project_number
 
   depends_on = [module.stage_data]
 }

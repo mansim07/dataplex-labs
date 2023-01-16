@@ -119,3 +119,9 @@ Please make sure you clean up your environment
 #Remove lien if any
 gcloud alpha resource-manager liens list --project ${PROJECT_ID}
 gcloud projects delete ${PROJECT_ID}
+
+
+## Errors 
+
+1. │ Error: googleapi: Error 400: You can't create a Composer environment due to Organization Policy constraints in the selected project.
+│ Policy constraints/compute.vmExternalIpAccess must allow all values when creating Public IP Cloud Composer environments., failedPrecondition

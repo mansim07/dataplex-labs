@@ -27,11 +27,11 @@ variable "datastore_project_id" {}
 /* With Metastore
 resource "null_resource" "create_lake" {
  for_each = {
-    "prod-customer-source-domain/Customer - Source Domain" : "domain_type=source",
-    "prod-merchant-source-domain/Merchant - Source Domain" : "domain_type=source",
-    "prod-transactions-source-domain/Transactions - Source Domain" : "domain_type=source",
-    "prod-transactions-consumer-domain/Credit Card Analytics - Consumer Domain" : "domain_type=consumer",
-    "central-operations-domain/Central Operations Domain" : "domain_type=operations"
+    "consumer-banking--customer--domain/Customer - Source Domain" : "domain_type=source",
+    "consumer-banking--merchant--domain/Merchant - Source Domain" : "domain_type=source",
+    "consumer-banking--creditcards--transaction--domain/Transactions - Source Domain" : "domain_type=source",
+    "consumer-banking--creditcards--analytics--domain/Credit Card Analytics - Consumer Domain" : "domain_type=consumer",
+    "central-operations--domain/Central Operations Domain" : "domain_type=operations"
   }
   provisioner "local-exec" {
     command = format("gcloud dataplex lakes create --project=%s %s --display-name=\"%s\" --location=%s --labels=%s --metastore-service=%s ", 
@@ -45,90 +45,235 @@ resource "null_resource" "create_lake" {
 }
 */
 
-resource "google_dataplex_lake" "create_lakes" {
- for_each = {
-    "prod-customer-source-domain/Customer - Source Domain" : "domain_type=source",
-    "prod-merchant-source-domain/Merchant - Source Domain" : "domain_type=source",
-    "prod-transactions-source-domain/Transactions - Source Domain" : "domain_type=source",
-    "prod-transactions-consumer-domain/Credit Card Analytics - Consumer Domain" : "domain_type=consumer",
-    "central-operations-domain/Central Operations Domain" : "domain_type=operations"
-  }
+
+
+####################################################################################
+# Create Domain1: Customer Lakes and Zones                                                  #
+####################################################################################
+
+resource "google_dataplex_lake" "create_customer_lakes" {
   location     = var.location
-  name         = element(split("/", each.key), 0)
-  description  = element(split("/", each.key), 1)
-  display_name = element(split("/", each.key), 1)
+  name         = "consumer-banking--customer--domain"
+  description  = "Consumer Banking Customer Domain"
+  display_name = "Consumer Banking - Customer Domain"
 
   labels       = {
-    element(split("=", each.value), 0) = element(split("=", each.value), 1)
+    domain_type="source"
   }
   
   project = var.project_id
 }
 
-/* roles for dataplex service account in datastore project 
-+ so that dataplex can read from buckets
-
-terraform doesn't seem to allow setting IAM bindings across projects so using gcloud instead
-
-resource "google_project_iam_member" "dataplex_service_account_owner" {
-for_each = toset([
-"roles/dataplex.dataReader",
-"roles/dataplex.serviceAgent"])
-  project  = var.datastore_project_id
-  role     = each.key
-  member   = format("serviceAccount:service-%s@gcp-sa-dataplex.iam.gserviceaccount.com", local._project_number)
-  depends_on = [
-    google_service_account.dq_service_account
-  ]
-}
-*/
-
-
-resource "null_resource" "dataplex_permissions_1" {
-  provisioner "local-exec" {
-    command = format("gcloud projects add-iam-policy-binding %s --member=\"serviceAccount:service-%s@gcp-sa-dataplex.iam.gserviceaccount.com\" --role=\"roles/dataplex.dataReader\"", 
-                      var.datastore_project_id,
-                      var.project_number)
+resource "google_dataplex_zone" "create_customer_zones" {
+ for_each = {
+    "customer-raw-zone/Customer Raw Zone/consumer-banking--customer--domain/RAW" : "data_product_category=raw_data",
+    "customer-curated-zone/Customer Curated Zone/consumer-banking--customer--domain/CURATED" : "data_product_category=curated_data",
+    "customer-data-product-zone/Customer Data Product Zone/consumer-banking--customer--domain/CURATED" : "data_product_category=master_data",
   }
 
-  depends_on = [google_dataplex_lake.create_lakes]
-}
-
-resource "null_resource" "dataplex_permissions_2" {
-  provisioner "local-exec" {
-    command = format("gcloud projects add-iam-policy-binding %s --member=\"serviceAccount:service-%s@gcp-sa-dataplex.iam.gserviceaccount.com\" --role=\"roles/dataplex.serviceAgent\"", 
-                      var.datastore_project_id,
-                      var.project_number)
+  discovery_spec {
+    enabled = true
+    schedule = "0 * * * *"
   }
 
-  depends_on = [null_resource.dataplex_permissions_1]
+  lake     =  element(split("/", each.key), 2)
+  location = var.location
+  name     = element(split("/", each.key), 0)
+
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+
+  type         = element(split("/", each.key), 3)
+  description  = element(split("/", each.key), 1)
+  display_name = element(split("/", each.key), 1)
+  labels       = {
+    element(split("=", each.value), 0) = element(split("=", each.value), 1)
+  }
+  project      = var.project_id
+
+  depends_on  = [google_dataplex_lake.create_customer_lakes]
 }
 
-resource "time_sleep" "sleep_after_dataplex_permissions" {
-  create_duration = "120s"
-  depends_on = [
-                null_resource.dataplex_permissions_1,
-                null_resource.dataplex_permissions_2
-              ]
+####################################################################################
+# Create Domain2: Merchant Lakes and Zones                                         #
+####################################################################################
+
+
+resource "google_dataplex_lake" "create_merchant_lakes" {
+  location     = var.location
+  name         = "consumer-banking--merchant--domain"
+  description  = "Consumer Banking Merchant Domain"
+  display_name = "Consumer Banking - Merchant Domain"
+
+  labels       = {
+    domain_type="source"
+  }
+  
+  project = var.project_id
+
+  depends_on  = [google_dataplex_lake.create_customer_zones]
+}
+
+resource "google_dataplex_zone" "create_merchant_zones" {
+ for_each = {
+    "merchant-raw-zone/Merchant Raw Zone/consumer-banking--merchant--domain/RAW" : "data_product_category=raw_data",
+    "merchant-curated-zone/Merchant Curated Zone/consumer-banking--merchant--domain/CURATED" : "data_product_category=curated_data",
+    "merchant-data-product-zone/Merchant Data Product Zone/consumer-banking--merchant--domain/CURATED" : "data_product_category=master_data",
+  }
+
+  discovery_spec {
+    enabled = true
+    schedule = "0 * * * *"
+  }
+
+  lake     =  element(split("/", each.key), 2)
+  location = var.location
+  name     = element(split("/", each.key), 0)
+
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+
+  type         = element(split("/", each.key), 3)
+  description  = element(split("/", each.key), 1)
+  display_name = element(split("/", each.key), 1)
+  labels       = {
+    element(split("=", each.value), 0) = element(split("=", each.value), 1)
+  }
+  project      = var.project_id
+
+  depends_on  = [google_dataplex_lake.create_merchant_lakes]
+}
+
+
+####################################################################################
+# Create Domain3: CreditCards Transactions Lakes and Zones                         #
+####################################################################################
+
+
+resource "google_dataplex_lake" "create_cc_transaction_lakes" {
+  location     = var.location
+  name         = "consumer-banking--creditcards--transaction--domain"
+  description  = "Consumer Banking CreditCards Transaction Domain"
+  display_name = "Consumer Banking - CreditCards - Transaction Domain"
+
+  labels       = {
+    domain_type="source"
+  }
+  
+  project = var.project_id
+
+  depends_on  = [google_dataplex_zone.create_merchant_zones]
+}
+
+resource "google_dataplex_zone" "create_cc_transaction_lakes" {
+ for_each = {
+
+    "authorization-curated-zone/Authorizations Curated Zone/consumer-banking--creditcards--transaction--domain/CURATED" : "data_product_category=raw_data",
+    "authorizations-raw-zone/Authorizations Raw Zone/consumer-banking--creditcards--transaction--domain/RAW" : "data_product_category=curated_data",
+    "authorizations-data-product-zone/Authorizations Data Product Zone/consumer-banking--creditcards--transaction--domain/CURATED" : "data_product_category=master_data"
+
+  }
+
+  discovery_spec {
+    enabled = true
+    schedule = "0 * * * *"
+  }
+
+  lake     =  element(split("/", each.key), 2)
+  location = var.location
+  name     = element(split("/", each.key), 0)
+
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+
+  type         = element(split("/", each.key), 3)
+  description  = element(split("/", each.key), 1)
+  display_name = element(split("/", each.key), 1)
+  labels       = {
+    element(split("=", each.value), 0) = element(split("=", each.value), 1)
+  }
+  project      = var.project_id
+
+  depends_on  = [google_dataplex_lake.create_cc_transaction_lakes]
+}
+
+####################################################################################
+# Create Domain4: CreditCards Analytics Lakes and Zones                            #
+####################################################################################
+
+resource "google_dataplex_lake" "create_cc_transaction_lakes" {
+  location     = var.location
+  name         = "consumer-banking--creditcards--analytics--domain"
+  description  = "Consumer Banking CreditCards Analytics Domain"
+  display_name = "Consumer Banking - CreditCards - Analytics Domain"
+
+  labels       = {
+    domain_type="consumer"
+  }
+  
+  project = var.project_id
+
+  depends_on  = [google_dataplex_zone.create_cc_transaction_lakes]
+
+}
+
+resource "google_dataplex_zone" "create_cc_transaction_zones" {
+ for_each = {
+       "data-product-zone/Data Product Zone/consumer-banking--creditcards--analytics--domain/CURATED" : "data_product_category=master_data",
+
+  }
+
+  discovery_spec {
+    enabled = true
+    schedule = "0 * * * *"
+  }
+
+  lake     =  element(split("/", each.key), 2)
+  location = var.location
+  name     = element(split("/", each.key), 0)
+
+  resource_spec {
+    location_type = "SINGLE_REGION"
+  }
+
+  type         = element(split("/", each.key), 3)
+  description  = element(split("/", each.key), 1)
+  display_name = element(split("/", each.key), 1)
+  labels       = {
+    element(split("=", each.value), 0) = element(split("=", each.value), 1)
+  }
+  project      = var.project_id
+
+  depends_on  = [google_dataplex_lake.create_cc_transaction_lakes]
+}
+
+
+####################################################################################
+# Create Domain5: Central Operations Lakes and Zones                               #
+####################################################################################
+
+resource "google_dataplex_lake" "create_central_ops_lakes" {
+  location     = var.location
+  name         = "central-operations--domain"
+  description  = "Central Operations Domain"
+  display_name = "Central Operations Domain"
+
+  labels       = {
+    domain_type="operations"
+  }
+  
+  project = var.project_id
+
+  depends_on  = [google_dataplex_zone.create_cc_transaction_zones]
 }
 
 resource "google_dataplex_zone" "create_zones" {
  for_each = {
-    "customer-curated-zone/Customer Curated Zone/prod-customer-source-domain/CURATED" : "",
-    "customer-raw-zone/Customer Raw Zone/prod-customer-source-domain/RAW" : "",
-    "merchant-raw-zone/Merchant Raw Zone/prod-merchant-source-domain/RAW" : "",
-    "merchant-curated-zone/Merchant Curated Zone/prod-merchant-source-domain/CURATED" : "",
-    "merchant-data-product-zone/Merchant Data Product Zone/prod-merchant-source-domain/CURATED" : "",
-    "common-utilities/Common Utilities/central-operations-domain/CURATED" : "",
-    "operations-data-product-zone/Data Product Zone/central-operations-domain/CURATED" : "",
-    "clearing-and-settlement-data-product-zone/Clearing and Settlement Data Product Zone/prod-transactions-source-domain/CURATED" : "",
-    "clearing-and-settlements-curated-zone/Clearing and Settlements Curated Zone/prod-transactions-source-domain/CURATED" : "",
-    "clearing-and-settlements-raw-zone/Clearing and Settlements Raw Zone/prod-transactions-source-domain/RAW" : "",
-    "funding-curated-zone/Funding Curated Zone/prod-transactions-source-domain/CURATED" : "",
-    "funding-data-product-zone/Funding Data Product Zone/prod-transactions-source-domain/CURATED" : "",
-    "funding-raw-zone/Funding Raw Zone/prod-transactions-source-domain/RAW" : "",
-    "transactions-curated-zone/Authorizations Curated Zone/prod-transactions-source-domain/CURATED" : "",
-    "transactions-raw-zone/Authorizations Raw Zone/prod-transactions-source-domain/RAW" : ""
+    "common-utilities/Common Utilities/central-operations--domain/CURATED" : "",
+    "operations-data-product-zone/Data Product Zone/central-operations--domain/CURATED" : "",   
   }
 
   discovery_spec {
@@ -150,43 +295,12 @@ resource "google_dataplex_zone" "create_zones" {
 
   project      = var.project_id
 
-  depends_on  = [time_sleep.sleep_after_dataplex_permissions]
+  depends_on  = [google_dataplex_lake.create_central_ops_lakes]
 }
 
 #sometimes we get API rate limit errors for dataplex; add wait until this is resolved.
-resource "time_sleep" "sleep_after_zones" {
-  create_duration = "60s"
-
-  depends_on = [google_dataplex_zone.create_zones]
-}
-
-resource "google_dataplex_zone" "create_zones_with_labels" {
- for_each = {
-    "customer-data-product-zone/Customer Data Product Zone/prod-customer-source-domain/CURATED" : "data_product_category=master_data",
-    "data-product-zone/Data Product Zone/prod-transactions-consumer-domain/CURATED" : "data_product_category=master_data",
-    "transactions-data-product-zone/Authorizations Data Product Zone/prod-transactions-source-domain/CURATED" : "data_product_category=master_data"
-  }
-
-    discovery_spec {
-    enabled = true
-    schedule = "0 * * * *"
-  }
-
-  lake     =  element(split("/", each.key), 2)
-  location = var.location
-  name     = element(split("/", each.key), 0)
-
-  resource_spec {
-    location_type = "SINGLE_REGION"
-  }
-
-  type         = element(split("/", each.key), 3)
-  description  = element(split("/", each.key), 1)
-  display_name = element(split("/", each.key), 1)
-  labels       = {
-    element(split("=", each.value), 0) = element(split("=", each.value), 1)
-  }
-  project      = var.project_id
-
-  depends_on  = [time_sleep.sleep_after_zones]
-}
+#resource "time_sleep" "sleep_after_zones" {
+#  create_duration = "60s"
+#
+#  depends_on = [google_dataplex_zone.create_zones]
+#}

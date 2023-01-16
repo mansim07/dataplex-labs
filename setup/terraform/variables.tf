@@ -34,9 +34,9 @@ variable "tmpdir" {
   default = "/tmp/data"
 }
 
-variable "ldap" {
- description = "Individual ldap"
-}
+#variable "ldap" {
+# description = "Individual ldap"
+#}
 
 variable "user_ip_range" {
  description = "IP range for the user running the demo"

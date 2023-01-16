@@ -18,9 +18,7 @@
 # Variables
 ####################################################################################
 variable "project_id" {}
-
-
-
+variable "project_number" {}
 
 ####################################################################################
 # Create one service account for each data domain
@@ -174,6 +172,30 @@ resource "google_project_iam_member" "iam_cc_trans_consumer_sa" {
 }
 
 
+####################################################################################
+# Dataplex Service Account 
+####################################################################################
+
+
+resource "null_resource" "dataplex_permissions_1" {
+  provisioner "local-exec" {
+    command = format("gcloud projects add-iam-policy-binding %s --member=\"serviceAccount:service-%s@gcp-sa-dataplex.iam.gserviceaccount.com\" --role=\"roles/dataplex.dataReader\"", 
+                      var.project_id,
+                      var.project_number)
+  }
+
+  depends_on = [google_project_iam_member.iam_cc_trans_consumer_sa]
+}
+
+resource "null_resource" "dataplex_permissions_2" {
+  provisioner "local-exec" {
+    command = format("gcloud projects add-iam-policy-binding %s --member=\"serviceAccount:service-%s@gcp-sa-dataplex.iam.gserviceaccount.com\" --role=\"roles/dataplex.serviceAgent\"", 
+                      var.project_id,
+                      var.project_number)
+  }
+
+  depends_on = [null_resource.dataplex_permissions_1]
+}
 
 
 /*******************************************
@@ -183,6 +205,6 @@ dependencies having not completed
 resource "time_sleep" "sleep_after_network_and_iam_steps" {
   create_duration = "120s"
   depends_on = [
-                google_project_iam_member.iam_cc_trans_consumer_sa
+               null_resource.dataplex_permissions_2
               ]
 }

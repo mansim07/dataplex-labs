@@ -22,11 +22,11 @@ variable "dataplex_bqtemp_bucket_name" {}
 
 resource "null_resource" "curate_data" {
  for_each = {
-    format("projects/%s/locations/%s/lakes/prod-customer-source-domain/zones/customer-raw-zone/entities/customers_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/prod-customer-source-domain/zones/customer-curated-zone/assets/customer-curated-data",var.project_id, var.location)
-    #format("projects/%s/locations/%s/lakes/prod-customer-source-domain/zones/customer-raw-zone/entities/cc_customers_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/prod-customer-source-domain/zones/customer-curated-zone/assets/customer-curated-data",var.project_id, var.location),
-    #format("projects/%s/locations/%s/lakes/prod-merchant-source-domain/zones/merchant-raw-zone/entities/entities/merchants_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/prod-merchant-source-domain/zones/merchant-curated-zone/assets/merchant-curated-data",var.project_id, var.location),
-    #format("projects/%s/locations/%s/lakes/prod-merchant-source-domain/zones/merchant-raw-zone/entities/entities/merchants_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/prod-merchant-source-domain/zones/merchant-curated-zone/assets/mcc_codes",var.project_id, var.location),
-    #format("projects/%s/locations/%s/lakes/prod-transactions-source-domain/zones/transactions-raw-zone/entities/auth_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/prod-transactions-source-domain/zones/transactions-curated-zone/assets/transactions-curated-data",var.project_id, var.location)
+    format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/customers_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/assets/customer-curated-data",var.project_id, var.location)
+    #format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/cc_customers_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/assets/customer-curated-data",var.project_id, var.location),
+    #format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-raw-zone/entities/entities/merchants_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/assets/merchant-curated-data",var.project_id, var.location),
+    #format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-raw-zone/entities/entities/merchants_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/assets/mcc_codes",var.project_id, var.location),
+    #format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/transactions-raw-zone/entities/auth_data",var.project_id, var.location) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/transactions-curated-zone/assets/transactions-curated-data",var.project_id, var.location)
   }  
 
   provisioner "local-exec" {
@@ -75,11 +75,11 @@ EOT
 
 resource "null_resource" "copy_asset" {
   for_each = {
-    format("prod_customer_refined_data/customer-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/prod-customer-source-domain/zones/customer-curated-zone/entities/customers_data",var.project_id, var.location)
-    #format("prod_customer_refined_data/customer-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/prod-customer-source-domain/zones/customer-curated-zone/entities/cc_customers_data",var.project_id, var.location),
-    #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/prod-merchant-source-domain/zones/merchant-curated-zone/entities/merchants_data",var.project_id, var.location),
-    #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/prod-merchant-source-domain/zones/merchant-curated-zone/entities/mcc_codes",var.project_id, var.location),
-    #format("prod_pos_auth_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/prod-transactions-source-domain/zones/transactions-curated-zone/entities/merchants_data",var.project_id, var.location)
+    format("prod_customer_refined_data/customer-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/entities/customers_data",var.project_id, var.location)
+    #format("prod_customer_refined_data/customer-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/entities/cc_customers_data",var.project_id, var.location),
+    #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/entities/merchants_data",var.project_id, var.location),
+    #format("prod_merchant_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--merchant--domain/zones/merchant-curated-zone/entities/mcc_codes",var.project_id, var.location),
+    #format("prod_pos_auth_refined_data/merchant-sa@%s.iam.gserviceaccount.com", var.project_id) : format("projects/%s/locations/%s/lakes/consumer-banking--creditcards--transaction--domain/zones/transactions-curated-zone/entities/merchants_data",var.project_id, var.location)
   }
 
   provisioner "local-exec" {
