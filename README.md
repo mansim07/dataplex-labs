@@ -36,6 +36,7 @@ The org policies should be set to below:
  6. For Argolis make sure, you run it as the admin and it has the below iam privileges - 
  Owner, Service AccountToken creator, Organization Admin.
 
+7. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
 
 ## Setup
 
@@ -87,10 +88,10 @@ For Argolis, use fully qualified corporate email address
 
 8. Validate the Dataplex lakes and zones are created with the right number of asserts. Go to Dataplex -> Manage
  
-    ![Dataplex Image](/demo_artifacts/imgs/Dataplex-ui.png)
+    ![Dataplex Image](setup/resources/code_artifacts/imgs/Dataplex-ui.png)
 
 9. Go to Composer… Then Environments…  Click on <your-project-id>-composer link..then click on 'Environment Variables'
-    ![Composer Env](/demo_artifacts/imgs/Composer-env.png)
+    ![Composer Env](setup/resources/code_artifacts/imgs/Composer-env.png)
 
 
 ## Labs 
