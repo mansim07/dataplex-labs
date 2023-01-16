@@ -9,7 +9,7 @@
     3. Make sure "admin@" user has the below privileges
         - Owner
         - ServiceAccountTokenCreator
-        - OrganizationAdmin
+        - OrganizationPolicyAdmin
     3. Make sure the argolis account 
     4. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
 
