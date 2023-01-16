@@ -2,46 +2,52 @@
 
 ## Pre-requisites
 
-1.  Create a GCP Project 
+
+- For Argolis Account
+    1. Use "admin@" account 
+    2. Create a Argolis Project for your Dataplex Labs
+    3. Make sure "admin@" user has the below privileges
+        - Owner
+        - ServiceAccountTokenCreator
+        - OrganizationAdmin
+    3. Make sure the argolis account 
+    4. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
+
+- For Non-Argolis Account 
+    1.  Create a GCP Project 
+        1.1. Create a new GCP project and follow the guidelines [here](https://cloud.google.com/dataplex/docs/best-practices#choose_project). 
     
-    1.1. Create a new GCP project and follow the guidelines [here](https://cloud.google.com/dataplex/docs/best-practices#choose_project). 
-    
-    1.2. The project must belong to the same [VPC Service Control perimeter](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) as the data destined to be in the lake. Refer to this link to use or [add Dataplex to VPC-SC](https://cloud.google.com/dataplex/docs/vpc-sc). 
-    
-     
-2. Make sure both data and Dataplex regions are available in one of the Dataplex [supported regions](https://cloud.google.com/dataplex/docs/locations?hl=en_US)
-3. Organization Policies: 
-The org policies should be set to below:
+        1.2. The project must belong to the same [VPC Service Control perimeter](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) as the data destined to be in the lake. Refer to this link to use or [add Dataplex to VPC-SC](https://cloud.google.com/dataplex/docs/vpc-sc). 
+         
+    2. Make sure both data and Dataplex regions are available in one of the Dataplex [supported regions](https://cloud.google.com/dataplex/docs/locations?hl=en_US)
+    3. Organization Policies: 
+        The org policies should be set to below:
 
-    - "compute.requireOsLogin" : false,
-    - "compute.disableSerialPortLogging" : false,
-    - "compute.requireShieldedVm" : false
-    - "compute.vmCanIpForward" : true,
-    - "compute.vmExternalIpAccess" : true,
-    - "compute.restrictVpcPeering" : true
-    - "compute.trustedImageProjects" : true,
-    - "iam.disableCrossProjectServiceAccountUsage" :false #Only required when you want to setup in a seperate project to your data project 
+        - "compute.requireOsLogin" : false,
+        - "compute.disableSerialPortLogging" : false,
+        - "compute.requireShieldedVm" : false
+        - "compute.vmCanIpForward" : true,
+        - "compute.vmExternalIpAccess" : true,
+        - "compute.restrictVpcPeering" : true
+        - "compute.trustedImageProjects" : true,
+        - "iam.disableCrossProjectServiceAccountUsage" :false #Only required when you want to setup in a seperate project to your data project 
 
+    4. Enable [Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access#config-pga) on the network you plan to use with Dataplex Data Quality tasks. If you don't specify a network or sub-network when creating the Dataplex Data Quality task, Dataplex will use the default subnet, and you will need to enable Private Google Access for the default subnet.
 
-4. Enable [Private Google Access](https://cloud.google.com/vpc/docs/configure-private-google-access#config-pga) on the network you plan to use with Dataplex Data Quality tasks. If you don't specify a network or sub-network when creating the Dataplex Data Quality task, Dataplex will use the default subnet, and you will need to enable Private Google Access for the default subnet.
+    5. Make sure you have the appropriate Dataplex quotas 
+        ```
+        ## dataplex.googleapis.com/zones in region:us-central1 should be at least 20
+        ## dataplex.googleapis.com/lakes in region:us-central1 should be at least 5
 
-5. Make sure you have the appropriate Dataplex quotas 
-    ```
-     ## dataplex.googleapis.com/zones in region:us-central1 should be at least 20
-     ## dataplex.googleapis.com/lakes in region:us-central1 should be at least 5
-
-    ```
- You can view these settings at https://console.cloud.google.com/iam-admin/quotas and then enter the filters - Metric:dataplex.googleapis.com/zones OR Metric:dataplex.googleapis.com/lakes region:us-central1 
-
- 6. For Argolis make sure, you run it as the admin and it has the below iam privileges - 
- Owner, Service AccountToken creator, Organization Admin.
-
-7. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
+        ```
+        You can view these settings at https://console.cloud.google.com/iam-admin/quotas and then enter the filters - Metric:dataplex.googleapis.com/zones OR Metric:dataplex.googleapis.com/lakes region:us-central1 
+    6. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
 
 ## Setup
 
 1. [![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor)
-2. Select the appropriate project 
+
+2. Select the appropriate project. Make sure you are in the right project. 
 
 3. Install the below python libraries 
 
@@ -59,8 +65,7 @@ In cloud shell, declare the following variables after substituting with yours.
     echo "export PROJECT_ID=$(gcloud config get-value project)" >> ~/.profile
     ```
 
-You should use your fully qualified email address (e.g. joe.user@gmail.com)
-For Argolis, use fully qualified corporate email address
+For Argolis, use fully qualified corporate email address - ldap@fgoogle.com otherwise use your fully qualified email address (e.g. joe.user@gmail.com)
 
 5. To get the currently logged in email address, run: 'gcloud auth list as' below:
 
@@ -69,7 +74,7 @@ For Argolis, use fully qualified corporate email address
     Credentialed Accounts
 
     ACTIVE: *
-    ACCOUNT: joe.user@jgmail.com
+    ACCOUNT: joe.user@jgmail.com or admin@(for Argolis)
     ```
 
 6. Clone this repository in Cloud Shell
