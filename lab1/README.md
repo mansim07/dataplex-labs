@@ -18,9 +18,9 @@ We will grant the credit card transaction consumer (user managed) service accoun
 ### **Sub-Task 1: Make  customer-sa@ service account the data owner for consumer banking - customer domain**
 
 
-- **Step1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonization. 
+- **Step1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
 
-    Open Cloud Shell and execute the below command to list the tables in the "customer_raw_zone" dataset and list the objects in the customer raw zone bucket. Both  above commands will fail with authorization issue. 
+    Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset and list the objects in the customer raw zone bucket. Both  above commands will fail with authorization issue. 
 
 
     ```bash 
@@ -61,12 +61,15 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
         ```bash 
         curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/_project_datgov_/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/audit-data
-            ```
+        ```
+        
         ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
 
-    - **Method3:** Check the underlying asset permission
+    - **Method3:** Check the permissions of the underlying asset
 
-        ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-underlying-assets.png)
+        - Here is an example of the policy for underlying GCS bucket 
+
+            ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-underlying-assets.png)
 
 
 - **Step4**: After the access policies has been propagated by Dataplex, rerun the commands in Step1 and verify the service account is able to access underlying data
@@ -84,7 +87,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
         ```
 
-        Now both the commands should execute successfully. This shows how using a single security policy we are able to manage the access to both the GCS buckets as well BQ datasets. 
+        Now both the commands should execute successfully. This shows how using a single Dataplex security policy we are able to manage the access to both the GCS buckets as well BQ datasets. 
 
 
 ### **Sub Task 2: Grant the Credit card analytics consumer sa read access to the Customer Data product zone.  For this we will use the "Secure" functionality to the apply policy.**
@@ -212,11 +215,18 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
 - Execute the below command to automaically set the access for all the other domains - merchants, transaction and credit card consumer 
 
-```bash 
+    ```bash 
 
-bash ~/dataplex-labs/lab1/apply-security-policies.sh
+    bash ~/dataplex-labs/lab1/apply-security-policies.sh
 
-```
+    ```
+
+### Task 4: Go to BigQuery and perform analysis on the audit data to analyze and report 
+
+- 
+    ```bash 
+    SELECT protopayload_auditlog.methodName,   protopayload_auditlog.resourceName,  protopayload_auditlog.authenticationInfo.principalEmail,  protopayload_auditlog.requestJson, protopayload_auditlog.responseJson FROM `${PROJECT_ID}.central_audit_data.cloudaudit_googleapis_com_activity_*` LIMIT 1000
+    ```
 
 ## Summary 
 In this lab you have learned: 
