@@ -95,6 +95,12 @@ resource "google_dataplex_zone" "create_customer_zones" {
   depends_on  = [google_dataplex_lake.create_customer_lakes]
 }
 
+
+
+
+
+
+
 ####################################################################################
 # Create Domain2: Merchant Lakes and Zones                                         #
 ####################################################################################
@@ -324,6 +330,23 @@ resource "null_resource" "dataplex_permissions_2" {
 
   depends_on = [null_resource.dataplex_permissions_1]
 }
+
+
+# Delete the unnecessary dataset created in BigQuery only Zone based datasets 
+
+resource "null_resource" "delete_empty_bq_ds" {
+  provisioner "local-exec" {
+    command = <<-EOT
+    bq rm -r -f -d ${var.project_id}:customer_data_product_zone
+    bq rm -r -f -d ${var.project_id}:merchant_data_product_zone
+    bq rm -r -f -d ${var.project_id}:authorizations_data_product_zone
+    bq rm -r -f -d ${var.project_id}:data_product_zone
+    EOT
+    }
+    depends_on = [null_resource.dataplex_permissions_2]
+
+  }
+
 
 #sometimes we get API rate limit errors for dataplex; add wait until this is resolved.
 #resource "time_sleep" "sleep_after_zones" {

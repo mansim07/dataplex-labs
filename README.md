@@ -33,6 +33,9 @@ The org policies should be set to below:
     ```
  You can view these settings at https://console.cloud.google.com/iam-admin/quotas and then enter the filters - Metric:dataplex.googleapis.com/zones OR Metric:dataplex.googleapis.com/lakes region:us-central1 
 
+ 6. For Argolis make sure, you run it as the admin and it has the below iam privileges - 
+ Owner, Service AccountToken creator, Organization Admin.
+
 
 ## Setup
 

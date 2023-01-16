@@ -57,8 +57,7 @@ resource "google_project_iam_member" "iam_customer_sa" {
 "roles/dataproc.worker",
 "roles/cloudscheduler.jobRunner",
 "roles/dataplex.viewer",
-"roles/datacatalog.tagEditor",
-"roles/bigquery.dataViewer",   #adding for DQ on raw data and due to Dplx bug
+"roles/datacatalog.tagEditor"
 ])
   project  = var.project_id
   role     = each.key
@@ -92,8 +91,7 @@ resource "google_project_iam_member" "iam_merchant_sa" {
 "roles/dataflow.worker",
 "roles/cloudscheduler.jobRunner",
 "roles/dataplex.viewer",
-"roles/datacatalog.tagEditor",
-"roles/bigquery.dataViewer",   #adding for DQ on raw data and due to Dplx bug
+"roles/datacatalog.tagEditor"
 ])
   project  = var.project_id
   role     = each.key
@@ -126,8 +124,7 @@ resource "google_project_iam_member" "iam_cc_trans_sa" {
 "roles/dataflow.worker",
 "roles/cloudscheduler.jobRunner",
 "roles/dataplex.viewer",
-"roles/datacatalog.tagEditor",
-"roles/bigquery.dataViewer",   #adding for DQ on raw data and due to Dplx bug"
+"roles/datacatalog.tagEditor"
 ])
   project  = var.project_id
   role     = each.key
@@ -159,8 +156,7 @@ resource "google_project_iam_member" "iam_cc_trans_consumer_sa" {
 "roles/dataflow.worker",
 "roles/cloudscheduler.jobRunner",
 "roles/dataplex.viewer",
-"roles/datacatalog.tagEditor",
-"roles/bigquery.dataViewer",   #adding for DQ on raw data and due to Dplx bug
+"roles/datacatalog.tagEditor"
 ])
   project  = var.project_id
   role     = each.key
