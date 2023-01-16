@@ -129,3 +129,13 @@ gcloud projects delete ${PROJECT_ID}
 
 1. │ Error: googleapi: Error 400: You can't create a Composer environment due to Organization Policy constraints in the selected project.
 │ Policy constraints/compute.vmExternalIpAccess must allow all values when creating Public IP Cloud Composer environments., failedPrecondition
+
+2. ╷
+│ Error: googleapi: Error 400: You can't create a Composer environment due to Organization Policy constraints in the selected project.
+│ Policy constraints/compute.vmExternalIpAccess must allow all values when creating Public IP Cloud Composer environments., failedPrecondition
+│
+│   with module.composer.google_composer_environment.composer_env,
+│   on modules/composer/composer.tf line 127, in resource "google_composer_environment" "composer_env":
+│  127: resource "google_composer_environment" "composer_env" {
+
+3. 
