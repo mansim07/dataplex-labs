@@ -20,20 +20,17 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
 - **Step1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
 
-    Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset and list the objects in the customer raw zone bucket. Both  above commands will fail with authorization issue. 
+    Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset
 
 
     ```bash 
 
     export PROJECT_ID=$(gcloud config get-value project)
 
-    curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_raw_zone/tables?maxResults=10
+    curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
     ```
-
-    ```bash
-    curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://storage.googleapis.com/storage/v1/b/${PROJECT_ID}_customers_raw_data/o
-    ```
-
+    Sample output: 
+    ![permission denied](/lab1/resources/imgs/permission-dnied.png)
 
 - **Step2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
 
@@ -54,6 +51,10 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
         Go to Dataplex -> Manage sub menu -> Go to "Consumer Banking - Customer Domain" lake --> Click on "Customer Raw Zone" --> Click on the Customer Raw Data Asset
         ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-ui.png)
+
+        You can also look at the Asset Status section at the lake level. 
+
+        ![dataplex security status lake](/lab1/resources/imgs/dataplex-security-status-lake.png)
 
     -  **Method2:** Using Dataplex APIs
 
@@ -81,18 +82,14 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
         curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_raw_zone/tables?maxResults=10
         ```
+        Sample Output:
 
-        ```bash
-        curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://storage.googleapis.com/storage/v1/b/${PROJECT_ID}_customers_raw_data/o
-
-        ```
-
-        Now both the commands should execute successfully. This shows how using a single Dataplex security policy we are able to manage the access to both the GCS buckets as well BQ datasets. 
+        ![successful output](/lab1/resources/imgs/dataplex-security-result.png)
 
 
-### **Sub Task 2: Grant the Credit card analytics consumer sa read access to the Customer Data product zone.  For this we will use the "Secure" functionality to the apply policy.**
+### **Sub Task 2: Grant the Credit card analytics consumer sa read access to the Customer Data product zone.**
 
-- Using “Secure View” to provide the credit card analytics consumer domain access to the Customer Data Products 
+- Using “Secure View” to provide the credit card analytics consumer domain access to the Customer Data Products. For this we will use the "Secure" functionality to the apply policy
     1. Go to Dataplex in the Google Cloud console.
     2. Navigate to the **Manage**->**Secure** on the left menu.
     3. Under the **RESOURCE-CENTRIC** tab, find and expand on your project
