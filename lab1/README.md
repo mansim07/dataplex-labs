@@ -48,7 +48,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
     11. Verify Dataplex Data Owner roles appear under the permissions 
 
 
-- **Step3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally  Use any of the below methods
+- **Step3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods:
     
     - **Method1:** Using Dataplex UI 
 
