@@ -84,10 +84,60 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 
 - **Step4**: Monitor the job using the instructions specified in step#2
 
-- **Step5**: This is a critical validation 
-    - Go to BigQuery UI.  Validate both the tables customer tables under the “customer_refined_data” is populated. 
+- **Step5**: Validate the data. This is a critical validation 
+    - Open cloud shell and execute the below 2 command and make sure the count > 0
+        ```bash 
+        export PROJECT_ID=$(gcloud config get-value project)
 
-        ![bq_results](/lab3/resources/imgs/bq_results.png)
+        bq query --use_legacy_sql=false \
+        "SELECT
+        COUNT(*)
+        FROM
+        ${PROJECT_ID}.customer_refined_data.customers_data"
+        ```
+        Result: 
+        ```
+        admin_@cloudshell:~ (dataplex-lab5)$ export PROJECT_ID=$(gcloud config get-value project)
+
+        bq query --use_legacy_sql=false \
+        "SELECT
+        COUNT(*)
+        FROM
+        ${PROJECT_ID}.customer_refined_data.customers_data"
+        Your active configuration is: [cloudshell-4044]
+        +------+
+        | f0_  |
+        +------+
+        | 2020 |
+        +------+
+        ```
+
+        ```bash 
+        export PROJECT_ID=$(gcloud config get-value project)
+
+        bq query --use_legacy_sql=false \
+        "SELECT
+        COUNT(*)
+        FROM
+        ${PROJECT_ID}.customer_refined_data.cc_customers_data"
+        ```
+        Result:
+        ```
+        admin_@cloudshell:~ (dataplex-lab5)$ export PROJECT_ID=$(gcloud config get-value project)
+
+        bq query --use_legacy_sql=false \
+        "SELECT
+        COUNT(*)
+        FROM
+        ${PROJECT_ID}.customer_refined_data.cc_customers_data"
+        Your active configuration is: [cloudshell-4044]
+        +------+
+        | f0_  |
+        +------+
+        | 2000 |
+        +------+
+        ```
+
 ### **Sub Task 2: Move the Merchant Data**
 
 - **Step1**: Open gCloud shell and  execute the below commands
@@ -118,6 +168,20 @@ In this lab, you will learn how to build Data Products. The diagram below depict
     ```
 - **Step2**:  Monitor the job through the Dataplex UI and wait for it to complete 
 - **Step3:**: Verify the  merchants_refined_data.merchants_data is populated in BQ 
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
+
+    bq query --use_legacy_sql=false \
+    "SELECT COUNT(*) FROM ${PROJECT_ID}.merchants_refined_data.merchants_data"
+    ```
+    Result: 
+    ```
+    Your active configuration is: [cloudshell-4044]
+    +------+
+    | f0_  |
+    +------+
+    | 6000 |
+    ```
 
 
 ### Sub Task 3: Move the Transaction Data
@@ -151,13 +215,31 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 
 - **Step2:** Monitor the job through the Dataplex UI and wait for it to complete 
 - **Step3:** Verify the pos_auth_refined_data.auth_data is populated in BQ 
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
 
+    bq query --use_legacy_sql=false \
+    "SELECT COUNT(*) FROM ${PROJECT_ID}.pos_auth_refined_data.auth_data"
+    ```
+    Result
+    ```
+    admin_@cloudshell:~ (dataplex-lab5)$ export PROJECT_ID=$(gcloud config get-value project)
 
-## Task 2: Use DataplexDQ+BQ+Composer to populate the Data Productss 
+    bq query --use_legacy_sql=false \
+    "SELECT COUNT(*) FROM ${PROJECT_ID}.pos_auth_refined_data.auth_data"
+    Your active configuration is: [cloudshell-4044]
+    +------+
+    | f0_  |
+    +------+
+    | 6000 |
+    +------+
+    ```
+
+## Task 2: Use DataplexDQ+BQ+Composer to populate the Data Products
 
 
 ### **Sub Task 1: Create the Customer Data Product**
-- **Step1:**: Go to Composer Service UI → You should see ${PROJECT_ID}-composer environment. Click on the Airflow UI.
+- **Step1:** Go to Composer Service UI → You should see ${PROJECT_ID}-composer environment. Click on the Airflow UI.
 
     ![airflow UI](/lab3/resources/imgs/airflow-ui.png)
 
