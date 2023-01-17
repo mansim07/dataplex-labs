@@ -201,7 +201,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
 - Open cloud shell and execute the below command
     ```bash 
     export PROJECT_ID=$(gcloud config get-value project)
-    export PROJECT_NBR=$(gcloud projects list --filter="${PROJECT_DATASTO}" --format="value(PROJECT_NUMBER)")
+    export PROJECT_NBR=$(gcloud projects list --filter="${PROJECT_ID}" --format="value(PROJECT_NUMBER)")
     echo $PROJECT_NBR
 
     curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
