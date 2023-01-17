@@ -5,7 +5,7 @@
 
 - For Argolis Account
     1. Use "admin@" account 
-    2. Create a new Argolis Project for this lab 
+    2. Create a new ArgolispProject for this lab 
     3. Make sure "admin@" user has the below privileges
         - Owner
         - ServiceAccountTokenCreator
@@ -64,7 +64,7 @@ In cloud shell, declare the following variables after substituting with yours.
     echo "export USERNAME=your-email" >> ~/.profile
     echo "export PROJECT_ID=$(gcloud config get-value project)" >> ~/.profile
     ```
-
+    ![profile_validate](/setup/resources/code_artifacts/imgs/profile-validate.png)
 For Argolis, use fully qualified corporate email address - ldap@fgoogle.com otherwise use your fully qualified email address (e.g. joe.user@gmail.com) as the USERNAME
 
 5. To get the currently logged in email address, run: 'gcloud auth list as' below:
