@@ -80,8 +80,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
         --partitionType=DAY,\
         --targetTableName=cc_customers_data,\
       --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
-
-        ```
+    ```
 
 - **Step4**: Monitor the job using the instructions specified in step#2
 
@@ -116,7 +115,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
             --partitionType=DAY,\
             --targetTableName=merchants_data,\
             --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/merchant-source-configs/merchantcustom.sql"
-        ```
+    ```
 - **Step2**:  Monitor the job through the Dataplex UI and wait for it to complete 
 - **Step3:**: Verify the  merchants_refined_data.merchants_data is populated in BQ 
 
@@ -148,7 +147,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
             --partitionType=DAY,\
             --targetTableName=auth_data,\
             --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/transactions-source-configs/transcustom.sql"
-        ```
+    ```
 
 - **Step2:** Monitor the job through the Dataplex UI and wait for it to complete 
 - **Step3:** Verify the pos_auth_refined_data.auth_data is populated in BQ 
