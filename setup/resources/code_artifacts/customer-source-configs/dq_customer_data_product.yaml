@@ -145,11 +145,3 @@ rule_bindings:
      - VALID_SSN
      - NO_DUPLICATES_IN_COLUMN_GROUPS:
          column_names: "ssn"
-
- #ACCURACY_CHECK_SIMPLE:
- #  entity_uri: dataplex://entities/customer_data
- #   column_id: gender
- #   row_filter_id: NONE
- #   rule_ids:
- #     - NO_ACCURACY_ISSUES_SIMPLE:
- #         deviation_threshold_pct: 25
