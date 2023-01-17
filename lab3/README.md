@@ -24,7 +24,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
         --project=${PROJECT_ID} \
         --location=us-central1 \
     --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
-        --lake=consumer-banking--customer--domainn \
+        --lake=consumer-banking--customer--domain \
         --trigger-type=ON_DEMAND \
         --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
         --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
@@ -36,7 +36,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
             --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
             --templateProperty=dataplex.gcs.bq.save.mode=append,\
             --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
-            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domainn/zones/customer-raw-zone/entities/customers_data,\
+            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/customers_data,\
             --partitionField=ingest_date,\
             --partitionType=DAY,\
             --targetTableName=customers_data,\
@@ -57,7 +57,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
         --project=${PROJECT_ID} \
         --location=us-central1 \
         --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
-        --lake=consumer-banking--customer--domainn \
+        --lake=consumer-banking--customer--domain \
         --trigger-type=ON_DEMAND \
         --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
         --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
@@ -69,7 +69,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
             --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
             --templateProperty=dataplex.gcs.bq.save.mode=append,\
             --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
-            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domainn/zones/customer-raw-zone/entities/cc_customers_data,\
+            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/cc_customers_data,\
             --partitionField=ingest_date,\
             --partitionType=DAY,\
             --targetTableName=cc_customers_data,\
