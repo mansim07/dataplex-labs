@@ -8,17 +8,21 @@ Dataplex provides the following two options to validate data quality:
 
 2. Dataplex data quality task (Generally Available) offers a highly customizable experience to manage your own rule repository and customize execution and results, using Dataplex for managed / serverless execution. Dataplex data quality task uses an open source component, CloudDQ, that can also open up choices for customers who want to enhance the code to their needs.
 
-Today's lab will focus on using Dataplex data quality task(#2) and we will perform these tasks: 
-
-- Task1: Configure & execute Data Quality Task for Customer Domain Data Products 
-- Task2: Configure & execute Data Quality for Merchants Domain Data Products
-- Task3: Configure and execute Data Quality for Transaction Domain Data Products 
 
 High Level DQ architecture 
 
 ![dq-arch](/lab5/resources/imgs/dq-arch.png)
 
-## Task1: Configure & Execute Data Quality task for Customer Domain Data Products
+ In today's lab , we will execute an end-to-end data quality task for customer domain data productswith a focus on using Dataplex data quality task (#2). The work entails: 
+- Reviewing the yaml file in which the dq rules are specified
+- Configuring and running Dataplex's Data Quality task
+- Reviewing the data quality metric published in BigQuery 
+- Creating a data quality dashboard 
+- Data quality incident management using Cloud logging and monitoring
+- Creating data quality score tags for the data products in the catalog.
+
+
+## Configure & execute end-to-end Data quality task for Customer Domain Data Products
 
 - **Step1**: Validate the entites are already discovered and registered in Dataplex 
 
@@ -128,7 +132,7 @@ High Level DQ architecture
 
         ![dq-dashboard](/lab5/resources/imgs/dq-dashboard.png)
 
-- [OPTIONAL] **Step7**: Cloud Logging and Monitoring 
+- [OPTIONAL] **Step7**: Data quality incident management using Cloud logging and monitoring 
     By appending " --summary_to_stdout" flag to your data quality jobs, you can easily route the DQ summary logs to Cloud Logging. 
     You can use "Alerts" within cloud logging to alert based on dq failures. Alerts can be send through multiple notification channels like webhooks, emails, sms etc.
    The steps to accomplish this will be provided in the next phase. Sorry!
@@ -151,21 +155,15 @@ High Level DQ architecture
         --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/tagmanager-1.0-SNAPSHOT.jar" \
         --execution-args=^::^TASK_ARGS="--tag_template_id=projects/${PROJECT_ID}/locations/us-central1/tagTemplates/data_product_quality, --project_id=${PROJECT_ID},--location=us-central1,--lake_id=consumer-banking--customer--domain,--zone_id=customer-data-product-zone,--entity_id=customer_data,--input_file=data-product-quality-tag-auto.yaml"
         ```
-
    
     - Go to Dataplex -> Discover ->  type "tag:data_quality_information" into the search bar  
     - The customer data product should be tagged with the data quality information as show below:
 
+- **Step9**: Composer can used to automate the dq process. Dataplex provides airflow operators using which we can now automate the dq process. 
+A DAG can be defined to first execute the Dataplex DQ job and then create the tags. Let's execute one of the pre-define composer dags to see how this works. 
 
-
-## Task2: Configure & Execute Data Quality task for Merchant Domain Data Products
-As you have already learned how to execute Data Quality, for this task we will leverage a pre-defined Composer DAG to automate and execute the above steps. 
-
-
-
-- **Step1** : 
-
-## Task2: Configure & Execute Data Quality task for Transaction Domain Data Products
-As you have already learned how to execute Data Quality, for this task we will leverage a pre-defined Composer DAG to automate and execute the above steps. 
-
-- **Step1** : 
+    - Go to Composer → Go to Airflow UI → Click on DAGs
+    - Click on DAGs and search for or go to  “master_dag_customer_dq” DAG and Click on it 
+    - Trigger the DAG Manually by clicking on the Run button as show below
+    - Monitor and wait for the jobs to Complete. You can also go to Dataplex UI to monitor the jobs 
+    - Go to Dataplex -> Discover ->  type "tag:data_quality_information" into the search bar. Now you should see all the customer data products
