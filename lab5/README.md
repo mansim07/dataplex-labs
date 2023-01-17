@@ -148,8 +148,6 @@ High Level DQ architecture
         ```
     - You will the cloud dq output in the logs 
     - Click on "Create Alert" to create an incident based on dq failures. 
-
-
         ![dq-log-alert](/lab5/resources/imgs/dq-log-alert.png)
 
     - Provide the below info in the "Create logs-based alert policy" screen
@@ -161,9 +159,9 @@ High Level DQ architecture
         - **Who should be notified?**
         - Click on **Notification Channel** and then Click on **Manage Notification channel**: 
             - Under Email -> Click add your corp email
-            ![notification-channel](/lab5/resources/imgs/notification_channel.png)
+                ![notification-channel](/lab5/resources/imgs/notification_channel.png)
         - Comeback to Logging screen -> Click on **Notification Channel** -> Click Refresh -> Choose the email id 
-            ![noti-email](/lab5/resources/imgs/noti-email.png)
+            - ![noti-email](/lab5/resources/imgs/noti-email.png)
         - Click "Save" 
         - Next time the DQ jobs fails you will receive an email alert.
             - Sample Alert 
