@@ -8,14 +8,15 @@ Dataplex provides the following two options to validate data quality:
 
 2. Dataplex data quality task (Generally Available) offers a highly customizable experience to manage your own rule repository and customize execution and results, using Dataplex for managed / serverless execution. Dataplex data quality task uses an open source component, CloudDQ, that can also open up choices for customers who want to enhance the code to their needs.
 
-Today's lab will focus on using Dataplex data quality task(#2)
+Today's lab will focus on using Dataplex data quality task(#2) and we will perform these tasks: 
 
-Data Quality 
+- Task1: Configure & execute Data Quality Task for Customer Domain Data Products 
+- Task2: Configure & execute Data Quality for Merchants Domain Data Products
+- Task3: Configure and execute Data Quality for Transaction Domain Data Products 
 
-Task1: Configure & execute Data Quality Task for Customer Domain Data Products 
-Task2: Configure & execute Data Quality for Merchants Domain Data Products
-Task3: Configure and execute Data Quality for Transaction Domain Data Products 
+High Level DQ architecture 
 
+![dq-arch](/lab5/resources/imgs/dq-arch.png)
 
 ## Task1: Configure & Execute Data Quality task for Customer Domain Data Products
 
@@ -23,7 +24,7 @@ Task3: Configure and execute Data Quality for Transaction Domain Data Products
 
     ![dataproduct-entities](/lab5/resources/imgs/customer-dp-entities.png)
 
-- **Step2**: Define and review the Yaml file for customer_Data Data product
+- **Step2**: Review the Yaml file for customer_Data Data product
 
     As part of the lab we have already defined a yaml file and stored in the gcs bucket 
 
@@ -86,7 +87,7 @@ Task3: Configure and execute Data Quality for Transaction Domain Data Products
         "$TASK_ID"
         ```
 -  **Step4**: Monitor the data quality job
-    - Go to Dataplex UI -> Process --> "Data Quality" Tab
+    - Go to **Dataplex UI** -> **Process** tab -> **"Data Quality"** tab
     - You will find a DQ job running with name "customer-data-product-dq"
     - Once the job is successful, proceed to the next step
 
