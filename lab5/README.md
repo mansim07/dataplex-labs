@@ -104,6 +104,11 @@ Task3: Configure and execute Data Quality for Transaction Domain Data Products
 
     - Leave the defaults as is and click the ‘Copy Report’ button.
         ![copy-report](/lab5/resources/imgs/copy-report.png)
+    - Share Dashboard with your Argolis admin account 
+        - Click the Share button in the top right corner to see the following display
+        - Enter your Argolis admin email id,  select ‘Can edit’ and click the ‘Send’ button.
+        - Click the ‘Share’ button again and choose the ‘Manage Access’ tab
+
 
 
 ## Task2: Configure & Execute Data Quality task for Merchant Domain Data Products
