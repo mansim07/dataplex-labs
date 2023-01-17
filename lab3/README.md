@@ -247,7 +247,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 - **Step3**: Trigger the DAG manually and monitor
     - You can go to Dataplex --> Process Tab --> Under the "Data Quality" Tab, you will find the DQ job that was triggered by the airflow job.  
 
-- **Step4**: Validate all the 3 Customer Data Products are Populated in BigQuery DS customer_data_product
+- **Step4**: Once the DAG successfully completes, validate all the 3 Customer Data Products are Populated in BigQuery DS customer_data_product
 
     ![bq_cust_results](/lab3/resources/imgs/bq_cust_results.png)
 
