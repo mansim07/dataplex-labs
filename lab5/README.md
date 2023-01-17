@@ -46,7 +46,7 @@ Task3: Configure and execute Data Quality for Transaction Domain Data Products
 -  **Step3**: Execute the Data Quality task 
     - Open cloud shell and execute the below command. No Changes Needed. 
         ```bash 
-        export PROJECT_ID=$(gcloud config get-value project)_
+        export PROJECT_ID=$(gcloud config get-value project)
 
         # Google Cloud region for the Dataplex lake.
         export REGION_ID="us-central1"
@@ -71,7 +71,7 @@ Task3: Configure and execute Data Quality for Transaction Domain Data Products
         export TASK_ID="customer-data-product-dq"
 
         #DQ Service Account
-        export SERVICE_ACCOUNT=customer-sa@_project_datgov_.iam.gserviceaccount.com
+        export SERVICE_ACCOUNT=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com
 
         gcloud dataplex tasks create \
         --location="${REGION_ID}" \
@@ -82,6 +82,7 @@ Task3: Configure and execute Data Quality for Transaction Domain Data Products
         --spark-python-script-file="gs://${PUBLIC_GCS_BUCKET_NAME}/clouddq_pyspark_driver.py" \
         --spark-file-uris="gs://${PUBLIC_GCS_BUCKET_NAME}/clouddq-executable.zip","gs://${PUBLIC_GCS_BUCKET_NAME}/clouddq-executable.zip.hashsum","${YAML_CONFIGS_GCS_PATH}" \
         --execution-args=^::^TASK_ARGS="clouddq-executable.zip, ALL, ${YAML_CONFIGS_GCS_PATH}, --gcp_project_id=${PROJECT_ID}, --gcp_region_id='${REGION_ID}', --gcp_bq_dataset_id='${TARGET_BQ_DATASET}', --target_bigquery_summary_table='${TARGET_BQ_TABLE}'" \
+        --summary_to_stdout \
         "$TASK_ID"
         ```
 -  **Step4**: Monitor the data quality job
@@ -99,20 +100,67 @@ Task3: Configure and execute Data Quality for Transaction Domain Data Products
     (This report is In the Pantheon instance)
     https://datastudio.google.com/c/u/0/reporting/faf194a4-6388-4df4-b566-99529a152f5c/page/x16FC
     - Click on the details link next to the 'Edit' button and make a copy of the dashboard
-
         ![dashboard UI ](/lab5/resources/imgs/dataplex-dashboard.png)
 
     - Leave the defaults as is and click the ‘Copy Report’ button.
         ![copy-report](/lab5/resources/imgs/copy-report.png)
+
     - Share Dashboard with your Argolis admin account 
         - Click the Share button in the top right corner to see the following display
         - Enter your Argolis admin email id,  select ‘Can edit’ and click the ‘Send’ button.
-        - Click the ‘Share’ button again and choose the ‘Manage Access’ tab
+        - Click the ‘Share’ button again and choose the ‘Manage Access’ tab. Copy the URL link shown below.
+
+        ![manage-access](/lab5/resources/imgs/manage-access.png)
+    - Edit the dashboard. Switch to the lab instance and open it in incognitio browser window and paste the link copies above 
+    - Change the title of the dashboard and select the Resource menu and choose Manage added data sources option.
+    - Click the Edit button under Action 
+    - Select the 'edit Connection' button 
+    - Select Project: ${PROJECT_ID}
+        Select Dataset: central_dq_results
+        Select Table: dq_summary
+        Click the ‘Reconnect’ button
+    - Click the 'Apply' button 
+    - Click the 'Done' button 
+    - Click the ‘Close’ button and then click the ‘View’ button
+    - View Dashboard. Change the date range if needed and select drill down parameters to refresh the Dashboard. 
+    (Sample screenshot shown below)
+
+        ![dq-dashboard](/lab5/resources/imgs/dq-dashboard.png)
+
+- [OPTIONAL] **Step7**: Cloud Logging and Monitoring 
+    By appending " --summary_to_stdout" flag to your data quality jobs, you can easily route the DQ summary logs to Cloud Logging. 
+    You can use "Alerts" within cloud logging to alert based on dq failures. Alerts can be send through multiple notification channels like webhooks, emails, sms etc.
+   The steps to accomplish this will be provided in the next phase. Sorry!
+
+- **Step8**: Data Quality automated tagging job  
+    Once we have the DQ results available, using a custom utility which will automatically calculate the dq scores and create the data product tags. We have pre-built the utility as a java library which we can now orchestrate using Dataplex's serverless spark task 
+     - Open cloud shell ad execute the below command 
+        ```bash 
+        export PROJECT_ID=$(gcloud config get-value project)
+
+        gcloud dataplex tasks create customer-dp-dq-tag \
+        --project=${PROJECT_ID} \
+        --location=us-central1 \
+        --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
+        --lake=prod-customer-source-domain \
+        --trigger-type=ON_DEMAND \
+        --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
+        --spark-main-class="com.google.cloud.dataplex.templates.dataquality.DataProductQuality" \
+        --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/customer-source-configs/data-product-quality-tag-auto.yaml" \
+        --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/tagmanager-1.0-SNAPSHOT.jar" \
+        --execution-args=^::^TASK_ARGS="--tag_template_id=projects/${PROJECT_ID}/locations/us-central1/tagTemplates/data_product_quality, --project_id=${PROJECT_ID},--location=us-central1,--lake_id=consumer-banking--customer--domain,--zone_id=customer-data-product-zone,--entity_id=customer_data,--input_file=data-product-quality-tag-auto.yaml"
+        ```
+
+   
+    - Go to Dataplex -> Discover ->  type "tag:data_quality_information" into the search bar  
+    - The customer data product should be tagged with the data quality information as show below:
 
 
 
 ## Task2: Configure & Execute Data Quality task for Merchant Domain Data Products
 As you have already learned how to execute Data Quality, for this task we will leverage a pre-defined Composer DAG to automate and execute the above steps. 
+
+
 
 - **Step1** : 
 
