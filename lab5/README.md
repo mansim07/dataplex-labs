@@ -61,7 +61,7 @@ High Level DQ architecture
         export PUBLIC_GCS_BUCKET_NAME="dataplex-clouddq-artifacts-${REGION_ID}"
 
         # Location of DQ YAML Specifications file
-        export YAML_CONFIGS_GCS_PATH="gs://${PROJECT_ID}_dataplex_process/transactions-source-configs/dq_customer_data_product.yaml"
+        export YAML_CONFIGS_GCS_PATH="gs://${PROJECT_ID}_dataplex_process/customer-source-configs/dq_customer_data_product.yaml"
 
         # The Dataplex lake where your task is created.
         export LAKE_NAME="consumer-banking--customer--domain"
