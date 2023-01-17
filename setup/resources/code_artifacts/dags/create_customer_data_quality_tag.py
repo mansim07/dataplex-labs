@@ -273,7 +273,7 @@ with models.DAG(
                 "trigger_spec": {"type_": 'ON_DEMAND'},
                 "execution_spec": {
                     "service_account": IMPERSONATION_CHAIN,
-                    "args": {"TASK_ARGS": f" --tag_template_id={TAG_TEMPLATE}, --project_id={PROJECT_ID_DG},--location={DATAPLEX_REGION}, --lake_id={LAKE_ID},--zone_id={ZONE_ID}, --entity_id={entity},--input_file={TAG_INPUT_FILE}"
+                    "args": {"TASK_ARGS": f" --tag_template_id={TAG_TEMPLATE}, --project_id={PROJECT_ID_DG},--location={DATAPLEX_REGION}, --lake_id={LAKE_ID},--zone_id={ZONE_ID}, --entity_id={entity},--input_file={TAG_INPUT_FILE} --summary_to_stdout"
                              }
                 },
                 "spark": {

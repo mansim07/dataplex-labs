@@ -186,15 +186,17 @@ High Level DQ architecture
         --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/tagmanager-1.0-SNAPSHOT.jar" \
         --execution-args=^::^TASK_ARGS="--tag_template_id=projects/${PROJECT_ID}/locations/us-central1/tagTemplates/data_product_quality, --project_id=${PROJECT_ID},--location=us-central1,--lake_id=consumer-banking--customer--domain,--zone_id=customer-data-product-zone,--entity_id=customer_data,--input_file=data-product-quality-tag-auto.yaml"
         ```
-   
-    - Go to Dataplex -> Discover ->  type "tag:data_quality_information" into the search bar  
+    - Monitor the job. Go to Dataplex -> Process tab --> Custom spark --> "customer-dp-dq-tag" job. Refresh the page if you don't see your job. 
+    - Validate the result. Go to Dataplex -> Search under Discover ->  type "tag:data_product_quality" into the search bar  
     - The customer data product should be tagged with the data quality information as show below:
+        ![dq-tag-search](/lab5/resources/imgs/dq-tag-search.png)
 
-- **Step9**: Composer can used to automate the dq process. Dataplex provides airflow operators using which we can now automate the dq process. 
-A DAG can be defined to first execute the Dataplex DQ job and then create the tags. Let's execute one of the pre-define composer dags to see how this works. 
+- **Step9**:  Dataplex provides airflow operators using which we can now automate the dq process. 
+An airflow DAG can be defined to first execute the Dataplex DQ job and then publish the tags. Let's execute one of the pre-define composer dags to see how this works. 
 
     - Go to Composer → Go to Airflow UI → Click on DAGs
     - Click on DAGs and search for or go to  “master_dag_customer_dq” DAG and Click on it 
     - Trigger the DAG Manually by clicking on the Run button as show below
-    - Monitor and wait for the jobs to Complete. You can also go to Dataplex UI to monitor the jobs 
-    - Go to Dataplex -> Discover ->  type "tag:data_quality_information" into the search bar. Now you should see all the customer data products
+        ![run-dag](/lab5/resources/imgs/run-dag.png)
+    - Monitor and wait for the airflow jobs to complete. You can also go to Dataplex UI to monitor the jobs 
+    - Go to Dataplex -> Discover ->  type "tag:data_product_quality" into the search bar. Now you should see all the customer data products
