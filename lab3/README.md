@@ -1,2 +1,6 @@
-# Using Dataplex's Data Quality Task to validate Raw data and execute the transformation pipelines
+# Building Data products 
+
+In this lab, you will learn how to build Data Products. 
+
+
 
