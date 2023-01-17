@@ -13,7 +13,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 
 ## Task 1: Use Dataproc template to move the data from raw/curated zone to refine zone in BQ  
 
-### Sub Task 1: Move the Customer Data
+### **Sub Task 1: Move the Customer Data**
 
 - **Step1**: Open cloud shell and run the below command 
 
@@ -50,65 +50,67 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 - **Step3**: Populate the Customer Credit Card Profile  data feed 
   - Open cloud shell 
 
-  ```bash 
-   export PROJECT_ID=$(gcloud config get-value project)
-   
-  gcloud dataplex tasks create cc-cust-curated-refined \
-    --project=${PROJECT_ID} \
-    --location=us-central1 \
- --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
-    --lake=consumer-banking--customer--domainn \
-    --trigger-type=ON_DEMAND \
-    --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
-    --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
-    --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
-    --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
-    --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-        --templateProperty=project.id=_project_datsto_,\
-        --templateProperty=dataplex.gcs.bq.target.dataset=customer_refined_data,\
-        --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
-        --templateProperty=dataplex.gcs.bq.save.mode=append,\
-        --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
-        --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domainn/zones/customer-raw-zone/entities/cc_customers_data,\
-        --partitionField=ingest_date,\
-        --partitionType=DAY,\
-        --targetTableName=cc_customers_data,\
-      --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
+    
+    gcloud dataplex tasks create cc-cust-curated-refined \
+        --project=${PROJECT_ID} \
+        --location=us-central1 \
+        --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
+        --lake=consumer-banking--customer--domainn \
+        --trigger-type=ON_DEMAND \
+        --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
+        --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
+        --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
+        --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
+        --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
+            --templateProperty=project.id=_project_datsto_,\
+            --templateProperty=dataplex.gcs.bq.target.dataset=customer_refined_data,\
+            --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
+            --templateProperty=dataplex.gcs.bq.save.mode=append,\
+            --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
+            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domainn/zones/customer-raw-zone/entities/cc_customers_data,\
+            --partitionField=ingest_date,\
+            --partitionType=DAY,\
+            --targetTableName=cc_customers_data,\
+        --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
 
-```
+        ```
 
 - **Step4**: Monitor the job using the instructions specified in step#2
 
 - **Step5**: This is a critical validation 
     - Go to BigQuery UI.  Validate both the tables customer tables under the “customer_refined_data” is populated. 
-    ![bq_results](lab3/resources/imgs/bq_results.png)
-### Sub Task 2: Move the Merchant Data
+
+        ![bq_results](/lab3/resources/imgs/bq_results.png)
+### **Sub Task 2: Move the Merchant Data**
 
 - **Step1**: Open gCloud shell and  execute the below commands
 
-```bash 
-gcloud dataplex tasks create merchant-raw-to-refined \
-    --project=${PROJECT_ID} \
-    --location=us-central1 \
- --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
-    --lake=consumer-banking--merchant--domain \
-    --trigger-type=ON_DEMAND \
-    --execution-service-account=merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com \
-    --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
-    --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
-    --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
-    --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-        --templateProperty=project.id=_project_datsto_,\
-        --templateProperty=dataplex.gcs.bq.target.dataset=merchants_refined_data,\
-        --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
-        --templateProperty=dataplex.gcs.bq.save.mode=append,\
-        --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
-        --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--merchant--domain/zones/merchant-raw-zone/entities/merchants_data,\
-        --partitionField=ingest_date,\
-        --partitionType=DAY,\
-        --targetTableName=merchants_data,\
-        --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/merchant-source-configs/merchantcustom.sql"
-    ```
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
+    gcloud dataplex tasks create merchant-raw-to-refined \
+        --project=${PROJECT_ID} \
+        --location=us-central1 \
+        --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
+        --lake=consumer-banking--merchant--domain \
+        --trigger-type=ON_DEMAND \
+        --execution-service-account=merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com \
+        --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
+        --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
+        --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
+        --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
+            --templateProperty=project.id=_project_datsto_,\
+            --templateProperty=dataplex.gcs.bq.target.dataset=merchants_refined_data,\
+            --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
+            --templateProperty=dataplex.gcs.bq.save.mode=append,\
+            --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
+            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--merchant--domain/zones/merchant-raw-zone/entities/merchants_data,\
+            --partitionField=ingest_date,\
+            --partitionType=DAY,\
+            --targetTableName=merchants_data,\
+            --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/merchant-source-configs/merchantcustom.sql"
+        ```
 - **Step2**:  Monitor the job through the Dataplex UI and wait for it to complete 
 - **Step3:**: Verify the  merchants_refined_data.merchants_data is populated in BQ 
 
@@ -117,30 +119,62 @@ gcloud dataplex tasks create merchant-raw-to-refined \
 
 - **Step1**: Open gCloud shell and  execute the below commands
 
-```bash 
-gcloud dataplex tasks create auth-raw-to-refined-10 \
-    --project=${PROJECT_ID} \
-    --location=us-central1 \
- --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
-    --lake=consumer-banking--creditcards--transaction--domain \
-    --trigger-type=ON_DEMAND \
-    --execution-service-account=cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com \
-    --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
-    --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
-    --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
-    --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-        --templateProperty=project.id=_project_datsto_,\
-        --templateProperty=dataplex.gcs.bq.target.dataset=pos_auth_refined_data,\
-        --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
-        --templateProperty=dataplex.gcs.bq.save.mode=append,\
-        --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
-        --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--creditcards--transaction--domain/zones/authorizations-raw-zone/entities/auth_data,\
-        --partitionField=ingest_date,\
-        --partitionType=DAY,\
-        --targetTableName=auth_data,\
-        --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/transactions-source-configs/transcustom.sql"
-```
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
+    gcloud dataplex tasks create auth-raw-to-refined-10 \
+        --project=${PROJECT_ID} \
+        --location=us-central1 \
+        --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
+        --lake=consumer-banking--creditcards--transaction--domain \
+        --trigger-type=ON_DEMAND \
+        --execution-service-account=cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com \
+        --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
+        --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
+        --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
+        --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
+            --templateProperty=project.id=_project_datsto_,\
+            --templateProperty=dataplex.gcs.bq.target.dataset=pos_auth_refined_data,\
+            --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
+            --templateProperty=dataplex.gcs.bq.save.mode=append,\
+            --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
+            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--creditcards--transaction--domain/zones/authorizations-raw-zone/entities/auth_data,\
+            --partitionField=ingest_date,\
+            --partitionType=DAY,\
+            --targetTableName=auth_data,\
+            --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/transactions-source-configs/transcustom.sql"
+        ```
 
 - **Step2:** Monitor the job through the Dataplex UI and wait for it to complete 
 - **Step3:** Verify the pos_auth_refined_data.auth_data is populated in BQ 
 
+
+## Task 2: Use DataplexDQ+BQ+Composer to populate the Data Productss 
+
+
+### **Sub Task 1: Create the Customer Data Product**
+- **Step1:**: Go to Composer Service UI → You should see _project_datgov_-composer environment. Click on the Airflow UI.
+
+    ![airflow UI](/lab3/resources/imgs/airflow-ui.png)
+
+- **Step2**: Search for  “etl_with_dq_customer_data_product_wf”
+- **Step3**: Trigger the DAG manually and monitor
+    - You can go to Dataplex --> Process Tab --> Under the "Data Quality" Tab, you will find the DQ job that was triggered by the airflow job.  
+
+- **Step4**: Validate all the 3 Customer Data Products are Populated in BigQuery DS customer_data_product
+
+    ![bq_cust_results](/lab3/resources/imgs/bq_cust_results.png)
+
+
+### **Sub Task 2: Create the Merchant Data products**
+
+- **Step1**: Go to Airflow UI
+- **Step2**: Click on the “etl_with_dq_merchant_data_product_wf”
+- **Step 3**: Trigger DAG Manually and Monitor
+- **Step 4**: Validate _project_datsto_.merchants_data_product.core_merchants is populated in BQ
+
+### **Sub Task 3: Create the Auth Data products (gcloud)**
+
+- **Step1:** Go to Airflow UI 
+- **Step2:** Click on the “etl_with_dq_transactions_data_product_wf”
+- **Step 3:** Trigger DAG Manually and Monitor
+- **Step 4:** Validate _project_datsto_.auth_data_product.auth_table is populated in BigQuery  
