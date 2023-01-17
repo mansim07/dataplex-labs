@@ -178,3 +178,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 - **Step2:** Click on the “etl_with_dq_transactions_data_product_wf”
 - **Step 3:** Trigger DAG Manually and Monitor
 - **Step 4:** Validate _project_datsto_.auth_data_product.auth_table is populated in BigQuery  
+
+
+## Summary
+In this lab you learned how Dataplex provides serverless data management tasks that easily integrate and complement organizations existing Data Engineering pipleines through simple and open APIs.  
