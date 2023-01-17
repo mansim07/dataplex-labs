@@ -93,7 +93,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
 Suggestion: As a homework, try to curate the merchants data.  
 
 ## Summary 
-
+In this lab, you learned how to use the built-in one-click templatized Dataplex task to quick standardize your data. This can be a common Data Management task that can be executed without the need of understanding any underlying data. You can also leverage built-in scheduler to execute the workflow either on-demand or on-schedule. 
 
 ## Common Issues
 
