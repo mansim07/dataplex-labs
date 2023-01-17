@@ -224,6 +224,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
 - Execute the below command to automaically set the access for all the other domains - merchants, transaction and credit card consumer 
 
     ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
 
     bash ~/dataplex-labs/lab1/apply-security-policies.sh
 
