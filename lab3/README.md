@@ -49,7 +49,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
     Created task [cust-curated-refined].
     ```
  - **Step2**: Monitor the Job. It will take a few seconds to spin up, execute and complete 
-    - Go to Dataplex process tab → Choose “Custom Spark” → Click on the name of your task → Click on the job-id (wait for a few seconds and refresh if the job_id URL is not active) → This will take you to Dataproc Batched tab where you can look at the Output for jobs logs and Details tab for input arguments 
+    - Go to Dataplex process tab → Choose “Custom Spark” → Click on the name of your task → Click on the job-id (wait for a few seconds and refresh if the job_id URL is not active) → This will take you to Dataproc Batch tab where you can look at the output for jobs logs and Details tab for input arguments 
      ![dataplex-task-output](/lab3/resources/imgs/dplx-task-output.png)
 
      One the status is “Successful” move on to next step
@@ -60,26 +60,26 @@ In this lab, you will learn how to build Data Products. The diagram below depict
     export PROJECT_ID=$(gcloud config get-value project)
     
     gcloud dataplex tasks create cc-cust-curated-refined \
-        --project=${PROJECT_ID} \
-        --location=us-central1 \
-        --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
-        --lake=consumer-banking--customer--domain \
-        --trigger-type=ON_DEMAND \
-        --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
-        --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
-        --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
-        --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
-        --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-            --templateProperty=project.id=${PROJECT_ID},\
-            --templateProperty=dataplex.gcs.bq.target.dataset=customer_refined_data,\
-            --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
-            --templateProperty=dataplex.gcs.bq.save.mode=append,\
-            --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
-            --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/cc_customers_data,\
-            --partitionField=ingest_date,\
-            --partitionType=DAY,\
-            --targetTableName=cc_customers_data,\
-        --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
+    --project=${PROJECT_ID} \
+    --location=us-central1 \
+    --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
+    --lake=consumer-banking--customer--domain \
+    --trigger-type=ON_DEMAND \
+    --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
+    --spark-main-class="com.google.cloud.dataproc.templates.main.DataProcTemplate" \
+    --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
+    --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
+    --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
+        --templateProperty=project.id=${PROJECT_ID},\
+        --templateProperty=dataplex.gcs.bq.target.dataset=customer_refined_data,\
+        --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
+        --templateProperty=dataplex.gcs.bq.save.mode=append,\
+        --templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,\
+        --dataplexEntity=projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/cc_customers_data,\
+        --partitionField=ingest_date,\
+        --partitionType=DAY,\
+        --targetTableName=cc_customers_data,\
+      --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
 
         ```
 
@@ -158,7 +158,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 
 
 ### **Sub Task 1: Create the Customer Data Product**
-- **Step1:**: Go to Composer Service UI → You should see _project_datgov_-composer environment. Click on the Airflow UI.
+- **Step1:**: Go to Composer Service UI → You should see ${PROJECT_ID}-composer environment. Click on the Airflow UI.
 
     ![airflow UI](/lab3/resources/imgs/airflow-ui.png)
 
