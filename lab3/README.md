@@ -41,7 +41,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
             --partitionType=DAY,\
             --targetTableName=customers_data,\
             --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
-        ```
+    ```
  - **Step2**: Monitor the Job. It will take a few seconds to spin up, execute and complete 
     - Go to Dataplex process tab → Choose “Custom Spark” → Click on the name of your task → Click on the job-id (wait for a few seconds and refresh if the job_id URL is not active) → This will take you to Dataproc Batched tab where you can look at the Output for jobs logs and Details tab for input arguments 
      ![dataplex-task-output](/lab3/resources/imgs/dplx-task-output.png)
