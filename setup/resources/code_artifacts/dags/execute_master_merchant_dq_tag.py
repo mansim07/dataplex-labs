@@ -49,7 +49,7 @@ default_args = {
 
 
 with DAG(
-        'master_dag_customer_dq',
+        'master_dag_merchant_dq',
         schedule_interval=None,
         default_args=default_args,  # Every 1 minute
       #  start_date=days_ago(0),

@@ -200,3 +200,4 @@ An airflow DAG can be defined to first execute the Dataplex DQ job and then publ
         ![run-dag](/lab5/resources/imgs/run-dag.png)
     - Monitor and wait for the airflow jobs to complete. You can also go to Dataplex UI to monitor the jobs 
     - Go to Dataplex -> Discover ->  type "tag:data_product_quality" into the search bar. Now you should see all the customer data products
+    - If your alerting is setup correctly, then you will receive a email alert on failure
