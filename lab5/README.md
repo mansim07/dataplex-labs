@@ -89,16 +89,24 @@ High Level DQ architecture
         --execution-args=^::^TASK_ARGS="clouddq-executable.zip, ALL, ${YAML_CONFIGS_GCS_PATH}, --gcp_project_id=${PROJECT_ID}, --gcp_region_id='${REGION_ID}', --gcp_bq_dataset_id='${TARGET_BQ_DATASET}', --target_bigquery_summary_table='${TARGET_BQ_TABLE}' --summary_to_stdout " \
         "$TASK_ID"
         ```
+        
+
 -  **Step4**: Monitor the data quality job
     - Go to **Dataplex UI** -> **Process** tab -> **"Data Quality"** tab
-    - You will find a DQ job running with name "customer-data-product-dq"
+    - You will find a DQ job running with name "customer-data-product-dq". The job will take about 2-3 mins to complete. 
     - Once the job is successful, proceed to the next step
 
 - **Step5**: Review the Data quality metrics 
     - Navigate to BigQuery->SQL Workspace and open the central_dq_results. Review the table and views created in this dataset. 
     - Click on the dq_results table to preview the data quality results. Check the rows which shows the data quality metrics for the rules defined in the yaml configuration file 
+    ![dq_results](/lab5/resources/imgs/dq_results.png)
+    - To examine the rules that failed, run the following query. The failed record query's query can be used to learn more about the specific rows for which it failed.
+        ```bash 
+        SELECT rule_binding_id, rule_id,table_id,column_id,dimension, failed_records_query FROM `<your-project-id>.central_dq_results.dq_results` WHERE 
+        complex_rule_validation_success_flag is false or failed_percentage > 0.0
+        ```
 
-- **Step6**: Create a Data Quality Dashboard 
+- **Step6**: [Optional] Create a Data Quality Dashboard 
     - Copy the sample dashboard 
     Open a new normal browser window and paste the following link in the navigation bar 
     (This report is In the Pantheon instance)
@@ -133,8 +141,30 @@ High Level DQ architecture
 
 - [OPTIONAL] **Step7**: Data quality incident management using Cloud logging and monitoring 
     By appending " --summary_to_stdout" flag to your data quality jobs, you can easily route the DQ summary logs to Cloud Logging. 
-    You can use "Alerts" within cloud logging to alert based on dq failures. Alerts can be send through multiple notification channels like webhooks, emails, sms etc.
-   The steps to accomplish this will be provided in the next phase. Sorry!
+    - Go to Cloud Logging -> Log Explorer 
+    - Enter the below into the query editor 
+        ``` 
+        jsonPayload.message =~ "complex_rule_validation_errors_count\": [^null]" OR jsonPayload.message =~ "failed_count\": [^0|null]" 
+        ```
+    - You will the Cloud dq output in the logs 
+    - Click on "Create Alert" to create an incident based on dq failures. 
+        
+    - Provide the below info 
+        - **Alert policy name**: dq-failure-alert 
+        - **Define log entries to alert on**: leave it to default
+        - **Time between notifications** : 5  mins
+        - **Incident autoclose duration**: leave it to default
+        - **Who should be notified?**
+        - Click on **Notification Channel** and then Click on **Manage Notification channel**: 
+            - Under Email -> Click add your corp email 
+            ![notification-channel](/lab5/resources/imgs/notification_channel.png)
+        - Comeback to Logging -> Click on **Notification Channel** -> Click Refresh -> Choose the email id 
+            ![noti-email](/lab5/resources/imgs/noti-email.png)
+        - Click "Save" 
+        - Next time the DQ jobs fails you will receive an email alert.
+            - Sample Alert 
+              ![samplealert](/lab5/resources/imgs/alert.png)
+
 
 - **Step8**: Data Quality automated tagging job  
     Once we have the DQ results available, using a custom utility which will automatically calculate the dq scores and create the data product tags. We have pre-built the utility as a java library which we can now orchestrate using Dataplex's serverless spark task 
