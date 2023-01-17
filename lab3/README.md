@@ -239,15 +239,26 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 
 
 ### **Sub Task 1: Create the Customer Data Product**
-- **Step1:** Go to Composer Service UI → You should see ${PROJECT_ID}-composer environment. Click on the Airflow UI.
+
+- **Step1** Grant the service account access to raw zone for DQ
+
+    ```bash
+    curl --request PATCH  -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+    "https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_raw_zone" \
+    --header 'Accept: application/json' \
+    --header 'Content-Type: application/json' \
+    --data "{\"access\":[{\"userByEmail\":\"customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",\"role\":\"OWNER\"}]}" \
+    --compressed 
+    ```
+- **Step2:** Go to Composer Service UI → You should see ${PROJECT_ID}-composer environment. Click on the Airflow UI.
 
     ![airflow UI](/lab3/resources/imgs/airflow-ui.png)
 
-- **Step2**: Search for  “etl_with_dq_customer_data_product_wf”
-- **Step3**: Trigger the DAG manually and monitor
+- **Step3**: Search for  “etl_with_dq_customer_data_product_wf”
+- **Step4**: Trigger the DAG manually and monitor
     - You can go to Dataplex --> Process Tab --> Under the "Data Quality" Tab, you will find the DQ job that was triggered by the airflow job.  
 
-- **Step4**: Once the DAG successfully completes, validate all the 3 Customer Data Products are Populated in BigQuery DS customer_data_product
+- **Step5**: Once the DAG successfully completes, validate all the 3 Customer Data Products are Populated in BigQuery DS customer_data_product
 
     ![bq_cust_results](/lab3/resources/imgs/bq_cust_results.png)
 
