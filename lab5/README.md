@@ -178,7 +178,7 @@ High Level DQ architecture
         --project=${PROJECT_ID} \
         --location=us-central1 \
         --vpc-sub-network-name=projects/${PROJECT_ID}/regions/us-central1/subnetworks/default \
-        --lake=prod-customer-source-domain \
+        --lake=consumer-banking--customer--domain \
         --trigger-type=ON_DEMAND \
         --execution-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com \
         --spark-main-class="com.google.cloud.dataplex.templates.dataquality.DataProductQuality" \
