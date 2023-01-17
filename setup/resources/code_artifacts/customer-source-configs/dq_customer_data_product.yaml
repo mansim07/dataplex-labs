@@ -70,7 +70,7 @@ rules:
    dimension: conformance
    params:
      pattern: |-
-      ^d{3}-?d{2}-?d{4}$
+      ^[\\d]{3}-[\\d]{2}-[\\d]{4}$
 
  VALID_EMAIL:
     rule_type: REGEX
