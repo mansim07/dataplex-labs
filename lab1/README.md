@@ -60,7 +60,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
         - Open Cloud Shell and execute the below command: 
 
             ```bash 
-            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/_project_datgov_/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/audit-data
+            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/_project_datgov_/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data
             ```
             
             ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
@@ -123,7 +123,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
         echo $central_dq_policy
 
-        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dq-reports:setIamPolicy -d "${central_dq_policy}"
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/dq-reports:setIamPolicy -d "${central_dq_policy}"
         ```
         Sample Output: 
 
@@ -162,7 +162,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
         echo " "
         # 3. APPLY POLICY
         echo "==========="
-        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/common-utilities:setIamPolicy -d "${central_common_util_policy}"
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/common-utilities:setIamPolicy -d "${central_common_util_policy}"
         echo " "
         echo "==========="
         ```
@@ -193,7 +193,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
             LOGGING_GMSA=`gcloud logging sinks describe audits-to-bq | grep writerIdentity | grep serviceAccount | cut -d":" -f3`
             echo $LOGGING_GMSA
 
-            curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
+            curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
             ```
 
 **Step4:**  We will be using DLP for Data Classification in the later lab, here we will grant access service account access to the DLP datasets managed by central operations team. Grant permissions to the DLP Google Managed Service Account for the Central Operations Domain lake->Data Product zone->DLP Reports  asset 
@@ -213,7 +213,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
   --data '{"item":{"value":"google@google.com"}}' \
   --compressed
 
-    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
+    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
     ```
 
      Note: Sometime there may be upto 30 mins delay in security propagation. Verify the cloud logging is able to publish results and there are no permission issues. 
