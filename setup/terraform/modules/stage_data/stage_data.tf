@@ -277,6 +277,8 @@ resource "google_bigquery_dataset" "bigquery_datasets" {
   description                 = "${each.key} Dataset for Dataplex Demo"
   location                    = var.location
   delete_contents_on_destroy  = true
+  depends_on = [google_storage_bucket_object.gcs_transaction_refdata_objects]
+
 }
 
 ####################################################################################

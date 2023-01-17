@@ -3,7 +3,7 @@ metadata_registry_defaults:
    projects: _project_datagov_
    locations: us-central1
    lakes: consumer-banking--customer--domain
-   zones: customer-raw-zone
+   zones: customer-curated-zone
 
 row_filters:
  NONE:
