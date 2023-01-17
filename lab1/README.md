@@ -204,10 +204,19 @@ We will grant the credit card transaction consumer (user managed) service accoun
     export PROJECT_NBR=$(gcloud projects list --filter="${PROJECT_ID}" --format="value(PROJECT_NUMBER)")
     echo $PROJECT_NBR
 
+    curl --request POST \
+  "https://dlp.googleapis.com/v2/projects/${PROJECT_ID}/locations/us-central1/content:inspect" \
+  --header "X-Goog-User-Project: ${PROJECT_ID}" \
+  --header "Authorization: Bearer $(gcloud auth print-access-token)" \
+  --header 'Accept: application/json' \
+  --header 'Content-Type: application/json' \
+  --data '{"item":{"value":"google@google.com"}}' \
+  --compressed
+
     curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations-domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
     ```
 
-     Sample output of the author:
+     Note: Sometime there may be upto 30 mins delay in security propagation. Verify the cloud logging is able to publish results and there are no permission issues. 
 
 
 ### Task 3: Execute the below script to grant all the other access 
@@ -222,7 +231,8 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
 ### Task 4: Go to BigQuery and perform analysis on the audit data to analyze and report 
 
-- 
+
+ - Open BigQuery UI, change the processing location to us-central1 and execute the below query after replacing the ${PROJECT_ID}
     ```bash 
     SELECT protopayload_auditlog.methodName,   protopayload_auditlog.resourceName,  protopayload_auditlog.authenticationInfo.principalEmail,  protopayload_auditlog.requestJson, protopayload_auditlog.responseJson FROM `${PROJECT_ID}.central_audit_data.cloudaudit_googleapis_com_activity_*` LIMIT 1000
     ```
