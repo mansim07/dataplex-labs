@@ -5,14 +5,13 @@
 
 - For Argolis Account
     1. Use "admin@" account 
-    2. Create a Argolis Project for your Dataplex Labs
+    2. Create a new Argolis Project for this lab 
     3. Make sure "admin@" user has the below privileges
         - Owner
         - ServiceAccountTokenCreator
         - Organization Admin 
-        ![Admin Roles](setup/resources/code_artifacts/imgs/admin_roles.png)
-    3. Make sure the argolis account 
-    4. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
+        ![Admin Roles](/setup/resources/code_artifacts/imgs/admin_roles.png)
+    4. Make sure you have enough of disk space(1.5 GB - 2 GB) in your gCloud shell for the terraform setup 
 
 - For Non-Argolis Account 
     1.  Create a GCP Project 
