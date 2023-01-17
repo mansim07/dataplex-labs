@@ -142,23 +142,27 @@ High Level DQ architecture
 - [OPTIONAL] **Step7**: Data quality incident management using Cloud logging and monitoring 
     By appending " --summary_to_stdout" flag to your data quality jobs, you can easily route the DQ summary logs to Cloud Logging. 
     - Go to Cloud Logging -> Log Explorer 
-    - Enter the below into the query editor 
+    - Enter the below into the query editor and click run
         ``` 
         jsonPayload.message =~ "complex_rule_validation_errors_count\": [^null]" OR jsonPayload.message =~ "failed_count\": [^0|null]" 
         ```
-    - You will the Cloud dq output in the logs 
+    - You will the cloud dq output in the logs 
     - Click on "Create Alert" to create an incident based on dq failures. 
-        
-    - Provide the below info 
+
+
+        ![dq-log-alert](/lab5/resources/imgs/dq-log-alert.png)
+
+    - Provide the below info in the "Create logs-based alert policy" screen
         - **Alert policy name**: dq-failure-alert 
-        - **Define log entries to alert on**: leave it to default
-        - **Time between notifications** : 5  mins
+        - **Documentation**: anything-you-like-to-enter
+        - **Define log entries to alert on**: leave it to default dq log filtering text which is pre-populated
+        - **Time between notifications** : 5 mins
         - **Incident autoclose duration**: leave it to default
         - **Who should be notified?**
         - Click on **Notification Channel** and then Click on **Manage Notification channel**: 
-            - Under Email -> Click add your corp email 
+            - Under Email -> Click add your corp email
             ![notification-channel](/lab5/resources/imgs/notification_channel.png)
-        - Comeback to Logging -> Click on **Notification Channel** -> Click Refresh -> Choose the email id 
+        - Comeback to Logging screen -> Click on **Notification Channel** -> Click Refresh -> Choose the email id 
             ![noti-email](/lab5/resources/imgs/noti-email.png)
         - Click "Save" 
         - Next time the DQ jobs fails you will receive an email alert.
