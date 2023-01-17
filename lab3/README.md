@@ -31,7 +31,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
         --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
         --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
         --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-            --templateProperty=project.id=_project_datsto_,\
+            --templateProperty=project.id=${PROJECT_ID},\
             --templateProperty=dataplex.gcs.bq.target.dataset=customer_refined_data,\
             --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
             --templateProperty=dataplex.gcs.bq.save.mode=append,\
@@ -41,6 +41,12 @@ In this lab, you will learn how to build Data Products. The diagram below depict
             --partitionType=DAY,\
             --targetTableName=customers_data,\
             --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
+    ```
+    Sample Output: 
+    ```Create request issued for: [cust-curated-refined]
+    Waiting for operation [projects/dataplex-lab5/locations/us-central1/operations/operation-1673931152987-5f26e77c0967f-9cfa82a7-22f0b7d8] to complete...working.
+    Waiting for operation [projects/dataplex-lab5/locations/us-central1/operations/operation-1673931152987-5f26e77c0967f-9cfa82a7-22f0b7d8] to complete...done.
+    Created task [cust-curated-refined].
     ```
  - **Step2**: Monitor the Job. It will take a few seconds to spin up, execute and complete 
     - Go to Dataplex process tab → Choose “Custom Spark” → Click on the name of your task → Click on the job-id (wait for a few seconds and refresh if the job_id URL is not active) → This will take you to Dataproc Batched tab where you can look at the Output for jobs logs and Details tab for input arguments 
@@ -64,7 +70,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
         --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
         --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
         --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-            --templateProperty=project.id=_project_datsto_,\
+            --templateProperty=project.id=${PROJECT_ID},\
             --templateProperty=dataplex.gcs.bq.target.dataset=customer_refined_data,\
             --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
             --templateProperty=dataplex.gcs.bq.save.mode=append,\
@@ -100,7 +106,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
         --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
         --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
         --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-            --templateProperty=project.id=_project_datsto_,\
+            --templateProperty=project.id=${PROJECT_ID},\
             --templateProperty=dataplex.gcs.bq.target.dataset=merchants_refined_data,\
             --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
             --templateProperty=dataplex.gcs.bq.save.mode=append,\
@@ -132,7 +138,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
         --spark-file-uris="gs://${PROJECT_ID}_dataplex_process/common/log4j-spark-driver-template.properties" \
         --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar" \
         --execution-args=^::^TASK_ARGS="--template=DATAPLEXGCSTOBQ,\
-            --templateProperty=project.id=_project_datsto_,\
+            --templateProperty=project.id=${PROJECT_ID},\
             --templateProperty=dataplex.gcs.bq.target.dataset=pos_auth_refined_data,\
             --templateProperty=gcs.bigquery.temp.bucket.name=${PROJECT_ID}_dataplex_temp,\
             --templateProperty=dataplex.gcs.bq.save.mode=append,\
@@ -170,14 +176,14 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 - **Step1**: Go to Airflow UI
 - **Step2**: Click on the “etl_with_dq_merchant_data_product_wf”
 - **Step 3**: Trigger DAG Manually and Monitor
-- **Step 4**: Validate _project_datsto_.merchants_data_product.core_merchants is populated in BQ
+- **Step 4**: Validate ${PROJECT_ID}.merchants_data_product.core_merchants is populated in BQ
 
 ### **Sub Task 3: Create the Auth Data products (gcloud)**
 
 - **Step1:** Go to Airflow UI 
 - **Step2:** Click on the “etl_with_dq_transactions_data_product_wf”
 - **Step 3:** Trigger DAG Manually and Monitor
-- **Step 4:** Validate _project_datsto_.auth_data_product.auth_table is populated in BigQuery  
+- **Step 4:** Validate ${PROJECT_ID}.auth_data_product.auth_table is populated in BigQuery  
 
 
 ## Summary
