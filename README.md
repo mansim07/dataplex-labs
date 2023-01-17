@@ -47,7 +47,7 @@
 
 1. [![Open in Cloud Shell](http://gstatic.com/cloudssh/images/open-btn.svg)](https://console.cloud.google.com/cloudshell/editor)
 
-2. Select the appropriate project. Make sure you are in the right project. 
+2. Select the appropriate project. Make sure you are in the right project before you proceed. 
 
 3. Install the below python libraries 
 
@@ -65,7 +65,7 @@ In cloud shell, declare the following variables after substituting with yours.
     echo "export PROJECT_ID=$(gcloud config get-value project)" >> ~/.profile
     ```
 
-For Argolis, use fully qualified corporate email address - ldap@fgoogle.com otherwise use your fully qualified email address (e.g. joe.user@gmail.com)
+For Argolis, use fully qualified corporate email address - ldap@fgoogle.com otherwise use your fully qualified email address (e.g. joe.user@gmail.com) as the USERNAME
 
 5. To get the currently logged in email address, run: 'gcloud auth list as' below:
 
@@ -89,9 +89,9 @@ For Argolis, use fully qualified corporate email address - ldap@fgoogle.com othe
     source ~/.profile
     bash deploy-helper.sh ${PROJECT_ID} ${USERNAME}
     ```
-    The scrirpt will take about 30-40  minutes to finish.
+    The scrirpt will take about 30-40 minutes to finish.
 
-8. Validate the Dataplex lakes and zones are created with the right number of asserts. Go to Dataplex -> Manage
+8. Validate the Dataplex lakes and zones are created with the right number of asserts as shown below. Go to Dataplex -> Manage
  
     ![Dataplex Image](setup/resources/code_artifacts/imgs/Dataplex-ui.png)
 
