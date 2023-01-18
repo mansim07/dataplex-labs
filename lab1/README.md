@@ -61,7 +61,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         - Open Cloud Shell and execute the below command: 
 
             ```bash 
-            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/assets/customer_data
+            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/assets/customer-raw-data
             ```
             
             ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
