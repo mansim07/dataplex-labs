@@ -45,7 +45,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
     9. Verify Dataplex data owner roles appear under the permissions 
 
 
-- **Step 3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods:
+- **Step 3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods. Method#3 is safest. 
     
     - **Method 1:** Using Dataplex UI 
 
@@ -113,7 +113,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         export central_dq_policy="{\"policy\":{
         \"bindings\": [
         {
-            \"role\": \"roles/dataplex.dataOwner\",
+            \"role\": \"roles/dataplex.dataWriter\",
             \"members\": [
             \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
         \"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com\"
@@ -125,7 +125,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
 
         echo $central_dq_policy
 
-        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/dq-reports:setIamPolicy -d "${central_dq_policy}"
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone:setIamPolicy -d "${central_dq_policy}"
         ```
         Sample Output: 
 

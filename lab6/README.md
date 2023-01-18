@@ -165,7 +165,8 @@ Above we learned how to create and update the tags manually, now let’s see how
     - **data_governance_merchant_exchange_tag**
 
 
-## Task 5: Create bulk tags for Transactions Domain
+## Task 5: [OPTIONAL] Create bulk tags for Transactions Domain
+This task is optional and finish this task only if you have time left for your lab. 
 
 - **Step1**: Follow the same steps you used above for triggering the below set of DAGs: and wait for its completion. Execute the below DAGs in airflow
     - **data_governance_transactions_classification_tag**
