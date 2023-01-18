@@ -1,27 +1,25 @@
 # Manage Data Security through Dataplex 
 
+    This is a critial lab. Make sure you follow step-by-step and finish applying each of the security policies. 
 ## Introduction
 
 [Cloud Dataplex](https://cloud.google.com/dataplex/docs/lake-security) provides a single control plane for managing data security for distribued data. It translates and propagates  data roles to the underlying storage resource, setting the correct roles for each storage resource. The benefit is that you can grant a single Dataplex data role at the lake hierarchy (for example, a lake), and Dataplex maintains the specified access to data on all resources connected to that lake (for example, Cloud Storage buckets and BigQuery datasets are referred to by assets in the underlying zones). You can specify data roles at lake, zone and asset level. 
 
 In this lab,  
  - you will grant data roles to the service accounts created by terraform to own and manage the data
- - you will learn to apply the security policies both through the Dataplex UI as well Dataplex APIs. 
+ - you will learn various ways to monitor the security policy propagation
+ - you will learn to apply the security policies both through the Dataplex UI as well Dataplex APIs 
  - you will learn how to publish cloud audit logs to bigquery for further analysis and reporting
 
 ![Dataplex Security](/lab1/resources/imgs/dataplex-security-lab.png)
 
  ## Task 1: Manage security policies for Consumer Banking Customer Domain
-In this lab task, we will apply the following IAM permissions lake "Consumer Banking - Customer Domain":
--  Sub Task 1: Lake Level security pushdown: 
-We will grant the customer (user managed) service account (customer-sa@) auto-created by Terraform, the Dataplex Owner role for the "Cosumer Banking - Customer Domain" (lake)
--  Sub Task 2: Zone Level security pushdown:
-We will grant the credit card transaction consumer (user managed) service account (cc-trans-consumer-sa@) Dataplex Data Reader role for the Customer Data Product Zone
+In this lab task, we will apply the following IAM permissions for  "Consumer Banking - Customer Domain" lake:
 
-### **Sub-Task 1: Make  customer-sa@ service account the data owner for consumer banking - customer domain**
+### **Sub-Task 1: Make customer-sa@ service account the data owner for consumer banking - customer domain (Lake level pushdown)** 
 
 
-- **Step1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
+- **Step 1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
 
     - Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset
 
@@ -34,22 +32,22 @@ We will grant the credit card transaction consumer (user managed) service accoun
         Sample output: 
         ![permission denied](/lab1/resources/imgs/permission-dnied.png)
 
-- **Step2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
+- **Step 2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
 
     1. Go to Dataplex in the Google Cloud console.
     2. On the left navigation bar, click on **Manage** menu under **Manage Lakes**.
-    4. Click on the “Consumer Banking - Customer Domain” lake.
-    5. Click on the "**PERMISSIONS**" tab.
-    6.Click on **+GRANT ACCESS**
-    8. Choose “customer-sa@<your-project-id>.iam.gserviceaccount.com” as principal
-    9. Assign **Dataplex Data Owner** role.
-    10. Click the Save button
-    11. Verify Dataplex Data Owner roles appear under the permissions 
+    3. Click on the “Consumer Banking - Customer Domain” lake.
+    4. Click on the "**PERMISSIONS**" tab.
+    5. Click on **+GRANT ACCESS**
+    6. Choose “customer-sa@<your-project-id>.iam.gserviceaccount.com” as principal
+    7. Assign **Dataplex Data Owner** role.
+    8. Click the Save button
+    9. Verify Dataplex Data Owner roles appear under the permissions 
 
 
-- **Step3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods:
+- **Step 3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods:
     
-    - **Method1:** Using Dataplex UI 
+    - **Method 1:** Using Dataplex UI 
 
         - Go to Dataplex -> Manage sub menu -> Go to "Consumer Banking - Customer Domain" lake --> Click on "Customer Raw Zone" --> Click on the Customer Raw Data Asset
             ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-ui.png)
@@ -58,24 +56,24 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
             ![dataplex security status lake](/lab1/resources/imgs/dataplex-security-status-lake.png)
 
-    -  **Method2:** Using Dataplex APIs
+    -  **Method 2:** Using Dataplex APIs
 
         - Open Cloud Shell and execute the below command: 
 
             ```bash 
-            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/_project_datgov_/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data
+            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/customer-raw-zone/assets/customer_data
             ```
             
             ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
 
-    - **Method3:** Check the permissions of the underlying asset
+    - **Method 3:** Check the permissions of the underlying asset
 
         - Here is an example of the policy for underlying GCS bucket 
 
             ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-underlying-assets.png)
 
 
-- **Step4**: After the access policies has been propagated by Dataplex, rerun the commands in Step1 and verify the service account is able to access underlying data
+- **Step 4**: After the access policies has been propagated by Dataplex, rerun the commands in Step1 and verify the service account is able to access underlying data
 
     - Open Cloud shell and execute the below command which should now execute successfully. 
 
@@ -89,24 +87,25 @@ We will grant the credit card transaction consumer (user managed) service accoun
         ![successful output](/lab1/resources/imgs/dataplex-security-result.png)
 
 
-### **Sub Task 2: Grant the Credit card analytics consumer sa read access to the Customer Data product zone.**
+### **Sub Task 2: Grant the Credit card analytics consumer sa read access to the Customer Data product zone(Zone Level security pushdown).**
 
 - Using “Secure View” to provide the credit card analytics consumer domain access to the Customer Data Products. For this we will use the "Secure" functionality to the apply policy
-    1. Go to Dataplex in the Google Cloud console.
+    1. Go to **Dataplex** in the Google Cloud console.
     2. Navigate to the **Manage**->**Secure** on the left menu.
     3. Under the **RESOURCE-CENTRIC** tab, find and expand on your project
-    4. Expand on the "Consumer Banking -  Customer Domain" lake
-    5. Click on the "Customer Data Product Zone"
+    4. Expand on the **"**Consumer Banking -  Customer Domain"** lake
+    5. Click on the **"Customer Data Product Zone"**
     6. Click on **+Grant Access**
     7. Choose "cc-trans-consumer-sa@<your-project-id>.iam.gserviceaccount.com as the principle
     8. Add the **Dataplex Data reader** roles
     9. Click on the Save button 
     10. Verify Dataplex Data Reader roles appear for the principal. Use one of the methods outlined in Step#3 above. 
 
+
 ## Task 2: Manage Security Policies for Central Operations domain(through Dataplex APIs)
 
 
-- **Step1:** Provide Data writer access to all the domain service accounts((customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed dq reports. This will allow them to publish the data product dq results centrally. 
+- **Step 1:** Provide Data writer access to all the domain service accounts((customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed dq reports. This will allow them to publish the data product dq results centrally. 
     - Open Cloud Shell and execute the below command 
         ```bash
         export PROJECT_ID=$(gcloud config get-value project)
@@ -132,7 +131,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
 
         ![successful_policy](/lab1/resources/imgs/etag_successful.png)
 
-- **Step2:**  Define and provide security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
+- **Step 2:**  Define and provide security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
 
     -  Open Cloud shell and execute the below commands: 
 
@@ -170,7 +169,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
         echo "==========="
         ```
 
-- **Step3:**  Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports. Grant permissions to the Cloud Logging sink’s Google Managed Service Account for the Central Operations Domain lake->Data Product zone->Audit Data asset
+- **Step 3:**  Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports. Grant permissions to the Cloud Logging sink’s Google Managed Service Account for the Central Operations Domain lake->Data Product zone->Audit Data asset
 
 
     - **Step 3.1:**  Create the Cloud Logging sink to capture the Dataplex Audit logs into a BigQuery  table
@@ -199,7 +198,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
             curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
             ```
 
-**Step4:**  We will be using DLP for Data Classification in the later lab, here we will grant access service account access to the DLP datasets managed by central operations team. Grant permissions to the DLP Google Managed Service Account for the Central Operations Domain lake->Data Product zone->DLP Reports  asset 
+**Step 4:**  We will be using DLP for Data Classification in the later lab, here we will grant access service account access to the DLP datasets managed by central operations team. Grant permissions to the DLP Google Managed Service Account for the Central Operations Domain lake->Data Product zone->DLP Reports  asset 
 
 - Open cloud shell and execute the below command
     ```bash 
@@ -219,7 +218,7 @@ We will grant the credit card transaction consumer (user managed) service accoun
     curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
     ```
 
-     Note: Sometime there may be upto 30 mins delay in security propagation. Verify the cloud logging is able to publish results and there are no permission issues. 
+     **Note:** Sometime there may be a bit of delay in security propagation. Verify the cloud logging is able to publish results and there are no permission issues. 
 
 
 ### Task 3: Execute the below script to grant all the other access 
