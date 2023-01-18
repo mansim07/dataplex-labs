@@ -25,7 +25,7 @@ We have already explored the Data Quality tagging in the previous lab.
     "SELECT
     COUNT(*)
     FROM
-    ${PROJECT_ID}.central_dlp_data.dlp_scan_result"
+    ${PROJECT_ID}.central_dlp_data.dlp_data_profiles"
     ```
 
 

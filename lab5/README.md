@@ -41,7 +41,7 @@ High Level DQ architecture
         ```
 
         Here we have performing 3 key DQ rules: 
-        1. Valid Customer which checks Client_id is not null, not blank  and no duplicates 
+        1. Valid customer which checks client_id is not null, not blank  and no duplicates 
         2. We verify the timeliness score by checking the ingestion date is not older than 1 day
         3. There is no duplicates in SSN and it's valid means it meets a certain regex pattern - " ^d{3}-?d{2}-?d{4}$" 
 
