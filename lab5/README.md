@@ -191,13 +191,5 @@ High Level DQ architecture
     - The customer data product should be tagged with the data quality information as show below:
         ![dq-tag-search](/lab5/resources/imgs/dq-tag-search.png)
 
-- **Step9**:  Dataplex provides airflow operators using which we can now automate the dq process. 
-An airflow DAG can be defined to first execute the Dataplex DQ job and then publish the tags. Let's execute one of the pre-define composer dags to see how this works. 
+- **Step9**:  Dataplex provides airflow operators using which we can now automate the dq process. We will learn more about this in the next lab: "Tag templates and bulk tagging lab" 
 
-    - Go to Composer → Go to Airflow UI → Click on DAGs
-    - Click on DAGs and search for or go to  “master_dag_customer_dq” DAG and Click on it 
-    - Trigger the DAG Manually by clicking on the Run button as show below
-        ![run-dag](/lab5/resources/imgs/run-dag.png)
-    - Monitor and wait for the airflow jobs to complete. You can also go to Dataplex UI to monitor the jobs 
-    - Go to Dataplex -> Discover ->  type "tag:data_product_quality" into the search bar. Now you should see all the customer data products
-    - If your alerting is setup correctly, then you will receive a email alert on failure
