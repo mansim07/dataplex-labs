@@ -15,7 +15,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 
 ### **Sub Task 1: Move the Customer Data**
 
-- **Step1**: Open cloud shell and run the below command 
+- **Step 1**: Open cloud shell and run the below command 
 
     ```bash 
      export PROJECT_ID=$(gcloud config get-value project)
@@ -48,12 +48,40 @@ In this lab, you will learn how to build Data Products. The diagram below depict
     Waiting for operation [projects/dataplex-lab5/locations/us-central1/operations/operation-1673931152987-5f26e77c0967f-9cfa82a7-22f0b7d8] to complete...done.
     Created task [cust-curated-refined].
     ```
- - **Step2**: Monitor the Job. It will take a few seconds to spin up, execute and complete 
+ - **Step 2**: Monitor the Job. It will take a few seconds to spin up, execute and complete 
     - Go to Dataplex process tab → Choose “Custom Spark” → Click on the name of your task → Click on the job-id (wait for a few seconds and refresh if the job_id URL is not active) → This will take you to Dataproc Batch tab where you can look at the output for jobs logs and Details tab for input arguments 
      ![dataplex-task-output](/lab3/resources/imgs/dplx-task-output.png)
 
      One the status is “Successful” move on to next step
-- **Step3**: Populate the Customer Credit Card Profile  data feed 
+
+- **Step 3**: Validate the data. This is a critical validation to make sure data is populated.  
+    - Open cloud shell and execute the below 2 command and make sure the count > 0
+        ```bash 
+        export PROJECT_ID=$(gcloud config get-value project)
+
+        bq query --use_legacy_sql=false \
+        "SELECT
+        COUNT(*)
+        FROM
+        ${PROJECT_ID}.customer_refined_data.customers_data"
+        ```
+        Result: 
+        ```
+        admin_@cloudshell:~ (dataplex-lab5)$ export PROJECT_ID=$(gcloud config get-value project)
+
+        bq query --use_legacy_sql=false \
+        "SELECT
+        COUNT(*)
+        FROM
+        ${PROJECT_ID}.customer_refined_data.customers_data"
+        Your active configuration is: [cloudshell-4044]
+        +------+
+        | f0_  |
+        +------+
+        | 2020 |
+        +------+
+        ```
+- **Step 4**: Populate the Customer Credit Card Profile  data feed 
   - Open cloud shell 
 
     ```bash 
@@ -82,36 +110,10 @@ In this lab, you will learn how to build Data Products. The diagram below depict
       --customSqlGcsPath=gs://${PROJECT_ID}_dataplex_process/customer-source-configs/customercustom.sql"
     ```
 
-- **Step4**: Monitor the job using the instructions specified in step#2
+- **Step5**: Monitor the job using the instructions specified in step#2
 
-- **Step5**: Validate the data. This is a critical validation 
-    - Open cloud shell and execute the below 2 command and make sure the count > 0
-        ```bash 
-        export PROJECT_ID=$(gcloud config get-value project)
-
-        bq query --use_legacy_sql=false \
-        "SELECT
-        COUNT(*)
-        FROM
-        ${PROJECT_ID}.customer_refined_data.customers_data"
-        ```
-        Result: 
-        ```
-        admin_@cloudshell:~ (dataplex-lab5)$ export PROJECT_ID=$(gcloud config get-value project)
-
-        bq query --use_legacy_sql=false \
-        "SELECT
-        COUNT(*)
-        FROM
-        ${PROJECT_ID}.customer_refined_data.customers_data"
-        Your active configuration is: [cloudshell-4044]
-        +------+
-        | f0_  |
-        +------+
-        | 2020 |
-        +------+
-        ```
-
+- **Step6**: Validate the data. This is a critical validation to make sure data is populated.  
+    -   Open cloud shell and execute the below 2 command and make sure the count > 0
         ```bash 
         export PROJECT_ID=$(gcloud config get-value project)
 
