@@ -241,9 +241,8 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
     ```
 
 ## Summary 
-In this lab you have learned: 
-1. the dfferent ways you can apply the security policies(terraform will be supported in future) 
-    1.1 using Dataplex UI - both using the PERMISSIONS tab within Lakes, Zones and Assets and also using the "SECURE" tab under Manage
-    1.2 using Dataplex API
-2. how to route the Dataplex audit logs into BigQuery for further analysis and reporting  
-3. using Dataplex you can simply data security policy using a single policy for both buckets and datasets 
+In this lab you have learned:
+
+1. the different ways you can apply the security policies(terraform will be supported in future) <br>1.1 using Dataplex UI - both using the PERMISSIONS tab within Lakes, Zones and Assets and also using the "SECURE" tab under Manage <br>1.2 using Dataplex API
+2. how to route the Dataplex audit logs into BigQuery for further analysis and reporting
+3. that using Dataplex you can simply data security policy using a single policy for both buckets and datasets
