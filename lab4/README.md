@@ -13,8 +13,7 @@ Follow the below instructions to setup the DLP Auto profiler job.
     ```bash
      export PROJECT_ID=$(gcloud config get-value project)
 
-     export project_num=$(gcloud projects list --filter="${PROJECT_ID}"
-    --format="value(PROJECT_NUMBER)")
+     export project_num=$(gcloud projects list --filter="${PROJECT_ID}" --format="value(PROJECT_NUMBER)")
 
     gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:service-${project_num}@dlp-api.iam.gserviceaccount.com" --role="roles/dlp.admin"
 
