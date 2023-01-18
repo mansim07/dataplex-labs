@@ -241,6 +241,7 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 
 
 ### **Sub Task 1: Create the Customer Data Product**
+In this sub task we will trigger a composer workflow that will first create the bigquery table schemas if they don't exists, then trigger the Dataplex data quality job to validate the raw data and then load the customer data product. This shows how Dataplex can easily integrate with your data pipelines. 
 
 - **Step1** Grant the service account access to raw zone for DQ
 
@@ -272,13 +273,24 @@ In this lab, you will learn how to build Data Products. The diagram below depict
 - **Step 3**: Trigger DAG Manually and Monitor
 - **Step 4**: Validate ${PROJECT_ID}.merchants_data_product.core_merchants is populated in BQ
 
+The job should execute in less than a minute. Refresh the terraform screen for updates.  
+
 ### **Sub Task 3: Create the Auth Data products (gcloud)**
 
 - **Step1:** Go to Airflow UI 
 - **Step2:** Click on the “etl_with_dq_transactions_data_product_wf”
 - **Step 3:** Trigger DAG Manually and Monitor
 - **Step 4:** Validate ${PROJECT_ID}.auth_data_product.auth_table is populated in BigQuery  
+The job should execute in less than a minute. Refresh the terraform screen for updates. 
 
+### **Sub Task 4: Create the Credit card Analytics Consumer Data products (gcloud)**
+
+- **Step1:** Go to Airflow UI 
+- **Step2:** Click on the “etl-transactions-analytics-process”
+- **Step 3:** Trigger DAG Manually and Monitor
+- **Step 4:** Validate ${PROJECT_ID}.cc_analytics_data_product.credit_card_transaction_data is populated in BigQuery  
+
+    The job should execute in less than a minute. Refresh the terraform screen for updates. 
 
 ## Summary
 In this lab you learned how Dataplex provides serverless data management tasks that easily integrate and complement organizations existing Data Engineering pipleines through simple and open APIs. 
