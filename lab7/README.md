@@ -1,30 +1,47 @@
-# Data discovery, search and Data Lineage 
+# Dataplex Catalog: Data discovery, search and Data Lineage 
+Dataplex makes data easily searchable and discoverable based on a number of facets - including business domains, classification, and operational metrics such as data quality. As a data consumer you simply search for the data you are looking for - based on its domain, classification, ownership, name, and so on. 
 
-In the Dataplex Discover tab:  
-Step1: Use search “tag:data_product_information” . This should populate all the data products across all domains 
-Step2: Search based on Dataplex lakes and Zones 
-Under “Filters” → Go to “Lakes and Zones” Tab and select Customer Raw Zone to look at the raw products 
-Click on on the listed entities and go to the browse through the schema and partition information
-Next click “CLEAR” next to filters
+Now it's time to explore how you can use the Dataplex catalog to perform advanced data discovery by being to trigger searches based on business metadata, get 360 degree context of your data product, provide business overview and explore data lineage. 
 
 
-To search for PII data products type below in search bar
-tag:data_product_classification.is_pii=true" 
+## Task 1: Get 360 degree overview of your data product
 
-To search for data product with high data quality score
-tag:data_product_quality.timeliness_score<50
+- **Step1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information customer data"
+- **Step2**: Click on the customer_data entry 
+- **Step3**: 
+    - Under overview -> Click on edit overview -> paste the below text and you also insert a sample icon to represent your data product. 
+        ```
+        Customer Demograhics Data Product 
+        This customer data table contains the data for customer demographics of all Bank of Mars retail banking customers. It contains PII information that can be accessed on "need-to-know" basis. 
 
-To search for data products that our Master Data
-tag:data_product_information.data_product_category="Master Data"
+        Customer data is the information that customers give us while interacting with our business through websites, applications, surveys, social media, marketing initiatives, and other online and offline channels. A good business plan depends on customer data. Data-driven businesses recognize the significance of this and take steps to guarantee that they gather the client data points required to enhance client experience and fine-tune business strategy over time.
+        ```
+    - Click Save 
+    - Sample screenshot 
+    ~[overview](/lab7/resources/imgs/cust_data_overview.png)
+  - Now as you see you have a 360 degree view of the customer data product - including technical metadata like schemas and fields , business metadata like wiki style product overview, business metadata such as - classification info, dq scores, data ownership..
 
-To search for data products that our Master Data	 
-tag:data_product_information.data_product_geo_region:us
-
-
-The input dq yaml files are located under the gcs bucket. Feel free to go update the tags in this directory especially the URLs
-
-
-Data Lineage: 
+    ![dp-overview](/lab7/resources/imgs/dp-overview.png) 
 
 
-Data overview 
+## Task 2: Data discovery and Search 
+
+- **Step1**: Use business filters to search for data products. Try out the below search string: 
+
+    | What is your end user looking for?  | Search String |
+    | ----------------------- | ------------- |
+    | Search for data products  | tag:data_product_information |
+    | Search for all data products that belong to the consumer banking domain | tag:data_product_information.domain:Consumer Banking  |
+    | Search for all data products that are owned by Rebecca Piper (Customer Domain Owner) | tag:data_product_information.domain_owner: Rebecca Piper |
+    | Search based on quality Score | tag:data_product_quality.data_quality_score>50 |
+    | List all the data products with PII info | tag:data_product_classification.is_pii=true |
+    | List data products which meets the SLA | tag:data_product_quality.timeliness_score=100 |
+    | List all data products hosted on Analytics Hub | tag:data_product_exchange.data_exchange_platform:Analytics Hub |
+    | List of data products that don’t have Data Quality Scores | tag:data_product_quality.data_quality_score=-1 |
+    | Search for data products that our Master Data | tag:data_product_information.data_product_category="Master Data" | 
+
+# Task 3: Explore Data lineage
+
+- **Step1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information merchant data"
+- **Step2**: Click on the merchant_data entry 
+- **Step3**: Click on Data Lineage to explore the lineage
