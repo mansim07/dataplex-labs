@@ -18,7 +18,7 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
         ```
     - Click Save 
     - Sample screenshot 
-    ~[overview](/lab7/resources/imgs/cust_data_overview.png)
+    ![overview](/lab7/resources/imgs/cust_data_overview.png)
   - Now as you see you have a 360 degree view of the customer data product - including technical metadata like schemas and fields , business metadata like wiki style product overview, business metadata such as - classification info, dq scores, data ownership..
 
     ![dp-overview](/lab7/resources/imgs/dp-overview.png) 
