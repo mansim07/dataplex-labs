@@ -6,9 +6,9 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
 
 ## Task 1: Get 360 degree overview of your data product
 
-- **Step1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information customer data"
-- **Step2**: Click on the customer_data entry 
-- **Step3**: 
+- **Step 1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information customer data"
+- **Step 2**: Click on the customer_data entry 
+- **Step 3**: 
     - Under overview -> Click on edit overview -> paste the below text and you also insert a sample icon to represent your data product. 
         ```
         Customer Demograhics Data Product 
@@ -26,7 +26,7 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
 
 ## Task 2: Data discovery and Search 
 
-- **Step1**: Use business filters to search for data products. Try out the below search string: 
+- **Step 1**: Use business filters to search for data products. Try out the below search string: 
 
     | What is your end user looking for?  | Search String |
     | ----------------------- | ------------- |
@@ -42,6 +42,6 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
 
 # Task 3: Explore Data lineage
 
-- **Step1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information merchant data"
-- **Step2**: Click on the merchant_data entry 
-- **Step3**: Click on Data Lineage to explore the lineage
+- **Step 1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information merchant data"
+- **Step 2**: Click on the merchant_data entry 
+- **Step 3**: Click on Data Lineage to explore the lineage
