@@ -34,15 +34,15 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
 
 - **Step 2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
 
-    1. Go to Dataplex in the Google Cloud console.
+    1. Go to **Dataplex** in the Google Cloud console.
     2. On the left navigation bar, click on **Manage** menu under **Manage Lakes**.
-    3. Click on the “Consumer Banking - Customer Domain” lake.
+    3. Click on the **“Consumer Banking - Customer Domain”** lake.
     4. Click on the "**PERMISSIONS**" tab.
     5. Click on **+GRANT ACCESS**
-    6. Choose “customer-sa@<your-project-id>.iam.gserviceaccount.com” as principal
+    6. Choose **“customer-sa@your-project-id.iam.gserviceaccount.com”**  as principal
     7. Assign **Dataplex Data Owner** role.
-    8. Click the Save button
-    9. Verify Dataplex Data Owner roles appear under the permissions 
+    8. Click the **save** button
+    9. Verify Dataplex data owner roles appear under the permissions 
 
 
 - **Step 3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods:
