@@ -4,7 +4,10 @@
 
 [Cloud Dataplex](https://cloud.google.com/dataplex/docs/lake-security) provides a single control plane for managing data security for distribued data. It translates and propagates  data roles to the underlying storage resource, setting the correct roles for each storage resource. The benefit is that you can grant a single Dataplex data role at the lake hierarchy (for example, a lake), and Dataplex maintains the specified access to data on all resources connected to that lake (for example, Cloud Storage buckets and BigQuery datasets are referred to by assets in the underlying zones). You can specify data roles at lake, zone and asset level. 
 
-In this lab we will grant data roles to the service accounts created by terraform to own and manage the data. 
+In this lab,  
+ - you will grant data roles to the service accounts created by terraform to own and manage the data
+ - you will learn to apply the security policies both through the Dataplex UI as well Dataplex APIs. 
+ - you will learn how to publish cloud audit logs to bigquery for further analysis and reporting
 
 ![Dataplex Security](/lab1/resources/imgs/dataplex-security-lab.png)
 
