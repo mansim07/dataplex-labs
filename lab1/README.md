@@ -105,7 +105,8 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
 ## Task 2: Manage Security Policies for Central Operations domain(through Dataplex APIs)
 
 
-- **Step 1:** Provide Data writer access to all the domain service accounts((customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed dq reports. This will allow them to publish the data product dq results centrally. 
+- **Step 1:** Provide Data writer access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed dq reports, in the Central Operations Domain Lake -> DATA PRODUCT ZONE. This will allow them to publish the data products managed centrally.
+
     - Open Cloud Shell and execute the below command 
         ```bash
         export PROJECT_ID=$(gcloud config get-value project)
@@ -131,7 +132,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
 
         ![successful_policy](/lab1/resources/imgs/etag_successful.png)
 
-- **Step 2:**  Define and provide security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
+- **Step 2:**  Define and apply security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities (Central Operations Domain Lake -> COMMON UTILITIES zone) housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
 
     -  Open Cloud shell and execute the below commands: 
 
@@ -169,7 +170,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         echo "==========="
         ```
 
-- **Step 3:**  Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports. Grant permissions to the Cloud Logging sink’s Google Managed Service Account for the Central Operations Domain lake->Data Product zone->Audit Data asset
+- **Step 3:**  Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports. Grant permissions to the Cloud Logging sink’s Google Managed Service Account for the Central Operations Domain lake->Data Product zone->Audit Data asset  (apply domain asset level security)
 
 
     - **Step 3.1:**  Create the Cloud Logging sink to capture the Dataplex Audit logs into a BigQuery  table
@@ -223,7 +224,9 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
 
 ### Task 3: Execute the below script to grant all the other access 
 
-- Execute the below command to automaically set the access for all the other domains - merchants, transaction and credit card consumer 
+- Execute the below command to automatically set the access for all the other domains - merchants, transaction and credit card consumer
+
+<br>This script will complete in a few minutes.
 
     ```bash 
     export PROJECT_ID=$(gcloud config get-value project)
