@@ -3,6 +3,8 @@ You will discover how to leverage common Dataplex templates to curate raw data a
 
 As part of this lab we will curate the Customer Data using Dataplex's Curation Task 
 
+    Note: ADD "Service Account User Role" for admin@ principle before proceeeding
+
 ## Task1: Curate the Data for Customer Domain 
 
 The Customer Raw data has 2 feeds coming into the gcs raw bucket. 
