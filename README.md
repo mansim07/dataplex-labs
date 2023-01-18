@@ -109,9 +109,9 @@ We have a series of labs designed to get hands-on-experience with Dataplex conce
 | Lab 2  | Standardize data using Dataplex built in task | You will discover how to leverage common Dataplex templates to curate raw data and translate it into standardized formats like parquet and Avro in the Data Curation lane. This demonstrates how domain teams may quickly process data in a serverless manner and begin consuming it for testing purposes.|[ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab2)  |
 | Lab 3  | Build Data Products |Learn how to transfer incremental data using [Configuration-driven Dataproc Templates](https://github.com/GoogleCloudPlatform/dataproc-templates) from GCS to BQ & convert using BigQuery. Serverless Dataplex tasks offer open, straightforward APIs that make it simpler to integrate them with existing Data Pipelines, making them complimentary in nature. | [ReadMe](https://github.com/mansim07/dataplex-labs/blob/main/lab3/README.md)  |
 | Lab 4 | Data Classification using DLP | You will use DLP Data Profiler in this lab so that it can automatically classify the BQ data, which will then be used by a Dataplex  to provide business tags/annotations | [ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab4) |
-| Lab5(TBD) | Data Quality and Tagging| You will learn how to define and perform Data Quality jobs on customer data in the Data Quality lab, evaluate and understand the DQ findings, and construct a dashboard to assess and monitor DQ , creating tags |[ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab5#readme) |
-| Lab 6(TBD) | Tag template and bulk tagging | TBD |[ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab6#readme) | 
-| Lab 7(TBD) | Data catalog Search and Data Lineage| In this lab we will explore the Data Catalog, how to perform advanced searches, look at Data Lineage| [ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab7)) | 
+| Lab5 | Data Quality and Tagging| You will learn how to define and perform Data Quality jobs on customer data in the Data Quality lab, evaluate and understand the DQ findings, and construct a dashboard to assess and monitor DQ , creating tags |[ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab5#readme) |
+| Lab 6(TBD) | Tag template and bulk tagging | In this lab, you will learn how to create business metadata tags on the Dataplex Data Product entity across domains using custom utilities and Composer  |[ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab6#readme) | 
+| Lab 7(TBD) | Data catalog Search and Data Lineage| You will learn how to find data using the logical structure and business annotations of Dataplex. In this lab we will explore the Data Catalog, how to perform advanced searches, look at Data Lineage| [ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab7) | 
 
 
 ## [Optional] Post Work
@@ -123,20 +123,4 @@ Don't forget post-survey and feedback
 ## Clean up
 Please make sure you clean up your environment
 
-#Remove lien if any
-gcloud alpha resource-manager liens list --project ${PROJECT_ID}
 gcloud projects delete ${PROJECT_ID}
-
-
-## Common Issues and Erros  
-
-1. │ Error: googleapi: Error 400: You can't create a Composer environment due to Organization Policy constraints in the selected project.
-│ Policy constraints/compute.vmExternalIpAccess must allow all values when creating Public IP Cloud Composer environments., failedPrecondition
-
-2. ╷
-│ Error: googleapi: Error 400: You can't create a Composer environment due to Organization Policy constraints in the selected project.
-│ Policy constraints/compute.vmExternalIpAccess must allow all values when creating Public IP Cloud Composer environments., failedPrecondition
-│
-│   with module.composer.google_composer_environment.composer_env,
-│   on modules/composer/composer.tf line 127, in resource "google_composer_environment" "composer_env":
-│  127: resource "google_composer_environment" "composer_env" {
