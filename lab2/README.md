@@ -36,7 +36,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
 
     - **Output file format in GCS**: PARQUET
     
-    - **Dataplex asset name for the destination GCS bucket**: projects/${PROJECT_ID}/locations/us-central1/lakes/prod-customer-source-domain/zones/customer-curated-zone/assets/customer-curated-data
+    - **Dataplex asset name for the destination GCS bucket**: projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/assets/customer-curated-data
 
     - **Sample Screenshot** 
         ![required parameters](/lab2/resources/imgs/required_parameters.png)
@@ -51,7 +51,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
 
         ![optional_parameter](/lab2/resources/imgs/Optional-parameter.png)
 
-- **Step5:** Skip Set Schedule and Click the **Create** button. 
+- **Step5:** **Skip** Set Schedule and Click the **Create** button. Make sure you SKIP SCHEDULE. 
 - **Step6:** Click **Run** button ad then **Run Pipeline**
 
      ![run_button](/lab2/resources/imgs/run_button.png)
