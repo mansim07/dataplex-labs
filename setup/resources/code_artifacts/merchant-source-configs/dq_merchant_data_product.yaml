@@ -189,7 +189,7 @@ rule_bindings:
     row_filter_id: NONE
     rule_ids:
       - NO_REFERENTIAL_INTEGRITY_VIOLATION_IN_OPERATOR:
-          ref_data_project: marsbank-datawarehouse
-          ref_data_dataset: prod_merchants_ref_data
+          ref_data_project: _project_datagov_
+          ref_data_dataset: merchants_ref_data
           ref_data_table_id: mcc_codes
           ref_data_column_id: mcc

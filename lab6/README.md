@@ -147,31 +147,31 @@ Above we learned how to create and update the tags manually, now let’s see how
 
 **We have limitation on Spark Serverless capacity(8 vCore)  by default so makes sure you trigger the tags sequentially to avoid failures due  resource crunch**
 
-- **Step1**: Go to Composer → Go to Airflow UI → Click on DAGs 
-- **Step2**: Click on DAGs and search for or go to  “data_governance_customer_dp_info_tag” DAG and Click on it 
-- **Step3**: Trigger the DAG Manually by clicking on the Run button as show below
-- **Step4**: Monitor and wait for the jobs to Complete. You can also go to Dataplex UI to monitor the jobs 
-- **Step5**: Trigger the “master_dag_customer_dq”  and wait for its completion. This first runs a data quality job and then publishes the data quality score tag. 
-- **Step6**: Trigger the “data_governance_customer_exchange_tag” tag and wait for its completion 
-- **Step7**: Trigger the  “data_governance_customer_classification_tag” and wait for its completion 	
+- **Step1**: Go to **Composer** → Go to **Airflow UI** → Click on DAGs 
+- **Step2**: Click on DAGs and search for or go to **“data_governance_customer_dp_info_tag”** DAG and click on it 
+- **Step3**: Trigger the DAG Manually by clicking on the Run button
+- **Step4**: Monitor and wait for the jobs to complete. You can also go to Dataplex UI to monitor the jobs 
+- **Step5**: Trigger the **“master_dag_customer_dq”**  and wait for its completion. This first runs a data quality job and then publishes the data quality score tag. 
+- **Step6**: Trigger the **“data_governance_customer_exchange_tag”** dag and wait for its completion 
+- **Step7**: Trigger the  **“data_governance_customer_classification_tag”** and wait for its completion 	
 
 
 ## Task 4: Create bulk tags for Merchants Domain
 
 - **Step1**: Follow the same steps you used above for triggering the below set of DAGs: and wait for its completion. Execute the below DAGs in airflow 
-    - master_dag_merchants_dq
-    - data_governance_merchant_classification_tag
-    - data_governance_merchant_dp_info_tag
-    - data_governance_merchant_exchange_tag
+    - **master_dag_merchant_dq**
+    - **data_governance_merchant_classification_tag**
+    - **data_governance_merchant_dp_info_tag**
+    - **data_governance_merchant_exchange_tag**
 
 
 ## Task 5: Create bulk tags for Transactions Domain
 
 - **Step1**: Follow the same steps you used above for triggering the below set of DAGs: and wait for its completion. Execute the below DAGs in airflow
-    - data_governance_transactions_classification_tag
-    - data_governance_transactions_dp_info_tag
-    - data_governance_transactions_exchange_tag
-    - data_governance_transactions_quality_tag
+    - **data_governance_transactions_classification_tag**
+    - **data_governance_transactions_dp_info_tag**
+    - **data_governance_transactions_exchange_tag**
+    - **data_governance_transactions_quality_tag**
 
 
  
