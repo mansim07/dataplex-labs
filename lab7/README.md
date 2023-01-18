@@ -9,7 +9,7 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
 - **Step 1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information customer data"
 - **Step 2**: Click on the customer_data entry 
 - **Step 3**: 
-    - Under overview -> Click on edit overview -> paste the below text and you also insert a sample icon to represent your data product. 
+    - Under **OVERVIEW** -> Click on **+ADD OVERVIEW** -> paste the below text and you also insert a sample icon to represent your data product. 
         ```
         Customer Demograhics Data Product 
         This customer data table contains the data for customer demographics of all Bank of Mars retail banking customers. It contains PII information that can be accessed on "need-to-know" basis. 
@@ -32,7 +32,7 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
     | ----------------------- | ------------- |
     | Search for data products  | tag:data_product_information |
     | Search for all data products that belong to the consumer banking domain | tag:data_product_information.domain:Consumer Banking  |
-    | Search for all data products that are owned by Rebecca Piper (Customer Domain Owner) | tag:data_product_information.domain_owner: Rebecca Piper |
+    | Search for all data products that are owned by Rebecca Piper (Customer Domain Owner) | tag:data_product_information.domain_owner:hannah.anderson@boma.com |
     | Search based on quality Score | tag:data_product_quality.data_quality_score>50 |
     | List all the data products with PII info | tag:data_product_classification.is_pii=true |
     | List data products which meets the SLA | tag:data_product_quality.timeliness_score=100 |
@@ -42,6 +42,7 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
 
 # Task 3: Explore Data lineage
 
-- **Step 1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "tag:data_product_information merchant data"
-- **Step 2**: Click on the merchant_data entry 
+- **Step 1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "system=bigquery credit_card_transaction_data"
+- **Step 2**: Click on the credit_card_transaction_data entry
 - **Step 3**: Click on Data Lineage to explore the lineage
+    ![lineage](/lab7/resources/imgs/lineage.png)
