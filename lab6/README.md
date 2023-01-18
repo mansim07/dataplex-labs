@@ -36,8 +36,9 @@ We have already explored the Data Quality tagging in the previous lab.
     ```bash 
     cd ~
     vim customer-tag.yaml
-
-
+    ``` 
+    Enter the below text 
+    ```
     data_product_id: derived
     data_product_name: ""
     data_product_type: ""
@@ -94,8 +95,10 @@ We have already explored the Data Quality tagging in the previous lab.
     ```bash 
     cd ~
     vim customer-tag.yaml
+    ```
 
-
+    Enter the below text
+    ```
     data_product_id: derived
     data_product_name: ""
     data_product_type: ""
