@@ -12,6 +12,7 @@ else
    exit 1 
 fi 
 
+sleep 1m
 export merchant_data_product_assert_policy="{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataReader\",\"members\":[\"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\"]}]}}"
 
 curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--merchant--domain/zones/merchant-data-product-zone:setIamPolicy -d "${merchant_data_product_assert_policy}"
@@ -22,6 +23,8 @@ else
    echo "Merchant Zone security policy application failed!"
    exit 1 
 fi 
+
+sleep 1m 
 
 export transaction_lake_policy="{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\"]}]}}" 
 
@@ -34,6 +37,8 @@ else
    exit 1 
 fi 
 
+sleep 1m 
+
 export  transaction_data_product_assert_policy="{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataReader\",\"members\":[\"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\"]}]}}"
 
 curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--creditcards--transaction--domain/zones/authorizations-data-product-zone:setIamPolicy -d "${transaction_data_product_assert_policy}"
@@ -44,6 +49,8 @@ else
    echo "Transaction Zone  policy application failed!"
    exit 1 
 fi 
+
+sleep 1m 
 
 export  transaction_consumer_lake_policy="{\"policy\":{\"bindings\":[ {\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\"]}]}}"
 
