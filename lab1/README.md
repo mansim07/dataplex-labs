@@ -61,7 +61,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         - Open Cloud Shell and execute the below command: 
 
             ```bash 
-            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
+           curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
             ```
             
             ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
