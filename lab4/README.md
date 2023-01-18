@@ -52,7 +52,7 @@ Follow the below instructions to setup the DLP Auto profiler job.
 - **Step12**: Make sure configuration has been successfully created 
 
      ![scan config](/lab4/resources/imgs/dlp_scan_configuration.png)
-- **Step13** After a few minutes check to make sure the data profile is available in the "DATA PROFILE" tab and the Central_dlp_table has been poupulated. 
+- **Step13** After a few minutes check to make sure the data profile is available in the "DATA PROFILE" tab, choose the Iowa region and the central_dlp_table dataset has been poupulated in Bigquery. Meanwhile feel free to move to the next lab. 
 
    ![dlp profile](/lab4/resources/imgs/dlp_profile.png)
 
