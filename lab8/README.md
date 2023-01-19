@@ -7,8 +7,8 @@ Note:
 2. Data profiling compute used is Google managed, so you don't need to plan for/or handle any infrastructure complexity.
 
 Documentation:
-About: https://cloud.google.com/dataplex/docs/data-profiling-overview#limitations_in_public_preview
-Practiioner's Guide: https://cloud.google.com/dataplex/docs/use-data-profiling
+[About](https://cloud.google.com/dataplex/docs/data-profiling-overview#limitations_in_public_preview) | 
+[Practiioner's Guide](https://cloud.google.com/dataplex/docs/use-data-profiling)
 
 ## Dataplex Profiling - what's involved
 
