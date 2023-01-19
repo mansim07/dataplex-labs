@@ -114,7 +114,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         export central_dq_policy="{\"policy\":{
         \"bindings\": [
         {
-            \"role\": \"roles/dataplex.dataWriter\",
+            \"role\": \"roles/dataplex.dataOwner\",
             \"members\": [
             \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
         \"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com\"
