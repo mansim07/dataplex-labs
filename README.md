@@ -14,7 +14,7 @@
     4. Make sure you have enough of disk space(1.5 GB - 2 GB) in your gCloud shell for the terraform setup 
 
 - For Non-Argolis Account 
-    1.  Create a GCP Project 
+    1.  Create a GCP Project <br>
         1.1. Create a new GCP project and follow the guidelines [here](https://cloud.google.com/dataplex/docs/best-practices#choose_project). 
     
         1.2. The project must belong to the same [VPC Service Control perimeter](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) as the data destined to be in the lake. Refer to this link to use or [add Dataplex to VPC-SC](https://cloud.google.com/dataplex/docs/vpc-sc). 
