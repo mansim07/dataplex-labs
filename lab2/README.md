@@ -49,7 +49,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
     - Open "Show Optional Parameters" 
     - **Service Account Email**: customer-sa@${PROJECT_ID}.iam.gserviceaccount.com
     - **Subnetwork**: https://www.googleapis.com/compute/v1/projects/${PROJECT_ID}/regions/us-central1/subnetworks/default
-    --**Sample ScreenShot**:
+    - **Sample ScreenShot**:
 
         ![optional_parameter](/lab2/resources/imgs/Optional-parameter.png)
 
