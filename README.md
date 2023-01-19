@@ -114,6 +114,7 @@ We have a series of labs designed to get hands-on-experience with Dataplex conce
 | Lab5 | Data Quality |  in this lab you will learn how to execute an end-to-end data quality process, including how to define **DQ rules**, assess and **analyze** DQ findings, build an dq analysis **dashboard**, manage DQ **incidents**, and finally publish DQ score **tags** to the catalog.  |[ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab5#readme) |
 | Lab 6 | Tag template and bulk tagging | In this lab, you will learn how to create business metadata tags on the Dataplex Data Product entity at scale across domains using custom utilities and Composer. |[ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab6#readme) | 
 | Lab 7 | Data catalog Search and Data Lineage| You will learn how to find data using the logical structure, perform advanced data discovery, provide additional(wiki-style) product overview and look at Data lineage | [ReadMe](https://github.com/mansim07/dataplex-labs/tree/main/lab7) | 
+| Lab 8 | Data profiling| You will learn how to run data profiling tasks on BigQuery tables to better understand data for cleansing, and analyzing | [ReadMe](lab8/README.md) | 
 
 
 ## [Optional] Post Work
