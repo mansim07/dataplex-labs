@@ -2,15 +2,22 @@
 
 Dataplex data profiling lets you identify common statistical characteristics of the columns of your BigQuery tables. This information helps data consumers understand their data better, which makes it possible to analyze data more effectively. Dataplex also uses this information to recommend rules for data quality.
 
-Note: 
+**Dataplex offers two options for Data Profiling:**<br>
+1. Auto Data Profiling
+2. User Configured Data Profiling
+
+**Scope of this lab:**<br>
+User Configured Data Profiling
+
+**Note:**<br>
 1. This feature is currently supported only for BigQuery tables.
 2. Data profiling compute used is Google managed, so you don't need to plan for/or handle any infrastructure complexity.
 
-Documentation:
+**Documentation:**<br>
 [About](https://cloud.google.com/dataplex/docs/data-profiling-overview#limitations_in_public_preview) | 
 [Practiioner's Guide](https://cloud.google.com/dataplex/docs/use-data-profiling)
 
-## Dataplex Profiling - what's involved
+## User Configured Dataplex Profiling - what's involved
 
 | # | Step | 
 | -- | :--- |
@@ -22,6 +29,7 @@ Documentation:
 | 6 | [Configure RBAC](https://cloud.google.com/dataplex/docs/use-data-profiling#datascan_permissions_and_roles) for running scan versus viewing results |
 
 At the time of the authoring of this lab, the capabilities supported are below-
+![supported](/lab8/resources/imgs/lab-profiling-01.png)
 
 
 
