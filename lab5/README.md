@@ -49,7 +49,31 @@ High Level DQ architecture
 
 
 -  **Step3**: Execute the Data Quality task 
-    - Open cloud shell and execute the below command. No Changes Needed. 
+    - Open cloud shell and execute the below command to make sure you have the access granted 
+
+        ```bash
+        export PROJECT_ID=$(gcloud config get-value project)
+
+        export central_dq_policy="{\"policy\":{
+        \"bindings\": [
+        {
+            \"role\": \"roles/dataplex.dataOwner\",
+            \"members\": [
+            \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
+        \"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com\"
+            ]
+        }
+        ]
+        }
+        }"
+
+        echo $central_dq_policy
+
+        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone:setIamPolicy -d "${central_dq_policy}"
+        ``` 
+     - Go to BigQuery, check the permissions on "central_dq_results" dataset and make sure policy has been propagated
+    
+    - Run the DQ job No Changes Needed. 
         ```bash 
         export PROJECT_ID=$(gcloud config get-value project)
 
