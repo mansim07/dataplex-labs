@@ -17,7 +17,7 @@ User Configured Data Profiling
 
 ### Documentation
 [About](https://cloud.google.com/dataplex/docs/data-profiling-overview#limitations_in_public_preview) | 
-[Practiioner's Guide](https://cloud.google.com/dataplex/docs/use-data-profiling)
+[Practitioner's Guide](https://cloud.google.com/dataplex/docs/use-data-profiling)
 
 ### User Configured Dataplex Profiling - what's involved
 
