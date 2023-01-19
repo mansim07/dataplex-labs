@@ -49,6 +49,9 @@ role/dataplex.dataScanDataViewer: Read access to DataScan resources, including t
 
 At the time of authoring of this lab, Console and REST API only
 
+<br><br>
+
+<hr>
 
 ## 2. Lab
 
