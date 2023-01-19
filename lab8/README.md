@@ -28,7 +28,7 @@ User Configured Data Profiling
 | 5 | Profiling results are visually displayed|
 | 6 | [Configure RBAC](https://cloud.google.com/dataplex/docs/use-data-profiling#datascan_permissions_and_roles) for running scan versus viewing results |
 
-At the time of the authoring of this lab, the capabilities supported are below-
+## User Configured Dataplex Profiling - what's supported
 ![supported](/lab8/resources/imgs/lab-profiling-01.png)
 
 
