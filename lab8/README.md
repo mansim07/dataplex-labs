@@ -50,4 +50,41 @@ role/dataplex.dataScanDataViewer: Read access to DataScan resources, including t
 At the time of authoring of this lab, Console and REST API only
 
 
+## 2. Lab
+
+### 2.1. Grant requisite IAM permissions
+
+The User Managed Service Account customer-sa@ needs privileges to create and run profiling scans. From the Cloud Shell scoped to your project, run the below:
+
+```
+PROJECT_ID=`gcloud config list --format "value(core.project)" 2>/dev/null`
+CUSTOMER_UMSA_FQN="customer-sa@${PROJECT_ID}.iam.gserviceaccount.com"
+
+gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$CUSTOMER_UMSA_FQN \
+--role="roles/dataplex.dataScanAdmin"
+```
+
+### 2.2. Create a Scan Profile from the Dataplex "Profile" UI
+
+### 2.3. Run the Data Profiling scan created
+
+### 2.4. Review the Data Profile
+
+### 2.5. Run multiple times
+
+
+### 2.6. Challenge
+
+Create a partitioned BQ table, run the profiling in an incremental mode, add some data and run profiling again and observe the results.
+
+<br><br>
+
+<hr>
+
+This concludes the lab module. Proceed to the main menu.
+
+<hr>
+
+
+
 
