@@ -68,12 +68,49 @@ gcloud projects add-iam-policy-binding $PROJECT_ID --member=serviceAccount:$CUST
 
 ### 2.2. Create a Scan Profile from the Dataplex "Profile" UI
 
+#### 2.2.1. Navigate to the "Profile" UI from the Dataplex landing page
+
+![navigate](/lab8/resources/imgs/lab-profiling-02.png)
+
+<br><br>
+
+#### 2.2.2. Create a profile scan as depicted below
+
+![navigate](/lab8/resources/imgs/lab-profiling-03.png)
+
+<br><br>
+
+#### 2.2.3. Review the profile scan list & click on the scan profile created
+
+![navigate](/lab8/resources/imgs/lab-profiling-04.png)
+
+<br><br>
+
 ### 2.3. Run the Data Profiling scan created
 
-### 2.4. Review the Data Profile
+![navigate](/lab8/resources/imgs/lab-profiling-06.png)
+
+<br><br>
+
+![navigate](/lab8/resources/imgs/lab-profiling-07.png)
+
+<br><br>
+
+
+
+### 2.4. Review the Data Profiling Results
+
+![navigate](/lab8/resources/imgs/lab-profiling-08.png)
+
+<br><br>
 
 ### 2.5. Run multiple times
 
+Note how you cannot switch to incremental mode.
+
+![navigate](/lab8/resources/imgs/lab-profiling-08.png)
+
+<br><br>
 
 ### 2.6. Challenge
 
