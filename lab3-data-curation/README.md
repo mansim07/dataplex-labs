@@ -1,9 +1,32 @@
 # Using Dataplex's Data Curation Task
-You will discover how to leverage common Dataplex templates to curate raw data and translate it into standardized formats like parquet and Avro in the Data Curation lane. This demonstrates how domain teams may quickly process data in a serverless manner and begin consuming it for testing purposes.
 
+## 1. About
+
+Dataplex provides templates, powered by Dataflow, to perform common data processing tasks like data ingestion, processing, and managing the data lifecycle. In this lab, you will discover how to leverage common Dataplex templates to curate raw data and translate it into standardized formats like parquet and Avro in the Data Curation lane. This demonstrates how domain teams may quickly process data in a serverless manner and begin consuming it. 
+
+### 1.1. Prerequisites
+Lab2-data-security successfully completed.
+
+### 1.2. Duration
+~20 mins
+
+### 1.3 Concepts
+tbd
+
+### 1.4. Scope of this lab
 As part of this lab we will curate the Customer Data using Dataplex's Curation Task 
 
-    Note: ADD "Service Account User Role" for admin@ principle before proceeeding
+    Note: ADD "Service Account User Role" for active UI User before proceeeding
+
+
+### 1.5. Note
+None
+
+### 1.6. Documentation
+[Practioner Guide](https://cloud.google.com/dataplex/docs/task-templates)
+
+## 2. Lab
+<hr>
 
 ## Task1: Curate the Data for Customer Domain 
 

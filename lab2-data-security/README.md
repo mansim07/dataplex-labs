@@ -31,6 +31,8 @@ While most part of data security policy application is already taken care as par
 ### 1.5. Note
 Attribute store which allows you to set column-level, row-level and table-level policies is a preview feature and is on the roadmap to be part of this lab. 
 
+    Note: ADD "Service Account User Role" for active account principle before proceeeding
+
 ### 1.6. Documentation
 [Secure your lake](https://cloud.google.com/dataplex/docs/lake-security)
 <hr>
