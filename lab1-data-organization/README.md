@@ -215,6 +215,6 @@ This hows how Dataplex was able to harvest technical medata from Google Cloud St
 
 <hr>
 
-This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab2-data-security/README.md) you will curate and standardize the data using Dataplex dataflow templates based task. 
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab2-data-security/README.md) where you will apply and manage data security policies using Dataplex
 
 <hr>
