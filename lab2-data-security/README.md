@@ -49,26 +49,38 @@ Cloud logging sink to capture the audit data which we can later query to run and
     
     echo $LOGGING_GMSA
 
-    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
+    curl -X \
+    POST -H \
+    "Authorization: Bearer $(gcloud auth print-access-token)" -H \
+    "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain \
+    /zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
     ```
 
 <hr>
 
 ### 2.2. Grant customer-sa@ service account the data owner for customer domain (Lake level pushdown)
 
-- **Step 1:** Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
+- **Step 1:** Pre-validation <br>
+
+    Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
 
     Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset
 
     ``` 
     export PROJECT_ID=$(gcloud config get-value project)
 
-    curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
+    curl -X \
+    GET -H \
+    "Authorization: Bearer $(gcloud auth print-access-token --impersonate \
+    -service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H \
+    "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
     ```
     Sample output: 
     ![permission denied](/lab2-data-security/resources/imgs/permission-dnied.png)
 
-- **Step 2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
+- **Step 2:** Security policy application <br>
+
+    In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
 
     1. Go to **Dataplex** in the Google Cloud console.
     2. On the left navigation bar, click on **Manage** menu under **Manage Lakes**.
@@ -81,7 +93,9 @@ Cloud logging sink to capture the audit data which we can later query to run and
     9. Verify Dataplex data owner roles appear under the permissions 
 
 
-- **Step 3** : Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods. Method#3 is safest. 
+- **Step 3** : Monitoring security policy propagation <br>
+
+    Monitor the security policy propagation, you have various options to monitor the security access porpation centrally. Use any of the below methods. Method#3 is safest. 
     
     - **Method 1:** Using Dataplex UI 
 
@@ -97,7 +111,11 @@ Cloud logging sink to capture the audit data which we can later query to run and
         - Open Cloud Shell and execute the below command: 
 
             ```bash 
-            curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/assets/customer-raw-data
+             curl -X \
+            GET -H \
+            "Authorization: Bearer $(gcloud auth print-access-token)" -H \
+            "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain \
+            /zones/customer-raw-zone/assets/customer-raw-data
             ```
             
             ![Dataplex Verify Image](/lab2-data-security/resources/imgs/dataplex-security-status-api.png)
@@ -109,33 +127,43 @@ Cloud logging sink to capture the audit data which we can later query to run and
             ![Dataplex Verify Image](/lab2-data-security/resources/imgs/dataplex-security-status-underlying-assets.png)
 
 
-- **Step 4**: After the access policies has been propagated by Dataplex, rerun the commands in Step1 and verify the service account is able to access underlying data
+- **Step 4**: Post-Validation<br>
 
-    - Open Cloud shell and execute the below command which should now execute successfully. 
+    After the access policies has been propagated by Dataplex, rerun the commands in Step1 and verify the service account is able to access underlying data
 
-        ```bash 
-        export PROJECT_ID=$(gcloud config get-value project)
+    Open Cloud shell and execute the below command which should now execute successfully. 
 
-         curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
-        ```
-        Sample Output:
+    ```bash 
+    export PROJECT_ID=$(gcloud config get-value project)
 
-        ![successful output](/lab2-data-security/resources/imgs/dataplex-security-result.png)
+    curl -X \
+    GET -H \
+    "Authorization: Bearer $(gcloud auth print-access-token --impersonate \
+    -service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H \
+    "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
+    ```
 
+    Sample Output:
+
+    ![successful output](/lab2-data-security/resources/imgs/dataplex-security-result.png)
+
+<br>
 
 ### 2.3.  Grant the Credit card analytics consumer sa read access to the Customer Data product zone(Zone Level security pushdown).**
 <hr>
-- Using “Secure View” to provide the credit card analytics consumer domain access to the Customer Data Products. For this we will use the "Secure" functionality to the apply policy
-    1. Go to **Dataplex** in the Google Cloud console.
-    2. Navigate to the **Manage**->**Secure** on the left menu.
-    3. Under the **RESOURCE-CENTRIC** tab, find and expand on your project
-    4. Expand on the **"**Consumer Banking -  Customer Domain"** lake
-    5. Click on the **"Customer Data Product Zone"**
-    6. Click on **+Grant Access**
-    7. Choose "cc-trans-consumer-sa@<your-project-id>.iam.gserviceaccount.com as the principle
-    8. Add the **Dataplex Data reader** roles
-    9. Click on the Save button 
-    10. Verify Dataplex Data Reader roles appear for the principal. Use one of the methods outlined in Step#3 above. 
+
+Using “Secure View” to provide the credit card analytics consumer domain access to the Customer Data Products. For this we will use the "Secure" functionality to the apply policy
+
+ 1. Go to **Dataplex** in the Google Cloud console.
+2. Navigate to the **Manage**->**Secure** on the left menu.
+3. Under the **RESOURCE-CENTRIC** tab, find and expand on your project
+4. Expand on the **"**Consumer Banking -  Customer Domain"** lake
+5. Click on the **"Customer Data Product Zone"**
+6. Click on **+Grant Access**
+7. Choose "cc-trans-consumer-sa@<your-project-id>.iam.gserviceaccount.com as the principle
+8. Add the **Dataplex Data reader** roles
+9. Click on the Save button 
+10. Verify Dataplex Data Reader roles appear for the principal. Use one of the methods outlined in Step#3 above. 
 
 
 ### 2.4. Manage Security Policies for Central Operations domain(through Dataplex APIs)
