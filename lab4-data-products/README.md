@@ -31,9 +31,11 @@ None
 ### 1.6. Documentation
 None
 
-## 2. About
+## 2. Labs
 
-## Task 1: Use Dataproc template to move the data from raw/curated zone to refine zone in BQ  
+## # 2.1. Building Customer Domain Data Products
+
+Use Dataproc template to move the data from raw/curated zone to refine zone in BQ  
 
 ### **Sub Task 1: Move the Customer Data**
 
