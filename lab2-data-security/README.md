@@ -1,7 +1,7 @@
 # Manage Data Security through Dataplex 
 
     This is a critial lab. Make sure you follow step-by-step and finish applying each of the security policies. 
-## Introduction
+## 1. About
 
 [Cloud Dataplex](https://cloud.google.com/dataplex/docs/lake-security) provides a single control plane for managing data security for distribued data. It translates and propagates  data roles to the underlying storage resource, setting the correct roles for each storage resource. The benefit is that you can grant a single Dataplex data role at the lake hierarchy (for example, a lake), and Dataplex maintains the specified access to data on all resources connected to that lake (for example, Cloud Storage buckets and BigQuery datasets are referred to by assets in the underlying zones). You can specify data roles at lake, zone and asset level. 
 
@@ -11,25 +11,62 @@ In this lab,
  - you will learn to apply the security policies both through the Dataplex UI as well Dataplex APIs 
  - you will learn how to publish cloud audit logs to bigquery for further analysis and reporting
 
+
 ![Dataplex Security](/lab2-data-security/resources/imgs/dataplex-security-lab.png)
 
- ## Task 1: Manage security policies for Consumer Banking Customer Domain
-In this lab task, we will apply the following IAM permissions for  "Consumer Banking - Customer Domain" lake:
+## 2. Lab
 
-### **Sub-Task 1: Make customer-sa@ service account the data owner for consumer banking - customer domain (Lake level pushdown)** 
+### 2.1. Set up data security audit sink 
 
-- **Step 1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
+Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports.
+- **Step 1:**  Create the Cloud Logging sink to capture the Dataplex Audit logs into a BigQuery table. <br>
 
-    - Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset
+     In Cloud shell, run the below command-
 
-        ```bash 
+    ```
+    export PROJECT_ID=$(gcloud config get-value project)
+    
+    gcloud logging --project=${PROJECT_ID} sinks create audits-to-bq bigquery.googleapis.com/projects/${PROJECT_ID}/datasets/central_audit_data --log-filter='resource.type="audited_resource" AND resource.labels.service="dataplex.googleapis.com" AND protoPayload.serviceName="dataplex.googleapis.com"'
+    ```
 
-        export PROJECT_ID=$(gcloud config get-value project)
+    Sample output of the author: 
 
-        curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
-        ```
-        Sample output: 
-        ![permission denied](/lab2-data-security/resources/imgs/permission-dnied.png)
+    ```
+    Created [https://logging.googleapis.com/v2/projects/mbdatagov-05/sinks/audits-to-bq].
+    Please remember to grant `serviceAccount:p52065135315-549975@gcp-sa-logging.iam.gserviceaccount.com` the BigQuery Data Editor role on the dataset.
+    More information about sinks can be found at https://cloud.google.com/logging/docs/export/configure_export
+    ```
+
+- **Step 2:**  Validate: Go to Cloud Logging -> Logs Router and you should see a sink called “audits-to-bq” as shown below
+
+- **Step 3:** Grant the Google Managed Cloud Logging Sink Service Account requisite permissions through Dataplex 
+ Open Cloud Shell execute the below command: 
+
+    ```
+    export PROJECT_ID=$(gcloud config get-value project)
+
+    LOGGING_GMSA=`gcloud logging sinks describe audits-to-bq | grep writerIdentity | grep serviceAccount | cut -d":" -f3`
+    
+    echo $LOGGING_GMSA
+
+    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
+    ```
+
+<hr>
+
+### 2.2. Grant customer-sa@ service account the data owner for customer domain (Lake level pushdown)
+
+- **Step 1:** Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
+
+    Open Cloud shell and execute the below command to list the tables in the "customer_raw_zone" dataset
+
+    ``` 
+    export PROJECT_ID=$(gcloud config get-value project)
+
+    curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
+    ```
+    Sample output: 
+    ![permission denied](/lab2-data-security/resources/imgs/permission-dnied.png)
 
 - **Step 2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
 
@@ -86,8 +123,8 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         ![successful output](/lab2-data-security/resources/imgs/dataplex-security-result.png)
 
 
-### **Sub Task 2: Grant the Credit card analytics consumer sa read access to the Customer Data product zone(Zone Level security pushdown).**
-
+### 2.3.  Grant the Credit card analytics consumer sa read access to the Customer Data product zone(Zone Level security pushdown).**
+<hr>
 - Using “Secure View” to provide the credit card analytics consumer domain access to the Customer Data Products. For this we will use the "Secure" functionality to the apply policy
     1. Go to **Dataplex** in the Google Cloud console.
     2. Navigate to the **Manage**->**Secure** on the left menu.
@@ -101,37 +138,9 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
     10. Verify Dataplex Data Reader roles appear for the principal. Use one of the methods outlined in Step#3 above. 
 
 
-## Task 2: Manage Security Policies for Central Operations domain(through Dataplex APIs)
+### 2.4. Manage Security Policies for Central Operations domain(through Dataplex APIs)
 
-
-- **Step 1:** Provide Data writer access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed dq reports, in the Central Operations Domain Lake -> DATA PRODUCT ZONE. This will allow them to publish the data products managed centrally.
-
-    - Open Cloud Shell and execute the below command 
-        ```bash
-        export PROJECT_ID=$(gcloud config get-value project)
-
-        export central_dq_policy="{\"policy\":{
-        \"bindings\": [
-        {
-            \"role\": \"roles/dataplex.dataOwner\",
-            \"members\": [
-            \"serviceAccount:cc-trans-consumer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",
-        \"serviceAccount:cc-trans-sa@${PROJECT_ID}.iam.gserviceaccount.com\",   \"serviceAccount:customer-sa@${PROJECT_ID}.iam.gserviceaccount.com\",    \"serviceAccount:merchant-sa@${PROJECT_ID}.iam.gserviceaccount.com\"
-            ]
-        }
-        ]
-        }
-        }"
-
-        echo $central_dq_policy
-
-        curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone:setIamPolicy -d "${central_dq_policy}"
-        ```
-        Sample Output: 
-
-        ![successful_policy](/lab2-data-security/resources/imgs/etag_successful.png)
-
-- **Step 2:**  Define and apply security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities (Central Operations Domain Lake -> COMMON UTILITIES zone) housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
+- **Step 1:**  Define and apply security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities (Central Operations Domain Lake -> COMMON UTILITIES zone) housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
 
     -  Open Cloud shell and execute the below commands: 
 
@@ -169,37 +178,9 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         echo "==========="
         ```
 
-- **Step 3:**  Cloud logging sink to capture the audit data which we can later query to run and visualize audit reports. Grant permissions to the Cloud Logging sink’s Google Managed Service Account for the Central Operations Domain lake->Data Product zone->Audit Data asset  (apply domain asset level security)
 
 
-    - **Step 3.1:**  Create the Cloud Logging sink to capture the Dataplex Audit logs into a BigQuery  table
-        ```bash 
-        export PROJECT_ID=$(gcloud config get-value project)
-        gcloud logging --project=${PROJECT_ID} sinks create audits-to-bq bigquery.googleapis.com/projects/${PROJECT_ID}/datasets/central_audit_data --log-filter='resource.type="audited_resource" AND resource.labels.service="dataplex.googleapis.com" AND protoPayload.serviceName="dataplex.googleapis.com"'
-        ```
-
-        Sample output of the author: 
-
-        ```
-        Created [https://logging.googleapis.com/v2/projects/mbdatagov-05/sinks/audits-to-bq].
-        Please remember to grant `serviceAccount:p52065135315-549975@gcp-sa-logging.iam.gserviceaccount.com` the BigQuery Data Editor role on the dataset.
-        More information about sinks can be found at https://cloud.google.com/logging/docs/export/configure_export
-        ```
-       Validate: Go to Cloud Logging -> Logs Router and you should see a sink called “audits-to-bq” as shown below
-
-    - **Step 3.2:** Grant the Google Managed Cloud Logging Sink Service Account requisite permissions through Dataplex 
-        - Open Cloud Shell execute the below command: 
-            ```bash 
-            export PROJECT_ID=$(gcloud config get-value project)
-
-            LOGGING_GMSA=`gcloud logging sinks describe audits-to-bq | grep writerIdentity | grep serviceAccount | cut -d":" -f3`
-            echo $LOGGING_GMSA
-
-            curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
-            ```
-
-
-### Task 4: Go to BigQuery and perform analysis on the audit data to analyze and report 
+### 2.4.  Go to BigQuery and perform analysis on the audit data to analyze and report 
 
 
  - Open BigQuery UI, change the processing location to us-central1 and execute the below query after replacing the ${PROJECT_ID}
