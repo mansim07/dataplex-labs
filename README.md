@@ -13,7 +13,7 @@ The labs will guide you through building a Data mesh using Dataplex's data gover
 ### 1.3. Data Flow 
 ![data flow](/setup/resources/code_artifacts/imgs/Data-flow.png)
 
-### 1.3. Data Domains 
+### 1.3. Data Domains and Asset Mapping
 ![Data Domains](/setup/resources/code_artifacts/imgs/Domain-structure.png)
 
 ### 1.4. Data Mesh high level architecture
