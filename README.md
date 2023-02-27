@@ -32,15 +32,15 @@ The labs will guide you through building a Data mesh using Dataplex's data gover
 ### 2.2 Pre-requisites
 
 1. Create a GCP Project <br>
-2. Terraform setup should be executed by an account with the below privileges
-        - Owner
+2. Grant the terraform user or service account the below IAM policies at the project level
+         - Owner
         - ServiceAccountTokenCreator
         - Organization Admin
         ![Admin Roles](/setup/resources/code_artifacts/imgs/admin_roles.png)
 For Argolis environment, use "admin@" account
 3. If VPC SC is enabled in your organization, the project must belong to the same [VPC Service Control perimeter](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) as the data destined to be in the lake. Refer to this link to use or [add Dataplex to VPC-SC](https://cloud.google.com/dataplex/docs/vpc-sc). 
 Ignore this for argolis account. 
-4. Make sure **us-central1** is allowed under your organization regions policy
+4. Make sure **us-central1** is allowed under your organization regions policy. Ignore for argolis. 
 5. For non-argolis accounts, the below org policies should be set at the project level before triggering the setup:<br>
     - "compute.requireOsLogin" : false,
     - "compute.disableSerialPortLogging" : false,
