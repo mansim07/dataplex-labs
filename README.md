@@ -51,7 +51,6 @@ Ignore this for argolis account.
     - "compute.trustedImageProjects" : true,
     - "iam.disableCrossProjectServiceAccountUsage" :false #Only required when you want to set up in a separate project to your data project
 6. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
-<br>
 
 ### 2.2 Run the Terraform Script 
 

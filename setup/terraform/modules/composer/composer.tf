@@ -140,10 +140,10 @@ resource "google_composer_environment" "composer_env" {
         requests_oauth2 = ""
        # scipy = "==1.1.0"
       }
-      cloud_data_lineage_integration = {
-        enabled=true
+      #cloud_data_lineage_integration = {
+      #  enabled=true
 
-      }
+      #}
       env_variables = {
         
         AIRFLOW_VAR_CUST_ENTITY_LIST_FILE_PATH = "/home/airflow/gcs/data/customer_data_products/entities.txt",
