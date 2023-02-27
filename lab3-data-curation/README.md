@@ -20,7 +20,7 @@ As part of this lab we will curate the Customer Data using Dataplex's Curation T
 
 
 ### 1.5. Note
-None
+This lab is optional
 
 ### 1.6. Documentation
 [Practioner Guide](https://cloud.google.com/dataplex/docs/task-templates)
@@ -28,11 +28,9 @@ None
 ## 2. Lab
 <hr>
 
-## Task1: Curate the Data for Customer Domain 
+### 2.1 Convert raw to curate for Customer Domain 
 
-The Customer Raw data has 2 feeds coming into the gcs raw bucket. 
-
-We will convert both the feeds from CSV to parquet while preserving the data and the partitions. 
+The Customer Raw data has 2 feeds coming into the gcs raw bucket. We will convert both the feeds from CSV to parquet while preserving the data and the partitions. 
 
 - **Step1:** Create the Dataflow pipeline 
     - Go to Dataplex UI --> Navigate to **Manage Lakes** --> **Process** menu --> Click on **Create Task** button 
@@ -43,7 +41,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
 
 - **Step2:** Enter the Base  Parameters 
 
-    - **Dataplex Lake:** : Choose the "Consumer Banking - Customer Domain" 
+    - **Dataplex Lake:** : Choose the "Customer Domain" 
 
     - **Task name:**: curate-customer-raw-data
     
@@ -69,14 +67,18 @@ We will convert both the feeds from CSV to parquet while preserving the data and
 - **Step4:** Enter the Optional Parameters **Very critical for job success**
 
         DON'T FORGET TO REPLACE THE PROJECT_ID WITH YOURS
-    - Open "Show Optional Parameters" 
+     Open "Show Optional Parameters" and add the following-
     - **Service Account Email**: customer-sa@${PROJECT_ID}.iam.gserviceaccount.com
     - **Subnetwork**: https://www.googleapis.com/compute/v1/projects/${PROJECT_ID}/regions/us-central1/subnetworks/dataplex-default
     - **Sample ScreenShot**:
 
         ![optional_parameter](/lab3-data-curation/resources/imgs/Optional-parameter.png)
 
-- **Step5:** **Skip** Set Schedule and Click the **Create** button. Make sure you SKIP SCHEDULE. 
+- **Step5:** Set Schedule <br>
+
+    - Choose "custom" as Repeats adn set Custom schedule to "0 0 1 1 *"
+    - Click the **Create** button.  
+
 - **Step6:** Click **Run** button ad then **Run Pipeline**
 
      ![run_button](/lab3-data-curation/resources/imgs/run_button.png)
@@ -119,6 +121,14 @@ Suggestion: As a homework, try to curate the merchants data.
 
 ## Summary 
 In this lab, you learned how to use the built-in one-click templatized Dataplex task to quick standardize your data. This can be a common Data Management task that can be executed without the need of understanding any underlying data. You can also leverage built-in scheduler to execute the workflow either on-demand or on-schedule. 
+
+<hr>
+
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab4-data-products/README.md) you will use build the data products i.e move from refined to data product layer. 
+
+<hr>
+
+
 
 ## Common Issues
 
