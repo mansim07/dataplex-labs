@@ -125,7 +125,7 @@ The script will take about 30-40 minutes to finish.
 
 ```
 export PROJECT_ID=$(gcloud config get-value project)
-gsutil cat gs://${PROJECT_ID}_customers_raw_data/customers_data/dt=2022-12-01/customer.csv | head -1
+gsutil cat gs://${PROJECT_ID}_customers_raw_data/customers_data/dt=2022-12-01/customer.csv | head -2
 ```
 
 #### 2.3.2. Validate the BQ datasets
