@@ -34,6 +34,11 @@ import time
 import json
 import csv
 
+#from airflow.composer.data_lineage.entities import BigQueryTable
+
+#from airflow.lineage import AUTO
+
+
 # --------------------------------------------------------------------------------
 # Set variables
 # --------------------------------------------------------------------------------
@@ -53,6 +58,7 @@ TAG_INPUT_PATH = models.Variable.get('customer_dq_info_input_path')
 SUB_NETWORK = models.Variable.get('gcp_sub_net')
 TAG_JAR = models.Variable.get('gdc_tag_jar')
 DPLX_TASK_PREFIX = "airflow-cust-dq"
+R_DPLX_TASK_PREFIX = "airflow-cust-raw-refined"
 TAG_MAIN_CLASS = models.Variable.get('data_quality_main_class')
 
 INPUT_DQ_YAML = models.Variable.get('customer_dq_raw_input_yaml')
@@ -428,31 +434,35 @@ with models.DAG(
         schedule_interval=None,  # datetime.timedelta(days=1),
         default_args=default_args) as dag:
 
-    pre_task_id = "customer-raw-dq"
+    """
+    Start of Move Customer Raw to Refined layer
+    """
 
-    start = dummy_operator.DummyOperator(
-        task_id='start',
+    r_pre_task_id = "customer-raw-to-refined-layer"
+
+    r_start = dummy_operator.DummyOperator(
+        task_id='r_start',
         trigger_rule='all_success'
     )
 
-    end = dummy_operator.DummyOperator(
-        task_id='end',
+    r_end = dummy_operator.DummyOperator(
+        task_id='r_end',
         trigger_rule='all_done'
     )
-    
-    generate_uuid_dq_check = PythonOperator(
-        task_id='{}'.format(pre_task_id),
+
+    r_generate_uuid_dq_check = PythonOperator(
+        task_id='{}'.format(r_pre_task_id),
         python_callable=get_uuid,
         trigger_rule='all_success'
     )
 
-    create_dataplex_dq_check_task = DataplexCreateTaskOperator(
-        task_id='customer-dq-check-job',
+    create_dataplex_raw_to_refined_task = DataplexCreateTaskOperator(
+        task_id='customer-raw-to-refined-task',
         project_id=PROJECT_ID_DG,
         region=REGION,
         lake_id=LAKE_ID,
 
-        dataplex_task_id=f"{DPLX_TASK_PREFIX}-{{{{ ti.xcom_pull(task_ids='{pre_task_id}', key='return_value') }}}}",
+        dataplex_task_id=f"{R_DPLX_TASK_PREFIX}-{{{{ ti.xcom_pull(task_ids='{r_pre_task_id}', key='return_value') }}}}",
 
         asynchronous=False,
         impersonation_chain=IMPERSONATION_CHAIN,
@@ -462,37 +472,43 @@ with models.DAG(
                 "execution_spec": {
                     "service_account": IMPERSONATION_CHAIN,
                     "args": {
-                        "TASK_ARGS": f"""clouddq-executable.zip, ALL,{INPUT_DQ_YAML}, --gcp_project_id={PROJECT_ID_DG}, --gcp_region_id={BQ_REGION}, --gcp_bq_dataset_id={GCP_BQ_DATASET_ID}, --target_bigquery_summary_table={TARGET_BQ_SUMMARY_TABLE}
+                        "TASK_ARGS": f"""--template=DATAPLEXGCSTOBQ,--templateProperty=project.id={PROJECT_ID_DG},--templateProperty=dataplex.gcs.bq.target.dataset=customer_refined_data,--templateProperty=gcs.bigquery.temp.bucket.name={PROJECT_ID_DG}_dataplex_temp,--templateProperty=dataplex.gcs.bq.save.mode=append,--templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,--dataplexEntity=projects/{PROJECT_ID_DG}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/entities/customers_data,--partitionField=ingest_date,--partitionType=DAY,--targetTableName=customers_data,--customSqlGcsPath=gs://{PROJECT_ID_DG}_dataplex_process/customer-source-configs/customercustom.sql
                     """
                     }
                 },
             "spark": {
-                    "file_uris": [f"gs://dataplex-clouddq-artifacts-us-central1/clouddq-executable.zip", "gs://dataplex-clouddq-artifacts-us-central1/clouddq-executable.zip.hashsum", f"{INPUT_DQ_YAML}"],
-                    "python_script_file": 'gs://dataplex-clouddq-artifacts-us-central1/clouddq_pyspark_driver.py',
-                    "infrastructure_spec": {"vpc_network": {"sub_network": f"{SUB_NETWORK}"}},
+                    "file_uris": [f"gs://{PROJECT_ID_DG}_dataplex_process/common/log4j-spark-driver-template.properties"],
+                    "main_jar_file_uri": f"gs://{PROJECT_ID_DG}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar",
+                    "main_class":'com.google.cloud.dataproc.templates.main.DataProcTemplate',
+                    "infrastructure_spec": {"vpc_network": {"sub_network": f"{SUB_NETWORK}"} , "container_image" : {"java_jars": [f"gs://{PROJECT_ID_DG}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar"] } },
                     },
         }
     )
 
-    dataplex_task_state = BranchPythonOperator(
-        task_id="dataplex_task_state_{}".format(pre_task_id),
+    r_dataplex_task_state = BranchPythonOperator(
+        task_id="dataplex_task_state_{}".format(r_pre_task_id),
         python_callable=_get_dataplex_job_state,
         provide_context=True,
         op_kwargs={
-            'dplx_task_id': f"{DPLX_TASK_PREFIX}-{{{{ ti.xcom_pull(task_ids='{pre_task_id}', key='return_value') }}}}", 'entity_val': f"{pre_task_id}"}
+            'dplx_task_id': f"{R_DPLX_TASK_PREFIX}-{{{{ ti.xcom_pull(task_ids='{r_pre_task_id}', key='return_value') }}}}", 'entity_val': f"{r_pre_task_id}"}
 
     )
 
-    dataplex_task_success = BashOperator(
-        task_id="SUCCEEDED_{}".format(pre_task_id),
+    r_dataplex_task_success = BashOperator(
+        task_id="SUCCEEDED_{}".format(r_pre_task_id),
         bash_command="echo 'Job Completed Successfully'",
         dag=dag,
     )
-    dataplex_task_failed = BashOperator(
-        task_id="FAILED_{}".format(pre_task_id),
+    r_dataplex_task_failed = BashOperator(
+        task_id="FAILED_{}".format(r_pre_task_id),
         bash_command="echo 'Job Failed'",
         dag=dag,
     )
+
+    """
+    End of Move Customer Raw to Refined layer
+    """
+
 
     bq_create_customer_ref_tbl = bigquery.BigQueryInsertJobOperator(
         task_id="bq_create_customer_ref_tbl",
@@ -503,6 +519,17 @@ with models.DAG(
                 "useLegacySql": False
             }
         }
+       # ,
+       # inlets=[BigQueryTable(
+       # project_id=PROJECT_ID_DG,
+       # dataset_id='customer_raw_zone',
+       # table_id='customers_data',
+       # )],
+       # outlets=[BigQueryTable(
+       # project_id=PROJECT_ID_DG,
+       # dataset_id='customer_refined_data',
+       # table_id='customers_data',
+       # )]
     )
 
     bq_create_customer_dp_tbl = bigquery.BigQueryInsertJobOperator(
@@ -548,6 +575,7 @@ with models.DAG(
             }
         }
     )
+
 
     bq_insert_customer_dp_tbl = bigquery.BigQueryInsertJobOperator(
         task_id="bq_insert_customer_dp_tbl",
@@ -595,7 +623,4 @@ with models.DAG(
 
     # [END composer_bigquery]
     
-    #Removing DQ due to service Account Issues with GCS and Dataplex Zones
-    chain(start >> bq_create_customer_ref_tbl >> bq_create_customer_dp_tbl >> bq_create_tokenized_customer_dp_tbl >> bq_create_cc_customer_ref_tbl >> bq_create_cc_customer_dp_tbl >> generate_uuid_dq_check >> create_dataplex_dq_check_task >> dataplex_task_state >> [dataplex_task_failed, dataplex_task_success] >> end >> bq_insert_customer_dp_tbl >> bq_insert_customer_keyset_dp_tbl >> bq_insert_customer_tokenized_dp_tbl >> bq_insert_cc_customer_dp_tbl)
-
-    #chain(start >>  bq_create_customer_ref_tbl >> bq_create_customer_dp_tbl >> bq_create_tokenized_customer_dp_tbl >> bq_create_cc_customer_ref_tbl >> bq_create_cc_customer_dp_tbl  >>  bq_insert_customer_dp_tbl >> bq_insert_customer_keyset_dp_tbl >> bq_insert_customer_tokenized_dp_tbl >> bq_insert_cc_customer_dp_tbl >> end)
+    chain( bq_create_customer_ref_tbl >> bq_create_customer_dp_tbl >> bq_create_tokenized_customer_dp_tbl >> bq_create_cc_customer_ref_tbl >> bq_create_cc_customer_dp_tbl >> r_generate_uuid_dq_check >> r_start >> create_dataplex_raw_to_refined_task >> r_dataplex_task_state >> [r_dataplex_task_failed, r_dataplex_task_success] >> r_end >>  bq_insert_customer_dp_tbl >> bq_insert_customer_keyset_dp_tbl >> bq_insert_customer_tokenized_dp_tbl >> bq_insert_cc_customer_dp_tbl)

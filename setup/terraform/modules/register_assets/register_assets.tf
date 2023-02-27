@@ -68,10 +68,10 @@ resource "time_sleep" "sleep_after_assets" {
 
 resource "google_dataplex_asset" "register_gcs_assets2" {
  for_each = {
-    "customer-raw-data/Customer Raw Data/customer-raw-zone/consumer-banking--customer--domain" : var.customers_bucket_name
-    "transactions-curated-data/Transactions Curated Data/authorization-curated-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_curated_bucket_name,
-    "merchant-curated-data/Merchant Curated Data/merchant-curated-zone/consumer-banking--merchant--domain" : var.merchants_curated_bucket_name,
-    "customer-curated-data/Customer Curated Data/customer-curated-zone/consumer-banking--customer--domain" : var.customers_curated_bucket_name
+    #"customer-raw-data/Customer Raw Data/customer-raw-zone/consumer-banking--customer--domain" : var.customers_bucket_name,
+    "transactions-curated-data/Transactions Curated Data/authorizations-data-product-zone/consumer-banking--creditcards--transaction--domain" : var.transactions_curated_bucket_name,
+    "merchant-curated-data/Merchant Curated Data/merchant-data-product-zone/consumer-banking--merchant--domain" : var.merchants_curated_bucket_name,
+    #"customer-curated-data/Customer Curated Data/customer-curated-zone/consumer-banking--customer--domain" : var.customers_curated_bucket_name
   }
   name          = element(split("/", each.key), 0)
   display_name  = element(split("/", each.key), 1)
@@ -107,11 +107,11 @@ resource "time_sleep" "sleep_after_gcs_assets2" {
 
 resource "google_dataplex_asset" "register_bq_assets1" {
  for_each = {
-    "customer-data-product/Customer Data Product/customer-data-product-zone/consumer-banking--customer--domain" : "customer_data_product",
-    "customer-data-product-reference/Customer Reference Data Product/customer-data-product-zone/consumer-banking--customer--domain" : "customer_ref_data" ,
-     "customer-refined-data/Customer Refined Data/customer-curated-zone/consumer-banking--customer--domain" : "customer_refined_data" ,
-    "merchant-refined-data/Merchant Refined Data/merchant-curated-zone/consumer-banking--merchant--domain" : "merchants_refined_data",
-     "auth-refined-data/Authorization Refined Data/authorization-curated-zone/consumer-banking--creditcards--transaction--domain" : "pos_auth_refined_data"
+    #"customer-data-product/Customer Data Product/customer-data-product-zone/consumer-banking--customer--domain" : "customer_data_product",
+    #"customer-data-product-reference/Customer Reference Data Product/customer-data-product-zone/consumer-banking--customer--domain" : "customer_ref_data" ,
+    # "customer-refined-data/Customer Refined Data/customer-curated-zone/consumer-banking--customer--domain" : "customer_refined_data" ,
+    "merchant-refined-data/Merchant Refined Data/merchant-data-product-zone/consumer-banking--merchant--domain" : "merchants_refined_data",
+     "auth-refined-data/Authorization Refined Data/authorizations-data-product-zone/consumer-banking--creditcards--transaction--domain" : "pos_auth_refined_data"
   }
   name          = element(split("/", each.key), 0)
   display_name  = element(split("/", each.key), 1)

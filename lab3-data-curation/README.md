@@ -16,7 +16,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
 
     - Then, Select Create Dataflow Pipeline  in Convert to Curated Formats panel
 
-        ![dataplex tasks](/lab2/resources/imgs/dataplex-tasks.png)
+        ![dataplex tasks](/lab3-data-curation/resources/imgs/dataplex-tasks.png)
 
 - **Step2:** Enter the Base  Parameters 
 
@@ -27,7 +27,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
     - **Regional Endpoint** : us-central1(Iowa) 
 
     - **Sample Screenshot**:
-        ![Base parameters](/lab2/resources/imgs/base-parameter.png)
+        ![Base parameters](/lab3-data-curation/resources/imgs/base-parameter.png)
 
 
 - **Step3:** Enter the Required Parameters 
@@ -41,31 +41,31 @@ We will convert both the feeds from CSV to parquet while preserving the data and
     - **Dataplex asset name for the destination GCS bucket**: projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-curated-zone/assets/customer-curated-data
 
     - **Sample Screenshot** 
-        ![required parameters](/lab2/resources/imgs/required_parameters.png)
+        ![required parameters](/lab3-data-curation/resources/imgs/required_parameters.png)
 
 - **Step4:** Enter the Optional Parameters **Very critical for job success**
 
         DON'T FORGET TO REPLACE THE PROJECT_ID WITH YOURS
     - Open "Show Optional Parameters" 
     - **Service Account Email**: customer-sa@${PROJECT_ID}.iam.gserviceaccount.com
-    - **Subnetwork**: https://www.googleapis.com/compute/v1/projects/${PROJECT_ID}/regions/us-central1/subnetworks/default
+    - **Subnetwork**: https://www.googleapis.com/compute/v1/projects/${PROJECT_ID}/regions/us-central1/subnetworks/dataplex-default
     - **Sample ScreenShot**:
 
-        ![optional_parameter](/lab2/resources/imgs/Optional-parameter.png)
+        ![optional_parameter](/lab3-data-curation/resources/imgs/Optional-parameter.png)
 
 - **Step5:** **Skip** Set Schedule and Click the **Create** button. Make sure you SKIP SCHEDULE. 
 - **Step6:** Click **Run** button ad then **Run Pipeline**
 
-     ![run_button](/lab2/resources/imgs/run_button.png)
+     ![run_button](/lab3-data-curation/resources/imgs/run_button.png)
 
 - **Step7:** Give it a couple of seconds, and after click on the refresh button. Shows the current job that was scheduled and is in pending/running status
 
 
-    ![jobstatatus](/lab2/resources/imgs/job_status.png)
+    ![jobstatatus](/lab3-data-curation/resources/imgs/job_status.png)
 
 - **Step8:** Monitor the job. Click on the refresh button again after a few minutes. 
 
-    ![pipline status](/lab2/resources/imgs/monitor_pipeline.png)
+    ![pipline status](/lab3-data-curation/resources/imgs/monitor_pipeline.png)
 
 - **Step9:** Validate the output 
 
@@ -73,7 +73,7 @@ We will convert both the feeds from CSV to parquet while preserving the data and
     - Select "Customer Curated Zone" 
     - Select "Customer Curated Data" Asset 
     - Scroll down to Resource details and click the External URL link
-        ![external_url](/lab2/resources/imgs/external_url.png)
+        ![external_url](/lab3-data-curation/resources/imgs/external_url.png)
     - Open customers_data folder 
     - Open the dt=2022-01-01 folder
     - You should see the "customer.parquet" file created here
@@ -87,10 +87,10 @@ We will convert both the feeds from CSV to parquet while preserving the data and
     - Navigate to the Discover menu, Search optin 
 
     - Open 'Consumer banking - Customer Domain' and select 'Customer Curated Zone' to filter the assets in the curated layer. 
-     ![filtered search](/lab2/resources/imgs/filter_search.png)
+     ![filtered search](/lab3-data-curation/resources/imgs/filter_search.png)
 
     - Select **customer_curated_data** from the list of assets shown on the right panel to see the following display. Validate the entry details to see the parquet format file information 
-    ![curated metadata](/lab2/resources/imgs/curated_metadata.png)
+    ![curated metadata](/lab3-data-curation/resources/imgs/curated_metadata.png)
 
 Suggestion: As a homework, try to curate the merchants data.  
 

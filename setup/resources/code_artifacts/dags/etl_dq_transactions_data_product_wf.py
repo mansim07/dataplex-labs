@@ -54,6 +54,7 @@ TAG_INPUT_PATH = models.Variable.get('transactions_dq_info_input_path')
 SUB_NETWORK = models.Variable.get('gcp_sub_net')
 TAG_JAR = models.Variable.get('gdc_tag_jar')
 DPLX_TASK_PREFIX = "airflow-trans-dq"
+R_DPLX_TASK_PREFIX = "airflow-trans-etl"
 TAG_MAIN_CLASS = models.Variable.get('data_quality_main_class')
 
 INPUT_DQ_YAML = models.Variable.get('transactions_dq_raw_input_yaml')
@@ -316,6 +317,81 @@ with models.DAG(
 #        dag=dag,
 #    )
 
+    """
+    Start of Move Transaction Raw to Refined layer
+    """
+
+    r_pre_task_id = "trans-raw-to-refined-layer"
+
+    r_start = dummy_operator.DummyOperator(
+        task_id='r_start',
+        trigger_rule='all_success'
+    )
+
+    r_end = dummy_operator.DummyOperator(
+        task_id='r_end',
+        trigger_rule='all_done'
+    )
+
+    r_generate_uuid_dq_check = PythonOperator(
+        task_id='{}'.format(r_pre_task_id),
+        python_callable=get_uuid,
+        trigger_rule='all_success'
+    )
+
+    create_dataplex_raw_to_refined_task = DataplexCreateTaskOperator(
+        task_id='trans-raw-to-refined-task',
+        project_id=PROJECT_ID_DG,
+        region=REGION,
+        lake_id=LAKE_ID,
+
+        dataplex_task_id=f"{R_DPLX_TASK_PREFIX}-{{{{ ti.xcom_pull(task_ids='{r_pre_task_id}', key='return_value') }}}}",
+
+        asynchronous=False,
+        impersonation_chain=IMPERSONATION_CHAIN,
+
+        body={
+                "trigger_spec": {"type_": 'ON_DEMAND'},
+                "execution_spec": {
+                    "service_account": IMPERSONATION_CHAIN,
+                    "args": {
+                        "TASK_ARGS": f"""--template=DATAPLEXGCSTOBQ,--templateProperty=project.id={PROJECT_ID_DG},--templateProperty=dataplex.gcs.bq.target.dataset=pos_auth_refined_data,--templateProperty=gcs.bigquery.temp.bucket.name={PROJECT_ID_DG}_dataplex_temp,--templateProperty=dataplex.gcs.bq.save.mode=append,--templateProperty=dataplex.gcs.bq.incremental.partition.copy=yes,--dataplexEntity=projects/{PROJECT_ID_DG}/locations/us-central1/lakes/consumer-banking--creditcards--transaction--domain/zones/authorizations-raw-zone/entities/auth_data,--partitionField=ingest_date,--partitionType=DAY,--targetTableName=auth_data,--customSqlGcsPath=gs://{PROJECT_ID_DG}_dataplex_process/transactions-source-configs/transcustom.sql"
+                    """
+                    }
+                },
+            "spark": {
+                    "file_uris": [f"gs://{PROJECT_ID_DG}_dataplex_process/common/log4j-spark-driver-template.properties"],
+                    "main_jar_file_uri": f"gs://{PROJECT_ID_DG}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar",
+                    "main_class":'com.google.cloud.dataproc.templates.main.DataProcTemplate',
+                    "infrastructure_spec": {"vpc_network": {"sub_network": f"{SUB_NETWORK}"} , "container_image" : {"java_jars": [f"gs://{PROJECT_ID_DG}_dataplex_process/common/dataproc-templates-1.0-SNAPSHOT.jar"] } },
+                    },
+        }
+    )
+
+    r_dataplex_task_state = BranchPythonOperator(
+        task_id="dataplex_task_state_{}".format(r_pre_task_id),
+        python_callable=_get_dataplex_job_state,
+        provide_context=True,
+        op_kwargs={
+            'dplx_task_id': f"{R_DPLX_TASK_PREFIX}-{{{{ ti.xcom_pull(task_ids='{r_pre_task_id}', key='return_value') }}}}", 'entity_val': f"{r_pre_task_id}"}
+
+    )
+
+    r_dataplex_task_success = BashOperator(
+        task_id="SUCCEEDED_{}".format(r_pre_task_id),
+        bash_command="echo 'Job Completed Successfully'",
+        dag=dag,
+    )
+    r_dataplex_task_failed = BashOperator(
+        task_id="FAILED_{}".format(r_pre_task_id),
+        bash_command="echo 'Job Failed'",
+        dag=dag,
+    )
+
+    """
+    End of Move Customer Raw to Refined layer
+    """
+
     bq_create_transactions_dp_tbl = bigquery.BigQueryInsertJobOperator(
         task_id="bq_create_transactions_dp_tbl",
         impersonation_chain=IMPERSONATION_CHAIN,
@@ -343,4 +419,4 @@ with models.DAG(
 
     #chain(start >> bq_create_transactions_dp_tbl >> generate_uuid_dq_check >> create_dataplex_dq_check_task >> dataplex_task_state >> [dataplex_task_success, dataplex_task_failed] >> end >> bq_insert_transactions_dp_tbl)
 
-    chain(start >> bq_create_transactions_dp_tbl  >> bq_insert_transactions_dp_tbl >> end)
+    chain(start >> bq_create_transactions_dp_tbl  >> r_generate_uuid_dq_check >> r_start >> create_dataplex_raw_to_refined_task >> r_dataplex_task_state >> [r_dataplex_task_failed, r_dataplex_task_success] >> r_end >>  bq_insert_transactions_dp_tbl >> end)

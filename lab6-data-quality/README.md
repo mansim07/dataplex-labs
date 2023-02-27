@@ -11,7 +11,7 @@ Dataplex provides the following two options to validate data quality:
 
 High Level DQ architecture 
 
-![dq-arch](/lab5/resources/imgs/dq-arch.png)
+![dq-arch](/lab6-data-quality/resources/imgs/dq-arch.png)
 
  In today's lab , we will execute an end-to-end data quality task for customer domain data productswith a focus on using Dataplex data quality task (#2). The work entails: 
 - Reviewing the yaml file in which the dq rules are specified
@@ -26,7 +26,7 @@ High Level DQ architecture
 
 - **Step1**: Validate the entites are already discovered and registered in Dataplex 
 
-    ![dataproduct-entities](/lab5/resources/imgs/customer-dp-entities.png)
+    ![dataproduct-entities](/lab6-data-quality/resources/imgs/customer-dp-entities.png)
 
 - **Step2**: Review the Yaml file for customer_Data Data product
 
@@ -123,7 +123,7 @@ High Level DQ architecture
 - **Step5**: Review the Data quality metrics 
     - Navigate to BigQuery->SQL Workspace and open the central_dq_results. Review the table and views created in this dataset. 
     - Click on the dq_results table to preview the data quality results. Check the rows which shows the data quality metrics for the rules defined in the yaml configuration file 
-    ![dq_results](/lab5/resources/imgs/dq_results.png)
+    ![dq_results](/lab6-data-quality/resources/imgs/dq_results.png)
     - To examine the rules that failed, run the following query. The failed record query's query can be used to learn more about the specific rows for which it failed.
         ```bash 
         SELECT rule_binding_id, rule_id,table_id,column_id,dimension, failed_records_query FROM `<your-project-id>.central_dq_results.dq_results` WHERE 
@@ -136,17 +136,17 @@ High Level DQ architecture
     (This report is In the Pantheon instance)
     https://datastudio.google.com/c/u/0/reporting/faf194a4-6388-4df4-b566-99529a152f5c/page/x16FC
     - Click on the details link next to the 'Edit' button and make a copy of the dashboard
-        ![dashboard UI ](/lab5/resources/imgs/dataplex-dashboard.png)
+        ![dashboard UI ](/lab6-data-quality/resources/imgs/dataplex-dashboard.png)
 
     - Leave the defaults as is and click the ‘Copy Report’ button.
-        ![copy-report](/lab5/resources/imgs/copy-report.png)
+        ![copy-report](/lab6-data-quality/resources/imgs/copy-report.png)
 
     - Share Dashboard with your Argolis admin account 
         - Click the Share button in the top right corner to see the following display
         - Enter your Argolis admin email id,  select ‘Can edit’ and click the ‘Send’ button.
         - Click the ‘Share’ button again and choose the ‘Manage Access’ tab. Copy the URL link shown below.
 
-        ![manage-access](/lab5/resources/imgs/manage-access.png)
+        ![manage-access](/lab6-data-quality/resources/imgs/manage-access.png)
     - Edit the dashboard. Switch to the lab instance and open it in incognitio browser window and paste the link copies above 
     - Change the title of the dashboard and select the Resource menu and choose Manage added data sources option.
     - Click the Edit button under Action 
@@ -161,7 +161,7 @@ High Level DQ architecture
     - View Dashboard. Change the date range if needed and select drill down parameters to refresh the Dashboard. 
     (Sample screenshot shown below)
 
-        ![dq-dashboard](/lab5/resources/imgs/dq-dashboard.png)
+        ![dq-dashboard](/lab6-data-quality/resources/imgs/dq-dashboard.png)
 
 - [OPTIONAL] **Step7**: Data quality incident management using Cloud logging and monitoring 
     By appending " --summary_to_stdout" flag to your data quality jobs, you can easily route the DQ summary logs to Cloud Logging. 
@@ -172,7 +172,7 @@ High Level DQ architecture
         ```
     - You will the cloud dq output in the logs 
     - Click on "Create Alert" to create an incident based on dq failures. 
-        ![dq-log-alert](/lab5/resources/imgs/dq-log-alert.png)
+        ![dq-log-alert](/lab6-data-quality/resources/imgs/dq-log-alert.png)
 
     - Provide the below info in the "Create logs-based alert policy" screen
         - **Alert policy name**: dq-failure-alert 
@@ -183,13 +183,13 @@ High Level DQ architecture
         - **Who should be notified?**
         - Click on **Notification Channel** and then Click on **Manage Notification channel**: 
             - Under Email -> Click add your corp email
-                ![notification-channel](/lab5/resources/imgs/notification_channel.png)
+                ![notification-channel](/lab6-data-quality/resources/imgs/notification_channel.png)
         - Comeback to Logging screen -> Click on **Notification Channel** -> Click Refresh -> Choose the email id 
-            - ![noti-email](/lab5/resources/imgs/noti-email.png)
+            - ![noti-email](/lab6-data-quality/resources/imgs/noti-email.png)
         - Click "Save" 
         - Next time the DQ jobs fails you will receive an email alert.
             - Sample Alert 
-              ![samplealert](/lab5/resources/imgs/alert.png)
+              ![samplealert](/lab6-data-quality/resources/imgs/alert.png)
 
 
 - **Step8**: Data Quality automated tagging job  
@@ -213,7 +213,7 @@ High Level DQ architecture
     - Monitor the job. Go to Dataplex -> Process tab --> Custom spark --> "customer-dp-dq-tag" job. Refresh the page if you don't see your job. 
     - Validate the result. Go to Dataplex -> Search under Discover ->  type "tag:data_product_quality" into the search bar  
     - The customer data product should be tagged with the data quality information as show below:
-        ![dq-tag-search](/lab5/resources/imgs/dq-tag-search.png)
+        ![dq-tag-search](/lab6-data-quality/resources/imgs/dq-tag-search.png)
 
 - **Step9**:  Dataplex provides airflow operators using which we can now automate the dq process. We will learn more about this in the next lab: "Tag templates and bulk tagging lab" 
 

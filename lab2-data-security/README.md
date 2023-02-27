@@ -11,13 +11,12 @@ In this lab,
  - you will learn to apply the security policies both through the Dataplex UI as well Dataplex APIs 
  - you will learn how to publish cloud audit logs to bigquery for further analysis and reporting
 
-![Dataplex Security](/lab1/resources/imgs/dataplex-security-lab.png)
+![Dataplex Security](/lab2-data-security/resources/imgs/dataplex-security-lab.png)
 
  ## Task 1: Manage security policies for Consumer Banking Customer Domain
 In this lab task, we will apply the following IAM permissions for  "Consumer Banking - Customer Domain" lake:
 
 ### **Sub-Task 1: Make customer-sa@ service account the data owner for consumer banking - customer domain (Lake level pushdown)** 
-
 
 - **Step 1**: Pre-verify data access. Make sure your active account has the Service Account Token Creator role for impersonation. 
 
@@ -30,7 +29,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token --impersonate-service-account=customer-sa@${PROJECT_ID}.iam.gserviceaccount.com)" -H "Content-Type: application.json"  https://bigquery.googleapis.com/bigquery/v2/projects/${PROJECT_ID}/datasets/customer_refined_data/tables?maxResults=10
         ```
         Sample output: 
-        ![permission denied](/lab1/resources/imgs/permission-dnied.png)
+        ![permission denied](/lab2-data-security/resources/imgs/permission-dnied.png)
 
 - **Step 2:** In Dataplex, let's grant the customer user managed service account, access to the “Consumer Banking - Customer Domain” (lake). For this we will use the Lakes Permission feature to apply policy. 
 
@@ -50,11 +49,11 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
     - **Method 1:** Using Dataplex UI 
 
         - Go to Dataplex -> Manage sub menu -> Go to "Consumer Banking - Customer Domain" lake --> Click on "Customer Raw Zone" --> Click on the Customer Raw Data Asset
-            ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-ui.png)
+            ![Dataplex Verify Image](/lab2-data-security/resources/imgs/dataplex-security-status-ui.png)
 
             You can also look at the Asset Status section at the lake level. 
 
-            ![dataplex security status lake](/lab1/resources/imgs/dataplex-security-status-lake.png)
+            ![dataplex security status lake](/lab2-data-security/resources/imgs/dataplex-security-status-lake.png)
 
     -  **Method 2:** Using Dataplex APIs
 
@@ -64,13 +63,13 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
             curl -X GET -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/assets/customer-raw-data
             ```
             
-            ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-api.png)
+            ![Dataplex Verify Image](/lab2-data-security/resources/imgs/dataplex-security-status-api.png)
 
     - **Method 3:** Check the permissions of the underlying asset
 
         - Here is an example of the policy for underlying GCS bucket 
 
-            ![Dataplex Verify Image](/lab1/resources/imgs/dataplex-security-status-underlying-assets.png)
+            ![Dataplex Verify Image](/lab2-data-security/resources/imgs/dataplex-security-status-underlying-assets.png)
 
 
 - **Step 4**: After the access policies has been propagated by Dataplex, rerun the commands in Step1 and verify the service account is able to access underlying data
@@ -84,7 +83,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         ```
         Sample Output:
 
-        ![successful output](/lab1/resources/imgs/dataplex-security-result.png)
+        ![successful output](/lab2-data-security/resources/imgs/dataplex-security-result.png)
 
 
 ### **Sub Task 2: Grant the Credit card analytics consumer sa read access to the Customer Data product zone(Zone Level security pushdown).**
@@ -130,7 +129,7 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
         ```
         Sample Output: 
 
-        ![successful_policy](/lab1/resources/imgs/etag_successful.png)
+        ![successful_policy](/lab2-data-security/resources/imgs/etag_successful.png)
 
 - **Step 2:**  Define and apply security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities (Central Operations Domain Lake -> COMMON UTILITIES zone) housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
 
@@ -199,41 +198,6 @@ In this lab task, we will apply the following IAM permissions for  "Consumer Ban
             curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/audit-data:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:$LOGGING_GMSA\"]}]}}" 
             ```
 
-**Step 4:**  We will be using DLP for Data Classification in the later lab, here we will grant access service account access to the DLP datasets managed by central operations team. Grant permissions to the DLP Google Managed Service Account for the Central Operations Domain lake->Data Product zone->DLP Reports  asset 
-
-- Open cloud shell and execute the below command
-    ```bash 
-    export PROJECT_ID=$(gcloud config get-value project)
-    export PROJECT_NBR=$(gcloud projects list --filter="${PROJECT_ID}" --format="value(PROJECT_NUMBER)")
-    echo $PROJECT_NBR
-
-    curl --request POST \
-  "https://dlp.googleapis.com/v2/projects/${PROJECT_ID}/locations/us-central1/content:inspect" \
-  --header "X-Goog-User-Project: ${PROJECT_ID}" \
-  --header "Authorization: Bearer $(gcloud auth print-access-token)" \
-  --header 'Accept: application/json' \
-  --header 'Content-Type: application/json' \
-  --data '{"item":{"value":"google@google.com"}}' \
-  --compressed
-
-    curl -X POST -H "Authorization: Bearer $(gcloud auth print-access-token)" -H "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/central-operations--domain/zones/operations-data-product-zone/assets/dlp-reports:setIamPolicy -d "{\"policy\":{\"bindings\":[{\"role\":\"roles/dataplex.dataOwner\",\"members\":[\"serviceAccount:service-${PROJECT_NBR}@dlp-api.iam.gserviceaccount.com\"]}]}}"
-    ```
-
-     **Note:** Sometime there may be a bit of delay in security propagation. Verify the cloud logging is able to publish results and there are no permission issues. 
-
-
-### Task 3: Execute the below script to grant all the other access 
-
-- Execute the below command to automatically set the access for all the other domains - merchants, transaction and credit card consumer
-
-<br>This script will complete in a few minutes.
-
-    ```bash 
-    export PROJECT_ID=$(gcloud config get-value project)
-
-    bash ~/dataplex-labs/lab1/apply-security-policies.sh
-
-    ```
 
 ### Task 4: Go to BigQuery and perform analysis on the audit data to analyze and report 
 

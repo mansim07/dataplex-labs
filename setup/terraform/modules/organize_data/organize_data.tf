@@ -48,9 +48,10 @@ resource "null_resource" "create_lake" {
 
 
 ####################################################################################
-# Create Domain1: Customer Lakes and Zones                                                  #
+# Create Domain1: Customer Lakes and Zones        
+# This will done as part of lab#0                                          #
 ####################################################################################
-
+/*
 resource "google_dataplex_lake" "create_customer_lakes" {
   location     = var.location
   name         = "consumer-banking--customer--domain"
@@ -98,7 +99,7 @@ resource "google_dataplex_zone" "create_customer_zones" {
 
 
 
-
+*/
 
 
 ####################################################################################
@@ -110,7 +111,7 @@ resource "google_dataplex_lake" "create_merchant_lakes" {
   location     = var.location
   name         = "consumer-banking--merchant--domain"
   description  = "Consumer Banking Merchant Domain"
-  display_name = "Consumer Banking - Merchant Domain"
+  display_name = "Merchant Domain"
 
   labels       = {
     domain_type="source"
@@ -118,14 +119,15 @@ resource "google_dataplex_lake" "create_merchant_lakes" {
   
   project = var.project_id
 
-  depends_on  = [google_dataplex_zone.create_customer_zones]
+ # depends_on  = [google_dataplex_zone.create_customer_zones]
 }
 
 resource "google_dataplex_zone" "create_merchant_zones" {
  for_each = {
     "merchant-raw-zone/Merchant Raw Zone/consumer-banking--merchant--domain/RAW" : "data_product_category=raw_data",
-    "merchant-curated-zone/Merchant Curated Zone/consumer-banking--merchant--domain/CURATED" : "data_product_category=curated_data",
-    "merchant-data-product-zone/Merchant Data Product Zone/consumer-banking--merchant--domain/CURATED" : "data_product_category=master_data",
+    #Commenting due to ZonePerRegion Limitations
+    #"merchant-curated-zone/Merchant Curated Zone/consumer-banking--merchant--domain/CURATED" : "data_product_category=curated_data",
+    "merchant-data-product-zone/Merchant Curated Zone/consumer-banking--merchant--domain/CURATED" : "data_product_category=master_data",
   }
 
   discovery_spec {
@@ -162,7 +164,7 @@ resource "google_dataplex_lake" "create_cc_transaction_lakes" {
   location     = var.location
   name         = "consumer-banking--creditcards--transaction--domain"
   description  = "Consumer Banking CreditCards Transaction Domain"
-  display_name = "Consumer Banking - CreditCards - Transaction Domain"
+  display_name = "CreditCards - Transaction Domain"
 
   labels       = {
     domain_type="source"
@@ -176,9 +178,9 @@ resource "google_dataplex_lake" "create_cc_transaction_lakes" {
 resource "google_dataplex_zone" "create_cc_transaction_zones" {
  for_each = {
 
-    "authorization-curated-zone/Authorizations Curated Zone/consumer-banking--creditcards--transaction--domain/CURATED" : "data_product_category=raw_data",
+    #"authorization-curated-zone/Authorizations Curated Zone/consumer-banking--creditcards--transaction--domain/CURATED" : "data_product_category=raw_data",
     "authorizations-raw-zone/Authorizations Raw Zone/consumer-banking--creditcards--transaction--domain/RAW" : "data_product_category=curated_data",
-    "authorizations-data-product-zone/Authorizations Data Product Zone/consumer-banking--creditcards--transaction--domain/CURATED" : "data_product_category=master_data"
+    "authorizations-data-product-zone/Authorizations Curated Zone/consumer-banking--creditcards--transaction--domain/CURATED" : "data_product_category=master_data"
 
   }
 
@@ -214,7 +216,7 @@ resource "google_dataplex_lake" "create_cc_analytics_lakes" {
   location     = var.location
   name         = "consumer-banking--creditcards--analytics--domain"
   description  = "Consumer Banking CreditCards Analytics Domain"
-  display_name = "Consumer Banking - CreditCards - Analytics Domain"
+  display_name = "CreditCards - Analytics Domain"
 
   labels       = {
     domain_type="consumer"

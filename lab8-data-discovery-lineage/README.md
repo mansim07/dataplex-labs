@@ -18,10 +18,10 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
         ```
     - Click Save 
     - Sample screenshot 
-    ![overview](/lab7/resources/imgs/cust_data_overview.png)
+    ![overview](/lab8-data-discovery-lineage/resources/imgs/cust_data_overview.png)
   - Now as you see you have a 360 degree view of the customer data product - including technical metadata like schemas and fields , business metadata like wiki style product overview, business metadata such as - classification info, dq scores, data ownership..
 
-    ![dp-overview](/lab7/resources/imgs/dp-overview.png) 
+    ![dp-overview](/lab8-data-discovery-lineage/resources/imgs/dp-overview.png) 
 
 
 ## Task 2: Data discovery and Search 
@@ -45,4 +45,4 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
 - **Step 1**: Go to Dataplex UI --> Search under Discover --> Type this in the search bar "system=bigquery credit_card_transaction_data"
 - **Step 2**: Click on the credit_card_transaction_data entry
 - **Step 3**: Click on Data Lineage to explore the lineage
-    ![lineage](/lab7/resources/imgs/lineage.png)
+    ![lineage](/lab8-data-discovery-lineage/resources/imgs/lineage.png)

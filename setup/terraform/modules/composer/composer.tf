@@ -132,7 +132,7 @@ resource "google_composer_environment" "composer_env" {
   config {
 
     software_config {
-      image_version = "composer-2.0.25-airflow-2.2.5"
+      image_version = "composer-2.1.5-airflow-2.3.4"
       #"composer-2.0.7-airflow-2.2.3"
 
       pypi_packages = {
@@ -140,7 +140,10 @@ resource "google_composer_environment" "composer_env" {
         requests_oauth2 = ""
        # scipy = "==1.1.0"
       }
+      cloud_data_lineage_integration = {
+        enabled=true
 
+      }
       env_variables = {
         
         AIRFLOW_VAR_CUST_ENTITY_LIST_FILE_PATH = "/home/airflow/gcs/data/customer_data_products/entities.txt",
@@ -169,7 +172,7 @@ resource "google_composer_environment" "composer_env" {
         AIRFLOW_VAR_GCP_DW_PROJECT = "${var.datastore_project_id}",
         AIRFLOW_VAR_GCP_MERCHANTS_SA_ACCT = "merchant-sa@${var.project_id}.iam.gserviceaccount.com",
         AIRFLOW_VAR_GCP_PROJECT_REGION = "${var.location}",
-        AIRFLOW_VAR_GCP_SUB_NET = "projects/${var.project_id}/regions/${var.location}/subnetworks/default",
+        AIRFLOW_VAR_GCP_SUB_NET = "projects/${var.project_id}/regions/${var.location}/subnetworks/dataplex-default",
         AIRFLOW_VAR_GCP_TRANSACTIONS_CONSUMER_SA_ACCT = "cc-trans-consumer-sa@${var.project_id}.iam.gserviceaccount.com",
         AIRFLOW_VAR_GCP_TRANSACTIONS_SA_ACCT = "cc-trans-sa@${var.project_id}.iam.gserviceaccount.com",
         AIRFLOW_VAR_GCS_DEST_BUCKET = "test",

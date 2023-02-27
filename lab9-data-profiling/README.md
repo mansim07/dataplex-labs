@@ -123,7 +123,3 @@ Create a partitioned BQ table, run the profiling in an incremental mode, add som
 This concludes the lab module. Proceed to the main menu.
 
 <hr>
-
-
-
-

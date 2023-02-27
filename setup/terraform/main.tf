@@ -153,8 +153,8 @@ module "register_assets" {
 
 resource "google_compute_network" "default_network" {
   project                 = var.project_id
-  name                    = "default"
-  description             = "Default network"
+  name                    = "dataplex-default"
+  description             = "Dataplex Default network"
   auto_create_subnetworks = false
   mtu                     = 1460
 
@@ -169,7 +169,7 @@ resource "google_compute_network" "default_network" {
 
 resource "google_compute_subnetwork" "main_subnet" {
   project       = var.project_id
-  name          = "default"       #format("%s-misc-subnet", local._prefix)
+  name          = "dataplex-default"       #format("%s-misc-subnet", local._prefix)
   ip_cidr_range = var.ip_range
   region        = var.location
   network       = google_compute_network.default_network.id
@@ -217,6 +217,25 @@ resource "google_compute_firewall" "user_firewall_rule" {
   ]
 }
 
+####################################################################################
+# Setup Dataplex Security IAM policies 
+# In future this will be moved to terraform based. Today these execute using APIs  
+# This will setup the security for most of the domains except customer which will done in lab#1 
+####################################################################################
+
+resource "null_resource" "dataplex_iam" {
+  provisioner "local-exec" {
+    command = <<-EOT
+      rm -rf /tmp/security.log
+      rm -rf /tmp/createbqtable.log
+      bash ~/dataplex-labs/setup/resources/code_artifacts/scripts/apply-security-policies.sh >> /tmp/security.log
+      bash ~/dataplex-labs/setup/resources/code_artifacts/bq-scripts/create-customer-dps.sh >> /tmp/createbqtable.log
+    EOT
+    }
+    depends_on = [google_compute_firewall.user_firewall_rule
+               ]
+
+  }
 
 ####################################################################################
 # Setup Composer
@@ -238,5 +257,5 @@ module "composer" {
   prefix                        = local._prefix_first_element
   dataplex_process_bucket_name  = local._dataplex_process_bucket_name
   
-  depends_on = [google_compute_firewall.user_firewall_rule]
+  depends_on = [null_resource.dataplex_iam]
 } 
