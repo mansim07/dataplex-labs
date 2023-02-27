@@ -31,7 +31,7 @@ variable "date_partition" {
 
 variable "tmpdir" {
   description = "Temporary folder to use for Data Generator Tool"
-  default = "/tmp/data"
+  default = "~/dataplex-labs/sample_data/generated"
 }
 
 #variable "ldap" {

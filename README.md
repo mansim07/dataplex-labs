@@ -131,6 +131,7 @@ gsutil cat gs://${PROJECT_ID}_customers_raw_data/customers_data/dt=2022-12-01/cu
 #### 2.3.2. Validate the BQ datasets
 
 Go to BigQuery UI -> validate the datasets as shown below are created<br>
+
 ![BQ Datasets](setup/resources/code_artifacts/imgs/Bq-datasets.png)
 
 #### 2.3.3. Validate the Dataplex lakes and zones 
@@ -158,7 +159,7 @@ We have a series of labs designed to get hands-on-experience with Dataplex conce
 
 | Lab# |  Title | Description | 
 | ------------------ | ------------------- | ------------- | 
-| [Lab 1](/lab1-data-organization/README.md )  | Data Organization  | Organize the Customer specific data assets into lakes and zones and map the underlying buckets and datasets assets| 
+| [Lab1](/lab1-data-organization/README.md )  | Data Organization  | Organize the Customer specific data assets into lakes and zones and map the underlying buckets and datasets assets| 
 | [Lab2](/lab2-data-security/README.md)  | Manage Data Security using Dataplex  | Managing Data Security is the main goal of this lab. You will learn how to design and manage security policies using Dataplex's UI and REST API as part of the lab. The purpose of the lab is to learn how to handle distributed data security more effectively across data domains|   |
 | [Lab3](/lab3-data-curation/README.md)  | Standardize data using Dataplex built in task | You will discover how to leverage common Dataplex templates to curate raw data and translate it into standardized formats like parquet and Avro in the Data Curation lane. This demonstrates how domain teams may quickly process data in a serverless manner and begin consuming it for testing purposes.|[  |
 |  [Lab4](/lab4-data-products/README.md)   | Build Data Products | Serverless Dataplex tasks offer with open, simple APIs that make it easier to integrate them with already-existing Data pipelines, which makes them complementary in nature. In this lab, you will discover how to integrate Dataplex functionalities with your data product engineering pipeline.  We will use  [Configuration-driven Serverless Dataproc Templates](https://github.com/GoogleCloudPlatform/dataproc-templates) for incremental data using from GCS to BQ, incorporate a Dataplex's data quality task to verify the raw data and then transform data use for building data products. | |
@@ -178,7 +179,7 @@ Please make sure you clean up your environment
 ## 6. Disclaimer 
 
 ## 7. Contact
-Share you feedback, ideas, by logging issues.
+Share you feedback, ideas, by logging [issues](https://github.com/mansim07/dataplex-labs/issues).
 
 ## 8. Credits 
 

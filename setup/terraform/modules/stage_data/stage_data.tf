@@ -30,6 +30,10 @@ variable "transactions_curated_bucket_name" {}
 variable "transactions_ref_bucket_name" {}
 variable "data_gen_git_repo" {}
 
+locals {
+  _abs_tmpdir=pathexpand(var.tmpdir)
+}
+
 
 ####################################################################################
 # Generate Sample Data
@@ -162,8 +166,8 @@ resource "time_sleep" "sleep_after_storage" {
 
 resource "google_storage_bucket_object" "gcs_customers_objects" {
   for_each = {
-    format("%s/customer.csv", var.tmpdir) : format("customers_data/dt=%s/customer.csv", var.date_partition),
-    format("%s/cc_customer.csv", var.tmpdir) : format("cc_customers_data/dt=%s/cc_customer.csv", var.date_partition)
+    format("%s/customer.csv", local._abs_tmpdir) : format("customers_data/dt=%s/customer.csv", var.date_partition),
+    format("%s/cc_customer.csv", local._abs_tmpdir) : format("cc_customers_data/dt=%s/cc_customer.csv", var.date_partition)
   }
   name        = each.value
   source      = each.key
@@ -194,7 +198,7 @@ resource "google_storage_bucket_object" "cust_folder" {
 
 resource "google_storage_bucket_object" "gcs_merchants_objects" {
   for_each = {
-    format("%s/merchants.csv", var.tmpdir) : format("merchants_data/dt=%s/merchants.csv", var.date_partition),
+    format("%s/merchants.csv", local._abs_tmpdir) : format("merchants_data/dt=%s/merchants.csv", var.date_partition),
     "./datamesh-datagenerator/merchant_data/data/ref_data/mcc_codes.csv" : format("mcc_codes/dt=%s/mcc_codes.csv", var.date_partition),
   }
   name        = each.value
@@ -219,7 +223,7 @@ resource "google_storage_bucket_object" "merchant_folder" {
 
 resource "google_storage_bucket_object" "gcs_transaction_objects" {
   for_each = {
-    format("%s/trans_data.csv", var.tmpdir) : format("auth_data/dt=%s/trans_data.csv", var.date_partition)
+    format("%s/trans_data.csv", local._abs_tmpdir) : format("auth_data/dt=%s/trans_data.csv", var.date_partition)
   }
   name        = each.value
   source      = each.key
