@@ -130,12 +130,12 @@ gsutil cat gs://${PROJECT_ID}_customers_raw_data/customers_data/dt=2022-12-01/cu
 
 #### 2.3.2. Validate the BQ datasets
 
-Go to BigQuery UI -> validate the datasets as shown below are created
+Go to BigQuery UI -> validate the datasets as shown below are created<br>
 ![BQ Datasets](setup/resources/code_artifacts/imgs/Bq-datasets.png)
 
 #### 2.3.3. Validate the Dataplex lakes and zones 
 
- Go to Dataplex -> Manage -> Verify lakes and assets are created as per the below screenshot
+ Go to Dataplex -> Manage -> Verify lakes and assets are created as per the below screenshot<br>
  ![Dataplex-ui](/setup/resources/code_artifacts/imgs/Dataplex-ui.png)
 
 #### 2.3.4. Validate Composer environment
