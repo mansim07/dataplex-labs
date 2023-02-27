@@ -18,15 +18,13 @@ tbd
 
 ![Lab flow](/lab2-data-security/resources/imgs/Lab-2-flow.png)
 
-Most part of data security policy application is already taken care as part of terraform setup. 
-
-In this lab,  
+While most part of data security policy application is already taken care as part of terraform setup, in this lab,  
  - you will grant data roles to the "customer-sa" service accounts created by terraform to own and manage the customer domain data
  - you will learn various ways to monitor the security policy propagation
  - you will learn to apply the security policies both through the Dataplex UI as well Dataplex APIs 
  - you will learn how to publish cloud audit logs to bigquery for further analysis and reporting
 
-Service Accounts and Acess Overview
+**Service Accounts and Access Overview**
 
 ![Dataplex Security](/lab2-data-security/resources/imgs/dataplex-security-lab.png)
 
