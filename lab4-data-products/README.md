@@ -1,15 +1,37 @@
 # Building Data products 
 
-In this lab, you will learn how to build Data Products. The diagram below depicts the overall flow. 
+## 1. About
+Dataplex provides building blocks and plugable data management tasks that can be plugged into data engineering pipelines to build data products. In this lab, you will learn how to build Data Products. The diagram below depicts the overall flow. 
 
 ![build-dp-flow](/lab4-data-products/resources/imgs/building-dp-flow.png)
 
+### 1.1. Prerequisites
+Lab2-data-security successfully completed.
+
+### 1.2. Duration
+~40 mins
+
+### 1.3 Concepts
+None
+
+### 1.4. Scope of this lab
+
+In this lab,  will focus on building Data products for all the source and consumer oriented domains. 
 1. We will use Open Source Spark-serverless based Dataproc Templates to move the data incrementally from GC(raw/curated buckets) to BigQuery(refined datasets)
 2. We will use Dataplex DQ to validate the incoming data quality 
 3. Use BQ SQL to transform the data and populate the final data products. We can also take necessary actions based on the DQ results(will be added to lab in future)
 4. We will use Dataplex catalog to search for the data products based on technical metadata
+5. We will use Composer to orchestrate the workflows for Merchants and Credit card analytics and transactions domains. 
 
+You will use step-by-step guide to build the Customer Data Product and use pre-built Composer pipelines to populate 
 
+### 1.5. Note
+None
+
+### 1.6. Documentation
+None
+
+## 2. About
 
 ## Task 1: Use Dataproc template to move the data from raw/curated zone to refine zone in BQ  
 
@@ -296,3 +318,9 @@ The job should execute in less than a minute. Refresh the terraform screen for u
 In this lab you learned how Dataplex provides serverless data management tasks that easily integrate and complement organizations existing Data Engineering pipleines through simple and open APIs. 
 
 Organizations can build customer data management Dataplex templates and make it avilable throughout their organization. 
+
+<hr>
+
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab5-data-classification/README.md) you will use DLP for classifying sensitive data
+
+<hr>
