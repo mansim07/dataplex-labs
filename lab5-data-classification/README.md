@@ -1,6 +1,31 @@
 # Data Classification using DLP 
 
+## 1. About
 You will use DLP Data Profiler in this lab so that it can automatically classify the BQ data, which will then be used by a Dataplex  to provide business tags/annotations.
+
+### 1.1. Prerequisites
+Lab2-data-security successfully completed.
+
+### 1.2. Duration
+~40 mins
+
+### 1.3 Concepts
+None
+
+### 1.4. Scope of this lab
+
+In this lab,  will focus on building Data products for all the source and consumer oriented domains. 
+1. We will use Open Source Spark-serverless based Dataproc Templates to move the data incrementally from GC(raw/curated buckets) to BigQuery(refined datasets)
+2. We will use Dataplex DQ to validate the incoming data quality 
+3. Use BQ SQL to transform the data and populate the final data products. We can also take necessary actions based on the DQ results(will be added to lab in future)
+4. We will use Dataplex catalog to search for the data products based on technical metadata
+5. We will use Composer to orchestrate the workflows for Merchants, Credit card analytics and transactions domains.  
+
+### 1.5. Note
+None
+
+### 1.6. Documentation
+None
 
 ## Lab Instructions 
 
@@ -16,7 +41,6 @@ Follow the below instructions to setup the DLP Auto profiler job.
      export project_num=$(gcloud projects list --filter="${PROJECT_ID}" --format="value(PROJECT_NUMBER)")
 
     gcloud projects add-iam-policy-binding ${PROJECT_ID} --member="serviceAccount:service-${project_num}@dlp-api.iam.gserviceaccount.com" --role="roles/dlp.admin"
-
     ```
 - **Step2**: Go to "Data Loss Prevention" service under Security
 - **Step3**: Click on "SCAN CONFIGURATIONS" tab 
