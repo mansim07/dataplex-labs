@@ -19,7 +19,7 @@ High Level DQ architecture
 - Reviewing the data quality metric published in BigQuery 
 - Creating a data quality dashboard 
 - Data quality incident management using Cloud logging and monitoring
-- Creating data quality score tags for the data products in the catalog.
+- Creating data quality score tags for the data products in the catalog(in lab 7)
 
 
 ## Configure & execute end-to-end Data quality task for Customer Domain Data Products

@@ -10,12 +10,12 @@ We have already explored the Data Quality tagging in the previous lab.
 
     In order to verify Go to Dataplex  → Manage tab → Click on Customer - Source Domain Lake → Click on Customer Data Product Zone
 
-    ![entities](/lab7-tagging-business-glossary/resources/imgs/entities_screnshot.png)
+    ![entities](/lab7-register-data-products/resources/imgs/entities_screnshot.png)
 
     Do this for all the other domain data product zones as well. 
 
 - **Step2**: Make sure tag templates are created in ${PROJECT_ID}  created. Go to Dataplex → Manage Catalog → Tag templates. You should see the below 4 Tag Templates. Open each one and look the schema: 
-     ![tagtemplates](/lab7-tagging-business-glossary/resources/imgs/tag_templates.png)
+     ![tagtemplates](/lab7-register-data-products/resources/imgs/tag_templates.png)
 
 - **Step3**: Make sure Data is populated by the DLP job profiler into ${PROJECT_ID}.central_dlp_data dataset. If the data has not been populated the data classification tags will fail. 
     ```bash 
@@ -83,10 +83,10 @@ We have already explored the Data Quality tagging in the previous lab.
 - **Step4**: Go to Dataplex UI → Process → Custom Spark tab → Monitor the job → you will find a job named “customer-tag-job”
 
 - **Step5**: Once job is successful, Go to Dataplex Search Tab and type this into the search bar - tag:data_product_information
-    ![tag-search](/lab7-tagging-business-glossary/resources/imgs/tag-search.png)
+    ![tag-search](/lab7-register-data-products/resources/imgs/tag-search.png)
 - **Step6**: Click on customer_data -> Go to the Tags section and make sure the data product information is created.
 
-    ![dp_info_tag](/lab7-tagging-business-glossary/resources/imgs/dp_info_tag.png)
+    ![dp_info_tag](/lab7-register-data-products/resources/imgs/dp_info_tag.png)
 
     As you can see the automation utilities was able to derive most of the information. But at times, certain values may needs to be overriden. 
 
@@ -173,9 +173,3 @@ This task is optional and finish this task only if you have time left for your l
     - **data_governance_transactions_dp_info_tag**
     - **data_governance_transactions_exchange_tag**
     - **data_governance_transactions_quality_tag**
-
-
- 
- 
-
-
