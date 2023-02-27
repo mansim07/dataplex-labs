@@ -31,7 +31,6 @@ import json
 import csv
 from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 
-
 yesterday = datetime.datetime.combine(
     datetime.datetime.today() - datetime.timedelta(1),
     datetime.datetime.min.time())

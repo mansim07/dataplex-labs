@@ -7,7 +7,6 @@ from airflow.providers.google.cloud.transfers import bigquery_to_gcs
 from airflow.utils import trigger_rule
 from airflow.models.baseoperator import chain
 
-
 IMPERSONATION_CHAIN = models.Variable.get('gcp_transactions_consumer_sa_acct')
 REGION = models.Variable.get('gcp_project_region')
 PROJECT_ID_DW = models.Variable.get('gcp_dw_project')

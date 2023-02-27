@@ -6,7 +6,6 @@ from airflow.providers.google.cloud.operators import bigquery
 from airflow.providers.google.cloud.transfers import bigquery_to_gcs
 from airflow.utils import trigger_rule
 from airflow.models.baseoperator import chain
-
 import datetime
 from airflow.operators import bash
 import uuid

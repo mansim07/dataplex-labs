@@ -47,7 +47,6 @@ default_args = {
     'retry_delay': datetime.timedelta(minutes=5),
 }
 
-
 with DAG(
         'master_dag_customer_dq',
         schedule_interval=None,
