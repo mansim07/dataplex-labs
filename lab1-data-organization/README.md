@@ -190,7 +190,7 @@ The discovery jobs takes a few minutes to run and register the entities. Verify 
 - Click on the "ENTITIES" tab 
 - The entities should list atleast 2 of the these - **customer_data** and **cc_customer_data** 
 
-![Entities](/lab1-data-organization/resources/imgs/Entities.png)
+    ![Entities](/lab1-data-organization/resources/imgs/Entities.png)
 
 This validates the discovery job ran successfully 
 
@@ -207,12 +207,14 @@ This validates the discovery job ran successfully
 - Scroll down and and look for **Discover data** and then  click on **customer-raw-zone** hyperlink
 - This will route you to the catalog search tab where you can further browse the tables to look at their technical metadata - Configuratio, Entry details, schema and columns and partition details
 
-![Customer Catalog](/lab1-data-organization/resources/imgs/Customer_Catalog.png)
+    ![Customer Catalog](/lab1-data-organization/resources/imgs/Customer_Catalog.png)
 
 This hows how Dataplex was able to harvest technical medata from Google Cloud Storgae bucket. 
 
-<br><br>
+<br>
 
-This concludes the lab module. Proceed to the main menu.
+<hr>
+
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab2-data-security/README.md) you will curate and standardize the data using Dataplex dataflow templates based task. 
 
 <hr>

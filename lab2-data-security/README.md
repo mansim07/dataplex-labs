@@ -5,14 +5,37 @@
 
 [Cloud Dataplex](https://cloud.google.com/dataplex/docs/lake-security) provides a single control plane for managing data security for distribued data. It translates and propagates  data roles to the underlying storage resource, setting the correct roles for each storage resource. The benefit is that you can grant a single Dataplex data role at the lake hierarchy (for example, a lake), and Dataplex maintains the specified access to data on all resources connected to that lake (for example, Cloud Storage buckets and BigQuery datasets are referred to by assets in the underlying zones). You can specify data roles at lake, zone and asset level. 
 
+### 1.1. Prerequisites
+Lab1-data-organization successfully completed.
+
+### 1.2. Duration
+~20 mins
+
+### 1.3 Concepts
+tbd
+
+### 1.4. Scope of this lab
+
+![Lab flow](/lab2-data-security/resources/imgs/Lab-2-flow.png)
+
+Most part of data security policy application is already taken care as part of terraform setup. 
+
 In this lab,  
- - you will grant data roles to the service accounts created by terraform to own and manage the data
+ - you will grant data roles to the "customer-sa" service accounts created by terraform to own and manage the customer domain data
  - you will learn various ways to monitor the security policy propagation
  - you will learn to apply the security policies both through the Dataplex UI as well Dataplex APIs 
  - you will learn how to publish cloud audit logs to bigquery for further analysis and reporting
 
+Service Accounts and Acess Overview
 
 ![Dataplex Security](/lab2-data-security/resources/imgs/dataplex-security-lab.png)
+
+### 1.5. Note
+Attribute store which allows you to set column-level, row-level and table-level policies is a preview feature and is on the roadmap to be part of this lab. 
+
+### 1.6. Documentation
+[Secure your lake](https://cloud.google.com/dataplex/docs/lake-security)
+<hr>
 
 ## 2. Lab
 
@@ -58,7 +81,9 @@ Cloud logging sink to capture the audit data which we can later query to run and
 
 <hr>
 
-### 2.2. Grant customer-sa@ service account the data owner for customer domain (Lake level pushdown)
+### 2.2. Apply Customer Domain Data Owner Policy(Lake Level push down) - UI
+
+Here you will grant "customer-sa@" service account the data owner role for customer domain.
 
 - **Step 1:** Pre-validation <br>
 
@@ -149,8 +174,10 @@ Cloud logging sink to capture the audit data which we can later query to run and
 
 <br>
 
-### 2.3.  Grant the Credit card analytics consumer sa read access to the Customer Data product zone(Zone Level security pushdown).**
+### 2.3. Apply Data Reader Policy for Customer Domain (Zone level push down) - UI
 <hr>
+
+Grant the Credit card analytics consumer sa read access to the Customer Data product zone(Zone Level security pushdown).**
 
 Using “Secure View” to provide the credit card analytics consumer domain access to the Customer Data Products. For this we will use the "Secure" functionality to the apply policy
 
@@ -166,7 +193,7 @@ Using “Secure View” to provide the credit card analytics consumer domain acc
 10. Verify Dataplex Data Reader roles appear for the principal. Use one of the methods outlined in Step#3 above. 
 
 
-### 2.4. Manage Security Policies for Central Operations domain(through Dataplex APIs)
+### 2.4. Manage Security Policies for Central Operations domain -  Dataplex APIs
 
 - **Step 1:**  Define and apply security policy to grant read access to all the domain service accounts(customer-sa@, cc-trans-consumer-sa@, cc-trans-sa@, merchant-sa@) to central managed common utilities (Central Operations Domain Lake -> COMMON UTILITIES zone) housed in the gcs bucket e.g. libs, jars, log files etc. As you observe this has been applied at the zone-level.
 
@@ -208,8 +235,9 @@ Using “Secure View” to provide the credit card analytics consumer domain acc
 
 
 
-### 2.4.  Go to BigQuery and perform analysis on the audit data to analyze and report 
+### 2.5. Analyze Dataplex Audit Data  
 
+Go to BigQuery and perform analysis on the audit data to analyze and report 
 
  - Open BigQuery UI, change the processing location to us-central1 and execute the below query after replacing the ${PROJECT_ID}
     ```bash 
@@ -222,3 +250,9 @@ In this lab you have learned:
 1. the different ways you can apply the security policies(terraform will be supported in future) <br>1.1 using Dataplex UI - both using the PERMISSIONS tab within Lakes, Zones and Assets and also using the "SECURE" tab under Manage <br>1.2 using Dataplex API
 2. how to route the Dataplex audit logs into BigQuery for further analysis and reporting
 3. that using Dataplex you can simply data security policy using a single policy for both buckets and datasets
+
+<hr>
+
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab3-data-curation/README.md) you will curate and standardize the data using Dataplex dataflow templates based task. 
+
+<hr>
