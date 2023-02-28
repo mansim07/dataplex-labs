@@ -126,10 +126,9 @@ By appending " --summary_to_stdout" flag to your data quality jobs, you can easi
     - Comeback to Logging screen -> Click on **Notification Channel** -> Click Refresh -> Choose the email id 
             - ![noti-email](/lab6-data-quality/resources/imgs/noti-email.png)
     - Click "Save" 
-    - Run the DQ job from #### 2.1.4 to see an alert in action
     - Sample Alert 
-              ![samplealert](/lab6-data-quality/resources/imgs/alert.png)
 
+              ![samplealert](/lab6-data-quality/resources/imgs/alert.png)
 
 #### 2.1.5  Execute the Data Quality task 
 
@@ -174,12 +173,11 @@ By appending " --summary_to_stdout" flag to your data quality jobs, you can easi
         "$TASK_ID"
     ```
         
-
 #### 2.1.6  Monitor the data quality job
-    - Go to **Dataplex UI** -> **Process** tab -> **"Data Quality"** tab
-    - You will find a DQ job running with name "customer-data-product-dq". The job will take about 2-3 mins to complete. 
-    - Once the job is successful, proceed to the next step
-
+- Go to **Dataplex UI** -> **Process** tab -> **"Data Quality"** tab
+- You will find a DQ job running with name "customer-data-product-dq". The job will take about 2-3 mins to complete. 
+- Once the job is successful, proceed to the next step
+- Check your email for the failure alert
 
 #### 2.1.7  Review the Data quality metrics 
 - Navigate to BigQuery->SQL Workspace and open the central_dq_results. Review the table and views created in this dataset. 
@@ -238,10 +236,10 @@ Once we have the DQ results available, using a custom utility which will automat
         --container-image-java-jars="gs://${PROJECT_ID}_dataplex_process/common/tagmanager-1.0-SNAPSHOT.jar" \
         --execution-args=^::^TASK_ARGS="--tag_template_id=projects/${PROJECT_ID}/locations/us-central1/tagTemplates/data_product_quality, --project_id=${PROJECT_ID},--location=us-central1,--lake_id=consumer-banking--customer--domain,--zone_id=customer-data-product-zone,--entity_id=customer_data,--input_file=data-product-quality-tag-auto.yaml"
         ```
-    - Monitor the job. Go to Dataplex -> Process tab --> Custom spark --> "customer-dp-dq-tag" job. Refresh the page if you don't see your job. 
-    - Validate the result. Go to Dataplex -> Search under Discover ->  type "tag:data_product_quality" into the search bar  
-    - The customer data product should be tagged with the data quality information as show below:
-        ![dq-tag-search](/lab6-data-quality/resources/imgs/dq-tag-search.png)
+- Monitor the job. Go to Dataplex -> Process tab --> Custom spark --> "customer-dp-dq-tag" job. Refresh the page if you don't see your job. 
+- Validate the result. Go to Dataplex -> Search under Discover ->  type "tag:data_product_quality" into the search bar  
+- The customer data product should be tagged with the data quality information as show below:
+    ![dq-tag-search](/lab6-data-quality/resources/imgs/dq-tag-search.png)
 
 #### 2.1.9   Use Composer to orchestrate the Data Quality Task 
 
