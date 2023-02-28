@@ -29,19 +29,15 @@ The labs will guide you through building a Data mesh using Dataplex's data gover
 
 <br>
 
-### 2.2 Pre-requisites
+### 2.2 Pre-requisites [VERY CRITICAL]
 
-1. Create a GCP Project <br>
-2. Grant the terraform user or service account the below IAM policies at the project level
+1. [CRITICAL for Setup] Create a GCP Project <br>
+2. [CRITICAL for Setup] Grant the terraform user or service account the below IAM policies at the project level
          - Owner
         - ServiceAccountTokenCreator
         - Organization Admin
         ![Admin Roles](/setup/resources/code_artifacts/imgs/admin_roles.png)
-For Argolis environment, use "admin@" account
-3. If VPC SC is enabled in your organization, the project must belong to the same [VPC Service Control perimeter](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) as the data destined to be in the lake. Refer to this link to use or [add Dataplex to VPC-SC](https://cloud.google.com/dataplex/docs/vpc-sc). 
-Ignore this for argolis account. 
-4. Make sure **us-central1** is allowed under your organization regions policy. Ignore for argolis. 
-5. For non-argolis accounts, the below org policies should be set at the project level before triggering the setup:<br>
+3. [CRITICAL for Setup] For non-argolis accounts, the below org policies should be set at the project level before triggering the setup:<br>
     - "compute.requireOsLogin" : false,
     - "compute.disableSerialPortLogging" : false,
     - "compute.requireShieldedVm" : false
@@ -50,7 +46,10 @@ Ignore this for argolis account.
     - "compute.restrictVpcPeering" : true
     - "compute.trustedImageProjects" : true,
     - "iam.disableCrossProjectServiceAccountUsage" :false #Only required when you want to set up in a separate project to your data project
-6. Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
+4. If VPC SC is enabled in your organization, the project must belong to the same [VPC Service Control perimeter](https://cloud.google.com/vpc-service-controls/docs/service-perimeters) as the data destined to be in the lake. Refer to this link to use or [add Dataplex to VPC-SC](https://cloud.google.com/dataplex/docs/vpc-sc). 
+Ignore this for argolis account. 
+5. Make sure **us-central1** is allowed under your organization regions policy. Ignore for argolis. 
+6. [CRITICAL for Setup] Make sure you have enough of disk space(1.5 GB - 2 GB)  for the terraform setup 
 
 ### 2.2 Run the Terraform Script 
 
