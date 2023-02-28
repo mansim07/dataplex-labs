@@ -10,7 +10,7 @@ We can leverage Dataplex's Catalog to register data products by bringing in addi
 Successful completion of lab1, lab2 and lab4
 
 ### 1.2. Duration
-~45  mins - 1 hr
+~45  mins
 
 ### 1.3 Concepts
 
