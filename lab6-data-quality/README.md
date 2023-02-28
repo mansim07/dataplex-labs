@@ -52,7 +52,7 @@ Auto Data Quality will be added in future
 
 ### 2.1  Execute a Cloud Data Quality Dataplex Task
 
-#### 2.1.1 Validate Data entities 
+#### 2.1.1 Validate Dataplex entities 
 
  - Validate the entites are already discovered and registered in Dataplex 
 

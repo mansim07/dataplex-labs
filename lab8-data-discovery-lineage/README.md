@@ -46,3 +46,10 @@ Now it's time to explore how you can use the Dataplex catalog to perform advance
 - **Step 2**: Click on the credit_card_transaction_data entry
 - **Step 3**: Click on Data Lineage to explore the lineage
     ![lineage](/lab8-data-discovery-lineage/resources/imgs/lineage.png)
+
+
+    <hr>
+
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab8-data-discovery-lineage/) where you will learn to discover data products and look at data lineage 
+
+<hr>
