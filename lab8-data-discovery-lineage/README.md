@@ -69,6 +69,6 @@ Customer data is the information that customers give us while interacting with o
 
 <hr>
 
-This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab8-data-discovery-lineage/) where you will learn to discover data products and look at data lineage 
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab8-data-discovery-lineage/) where you will learn to trigger a auto data profiling job
 
 <hr>
