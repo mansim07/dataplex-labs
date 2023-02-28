@@ -31,8 +31,9 @@ A highly flexible YAML syntax to declare your data quality rules. Your CloudDQ Y
 
 ### 1.4. Scope of this lab
 
-With an emphasis on using Dataplex data quality task (#2), we will perform an end-to-end data quality task for customer domain data product, i.e. 1 through 8, as illustrated in the below architecture, in today's lab.
+With an emphasis on using Dataplex data quality task (#2), we will perform an end-to-end data quality task for customer domain data product, in today's lab.
 
+Lab Flow
 - Reviewing the yaml file in which the dq rules are specified
 - Configuring and running Dataplex's Data Quality task
 - Reviewing the data quality metric published in BigQuery 
@@ -41,7 +42,7 @@ With an emphasis on using Dataplex data quality task (#2), we will perform an en
 - Creating data quality score tags for the data products in the catalog(again re-visit this in next register data product lab) 
 
 ### 1.5. Note
-Auto Data Quality will be added as part of a future lab. 
+Auto Data Quality will be added in future 
 
 ### 1.6. Documentation
 [About Data Quality](https://cloud.google.com/dataplex/docs/data-quality-overview)<br>
@@ -51,13 +52,13 @@ Auto Data Quality will be added as part of a future lab.
 
 ### 2.1  Execute a Cloud Data Quality Dataplex Task
 
-#### 2.1.1. Validate Data entities 
+#### 2.1.1 Validate Data entities 
 
  - Validate the entites are already discovered and registered in Dataplex 
 
     ![dataproduct-entities](/lab6-data-quality/resources/imgs/customer-dp-entities.png)
 
-#### 2.1.2.  Review the Yaml specification file
+#### 2.1.2  Review the Yaml specification file
 
 As part of the setup we have already defined a yaml file and stored in the gcs bucket  for assessing customer_data Data product quality. Let's review the yaml
 
@@ -77,7 +78,7 @@ Here we have performing 3 key DQ rules:
 You can learn more about Cloud DQ [here](https://github.com/GoogleCloudPlatform/cloud-data-quality). 
 
 
-#### 2.1.3.  Grant the security policy
+#### 2.1.3  Grant the security policy
 Just to make sure we have the necessary permissions, grant all the domain service accounts access to write data to central dq dataset
 
 - Open cloud shell and execute the below command to make sure you have the access granted 
@@ -99,7 +100,7 @@ Just to make sure we have the necessary permissions, grant all the domain servic
     ``` 
 - Go to BigQuery, check the permissions on "central_dq_results" dataset and make sure policy has been propagated
 
-#### 2.1.4.    Setup Incident Management using Cloud Logging and Monitoring 
+#### 2.1.4    Setup Incident Management using Cloud Logging and Monitoring 
 
 By appending " --summary_to_stdout" flag to your data quality jobs, you can easily route the DQ summary logs to Cloud Logging. 
 
@@ -130,7 +131,7 @@ By appending " --summary_to_stdout" flag to your data quality jobs, you can easi
               ![samplealert](/lab6-data-quality/resources/imgs/alert.png)
 
 
-#### 2.1.5.  Execute the Data Quality task 
+#### 2.1.5  Execute the Data Quality task 
 
 - Run the DQ job. No Changes Needed. 
     ```bash 
@@ -174,13 +175,13 @@ By appending " --summary_to_stdout" flag to your data quality jobs, you can easi
     ```
         
 
-#### 2.1.6.  Monitor the data quality job
+#### 2.1.6  Monitor the data quality job
     - Go to **Dataplex UI** -> **Process** tab -> **"Data Quality"** tab
     - You will find a DQ job running with name "customer-data-product-dq". The job will take about 2-3 mins to complete. 
     - Once the job is successful, proceed to the next step
 
 
-#### 2.1.7.  Review the Data quality metrics 
+#### 2.1.7  Review the Data quality metrics 
 - Navigate to BigQuery->SQL Workspace and open the central_dq_results. Review the table and views created in this dataset. 
 - Click on the dq_results table to preview the data quality results. Check the rows which shows the data quality metrics for the rules defined in the yaml configuration file 
     ![dq_results](/lab6-data-quality/resources/imgs/dq_results.png)
@@ -190,7 +191,7 @@ By appending " --summary_to_stdout" flag to your data quality jobs, you can easi
     SELECT rule_binding_id, rule_id,table_id,column_id,dimension, failed_records_query FROM `<your-project-id>.central_dq_results.dq_results` WHERE complex_rule_validation_success_flag is false or failed_percentage > 0.0
     ```
 
-#### 2.1.8.  Create a Data Quality Looker Studio Dashboard 
+#### 2.1.8  Create a Data Quality Looker Studio Dashboard 
 To build a sample cloudDQ dashboard in Looker Studio, please follow the steps below:
 
 1.  Open a new normal browser window and paste the following link in the navigation bar 
@@ -219,7 +220,7 @@ To build a sample cloudDQ dashboard in Looker Studio, please follow the steps be
         ![dq-dashboard](/lab6-data-quality/resources/imgs/dq-dashboard.png)
 
 
-#### 2.1.8.  Create a Data Quality Score Tag  in the Catalog 
+#### 2.1.8  Create a Data Quality Score Tag  in the Catalog 
 Once we have the DQ results available, using a custom utility which will automatically calculate the dq scores and create the data product tags. We have pre-built the utility as a java library which we can now orchestrate using Dataplex's serverless spark task 
      - Open cloud shell ad execute the below command 
         ```bash 
@@ -242,7 +243,7 @@ Once we have the DQ results available, using a custom utility which will automat
     - The customer data product should be tagged with the data quality information as show below:
         ![dq-tag-search](/lab6-data-quality/resources/imgs/dq-tag-search.png)
 
-#### 2.1.8.   Use Composer to orchestrate the Data Quality Task 
+#### 2.1.9   Use Composer to orchestrate the Data Quality Task 
 
 1. Go to Airflow UI 
 2. Click on the “data_governane_dq_customer_data_product_wf”
