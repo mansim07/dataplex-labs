@@ -7,6 +7,7 @@ In this self-service lab, you will discover how to build and maintain an end-to-
 
 The labs will guide you through building a Data mesh using Dataplex's data governance and management capabilities and is based on data journey of a fictious bank called "Bank of Mars".
 
+
 ### 1.2. Process Flow 
 ![process flow](/setup/resources/code_artifacts/imgs/Process-flow1.png)
 
@@ -18,7 +19,7 @@ The labs will guide you through building a Data mesh using Dataplex's data gover
 
 ### 1.4. Data Mesh high level architecture
 
-![Datmesh Architecture](setup/resources/code_artifacts/imgs/Datamesh-architecture.png)
+![Datamesh Architecture](setup/resources/code_artifacts/imgs/Datamesh-architecture.png)
 
 ## 2. Setup 
 
