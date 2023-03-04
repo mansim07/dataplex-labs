@@ -276,7 +276,7 @@ resource "null_resource" "dag_setup" {
     command = <<-EOT
     export airflow_dag_folder=$(gcloud composer environments describe ${var.project_id}-composer --location="us-central1" | grep dagGcsPrefix | awk  '{print $2}')
     export airflow_data_folder=$(gcloud composer environments describe ${var.project_id}-composer --location="us-central1" | grep dagGcsPrefix | awk  '{print $2}' | sed -e 's/dags/data/')
-    gsutil mv gs://${local._dataplex_process_bucket_name}/dags/* $airflow_dag_folder
+    gsutil mv gs://${local._dataplex_process_bucket_name}/composer/dags/* $airflow_dag_folder
     gsutil mv gs://${local._dataplex_process_bucket_name}/composer/data/* $airflow_data_folder/
     EOT
     }
