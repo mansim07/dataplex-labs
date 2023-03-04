@@ -72,23 +72,23 @@ resource "null_resource" "setup_code" {
       java -cp common/tagmanager-1.0-SNAPSHOT.jar  com.google.cloud.dataplex.setup.CreateTagTemplates ${var.project_id} ${var.location} data_product_quality
       java -cp common/tagmanager-1.0-SNAPSHOT.jar  com.google.cloud.dataplex.setup.CreateTagTemplates ${var.project_id} ${var.location} data_product_exchange
       java -cp common/tagmanager-1.0-SNAPSHOT.jar  com.google.cloud.dataplex.setup.CreateDLPInspectionTemplate ${var.project_id} global marsbank_dlp_template
-      sed -i s/_project_datagov_/${var.project_id}/g merchant-source-configs/dq_merchant_data_product.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g merchant-source-configs/dq_merchant_gcs_data.yaml
-      sed -i s/_project_datasto_/${var.project_id}/g merchant-source-configs/dq_merchant_gcs_data.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g customer-source-configs/dq_customer_data_product.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g customer-source-configs/dq_customer_gcs_data.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g customer-source-configs/dq_tokenized_customer_data_product.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g transactions-source-configs/dq_transactions_data_product.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g transactions-source-configs/dq_transactions_gcs_data.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g transactions-consumer-configs/dq_cc_analytics_data_product.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g merchant-source-configs/data-product-classification-tag-auto.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g customer-source-configs/data-product-classification-tag-auto.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g transactions-source-configs/data-product-classification-tag-auto.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g transactions-consumer-configs/data-product-classification-tag-auto.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g merchant-source-configs/data-product-quality-tag-auto.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g customer-source-configs/data-product-quality-tag-auto.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g transactions-source-configs/data-product-quality-tag-auto.yaml
-      sed -i s/_project_datagov_/${var.project_id}/g transactions-consumer-configs/data-product-quality-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/merchant-source-configs/dq_merchant_data_product.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/merchant-source-configs/dq_merchant_gcs_data.yaml
+      sed -i s/_project_datasto_/${var.project_id}/g code/merchant-source-configs/dq_merchant_gcs_data.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/customer-source-configs/dq_customer_data_product.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/customer-source-configs/dq_customer_gcs_data.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/customer-source-configs/dq_tokenized_customer_data_product.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/transactions-source-configs/dq_transactions_data_product.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/transactions-source-configs/dq_transactions_gcs_data.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/transactions-consumer-configs/dq_cc_analytics_data_product.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/merchant-source-configs/data-product-classification-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/customer-source-configs/data-product-classification-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/transactions-source-configs/data-product-classification-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/transactions-consumer-configs/data-product-classification-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/merchant-source-configs/data-product-quality-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/customer-source-configs/data-product-quality-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/transactions-source-configs/data-product-quality-tag-auto.yaml
+      sed -i s/_project_datagov_/${var.project_id}/g code/transactions-consumer-configs/data-product-quality-tag-auto.yaml
       gsutil -m cp -r * gs://${var.dataplex_process_bucket_name}
     EOT
     }
