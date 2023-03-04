@@ -3,30 +3,28 @@
 ## 1. About
 Google Cloud Dataplex is an intelligent data fabric that helps you unify distributed data and automate data management and governance across that data to power analytics at scale.
 
-In this self-service lab, you will discover how to build and maintain an end-to-end data mesh based on a financial services use case with data from multiple domains. You will start by creating domain-specific lakes and zones out of the distributed data saved across GCS buckets and BQ datasets. Use Dataplex to manage data security and to build products involving data curation, data migration, data quality, data classification, and business and technical metadata harvesting, cataloging and tagging. Also includes automation using terraform and Google Cloud composer(Airflow).
-
-The labs will guide you through building a Data mesh using Dataplex's data governance and management capabilities and is based on data journey of a fictious bank called "Bank of Mars".
+In this self-service lab, you will discover how to build and maintain an end-to-end data mesh  for  fictitious bank called "Bank of Mars" with data from multiple domains ane leveraging Dataplex's data governance and management capabilities. You will start by creating domain-specific lakes and zones out of the distributed data saved across GCS buckets and BQ datasets. Use Dataplex to manage data security and to build products involving data curation, data migration, data quality, data classification, and register data product through harvesting business and technical metadata, cataloging and tagging. Also includes automation using terraform and Google Cloud composer(Airflow).
 
 
 ### 1.2. Process Flow 
-![process flow](/setup/resources/code_artifacts/imgs/Process-flow1.png)
+![process flow](/setup/resources/imgs/Process-flow1.png)
 
 ### 1.3. Data Flow 
-![data flow](/setup/resources/code_artifacts/imgs/Data-flow.png)
+![data flow](/setup/resources/imgs/Data-flow.png)
 
 ### 1.3. Data Domains and Asset Mapping
-![Data Domains](/setup/resources/code_artifacts/imgs/Domain-structure.png)
+![Data Domains](/setup/resources/imgs/Domain-structure.png)
 
 ### 1.4. Data Mesh high level architecture
 
-![Datamesh Architecture](setup/resources/code_artifacts/imgs/Datamesh-architecture.png)
+![Datamesh Architecture](setup/resources/imgs/Datamesh-architecture.png)
 
 ## 2. Setup 
 
 ### 2.1 The setup flow
 <br>
 
-![Setup Flow](/setup/resources/code_artifacts/imgs/Setup-flow.png)
+![Setup Flow](/setup/resources/imgs/Setup-flow.png)
 
 <br>
 
@@ -37,7 +35,7 @@ The labs will guide you through building a Data mesh using Dataplex's data gover
          - Owner
         - ServiceAccountTokenCreator
         - Organization Admin
-        ![Admin Roles](/setup/resources/code_artifacts/imgs/admin_roles.png)
+        ![Admin Roles](/setup/resources/imgs/admin_roles.png)
 3. [CRITICAL for Setup] For non-argolis accounts, the below org policies should be set at the project level before triggering the setup:<br>
     - "compute.requireOsLogin" : false,
     - "compute.disableSerialPortLogging" : false,
@@ -81,7 +79,7 @@ In cloud shell, declare the following variables after substituting with yours.
     ```bash
     echo "export PROJECT_ID=$(gcloud config get-value project)" >> ~/.profile
     ```
-    ![profile_validate](/setup/resources/code_artifacts/imgs/profile-validate.png)
+    ![profile_validate](/setup/resources/imgs/profile-validate.png)
 
 
 #### 2.2.5. Validate the user
@@ -132,18 +130,18 @@ gsutil cat gs://${PROJECT_ID}_customers_raw_data/customers_data/dt=2022-12-01/cu
 
 Go to BigQuery UI -> validate the datasets as shown below are created<br>
 
-![BQ Datasets](setup/resources/code_artifacts/imgs/Bq-datasets.png)
+![BQ Datasets](setup/resources/imgs/Bq-datasets.png)
 
 #### 2.3.3. Validate the Dataplex lakes and zones 
 
  Go to Dataplex -> Manage -> Verify lakes and assets are created as per the below screenshot<br>
- ![Dataplex-ui](/setup/resources/code_artifacts/imgs/Dataplex-ui.png)
+ ![Dataplex-ui](/setup/resources/imgs/Dataplex-ui.png)
 
 #### 2.3.4. Validate Composer environment
 
 Go to Composer… Then Environments…  Click on <your-project-id>-composer link..then click on 'Environment Variables'<br>
 
-![Composer Env](/setup/resources/code_artifacts/imgs/Composer-env.png)
+![Composer Env](/setup/resources/imgs/Composer-env.png)
 
 <hr>
 
@@ -152,7 +150,7 @@ If all the above validations pass, you're setup is not complete. Please proceed 
 ## 3. Labs 
 
 ### 3.1. Lab Flow
-![Lab Flow](/setup/resources/code_artifacts/imgs/Lab-flow.png)
+![Lab Flow](/setup/resources/imgs/Lab-flow.png)
 
 ### 3.2. Lab Details
 We have a series of labs designed to get hands-on-experience with Dataplex concepts. Please refer to each of the lab specific README for more information on the labs.
