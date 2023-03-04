@@ -1,5 +1,4 @@
 # Cloud Dataplex Self-service labs
-
 ## 1. About
 Google Cloud Dataplex is an intelligent data fabric that helps you unify distributed data and automate data management and governance across that data to power analytics at scale.
 
