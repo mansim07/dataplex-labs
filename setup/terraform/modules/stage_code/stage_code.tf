@@ -65,7 +65,7 @@ resource "google_bigquery_dataset" "bigquery_datasets" {
 resource "null_resource" "setup_code" {
   provisioner "local-exec" {
     command = <<-EOT
-      cd ../resources/code_artifacts
+      cd ../resources/
       gsutil -u ${var.project_id} cp gs://dataplex-dataproc-templates-artifacts/* ./common/.
       cp ./libs/tagmanager-1.0-SNAPSHOT.jar ./common/.
       java -cp common/tagmanager-1.0-SNAPSHOT.jar  com.google.cloud.dataplex.setup.CreateTagTemplates ${var.project_id} ${var.location} data_product_information

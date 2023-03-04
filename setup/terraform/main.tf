@@ -228,8 +228,8 @@ resource "null_resource" "dataplex_iam" {
     command = <<-EOT
       rm -rf /tmp/security.log
       rm -rf /tmp/createbqtable.log
-      bash ~/dataplex-labs/setup/resources/code_artifacts/scripts/apply-security-policies.sh >> /tmp/security.log
-      bash ~/dataplex-labs/setup/resources/code_artifacts/bq-scripts/create-customer-dps.sh >> /tmp/createbqtable.log
+      bash ~/dataplex-labs/setup/resources/scripts/apply-security-policies.sh >> /tmp/security.log
+      bash ~/dataplex-labs/setup/resources/bq-scripts/create-customer-dps.sh >> /tmp/createbqtable.log
     EOT
     }
     depends_on = [google_compute_firewall.user_firewall_rule
