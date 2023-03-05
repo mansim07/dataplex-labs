@@ -39,7 +39,7 @@ locals {
 # Generate Sample Data
 ####################################################################################
 #retrieve data generator
-
+/*
 resource "null_resource" "git_clone_datagen" {
   provisioner "local-exec" {
     command = <<-EOT
@@ -48,14 +48,14 @@ resource "null_resource" "git_clone_datagen" {
       EOT 
   }
  
- /* provisioner "local-exec" {
+  provisioner "local-exec" {
     command = <<-EOT
       rm -rf ./datamesh-datagenerator
       rm /tmp/data/*
     EOT
     when    = destroy
-  } */
-}
+  } 
+} 
 
 
 #run data creation process
@@ -64,6 +64,23 @@ resource "null_resource" "run_datagen" {
     command = <<-EOT
       cd ./datamesh-datagenerator
       ./oneclick_deploy.sh ${var.date_partition} ${var.tmpdir} ${var.project_id} ${var.customers_bucket_name} ${var.merchants_bucket_name} ${var.transactions_bucket_name}
+    EOT
+    }
+    depends_on = [null_resource.git_clone_datagen]
+
+  }
+*/
+
+####################################################################################
+# Extract Data
+####################################################################################
+
+
+resource "null_resource" "run_datagen" {
+  provisioner "local-exec" {
+    command = <<-EOT
+      cd ../resources/sample_data
+      unzip -o synthetic_financial_data.zip
     EOT
     }
     depends_on = [null_resource.git_clone_datagen]
@@ -167,7 +184,7 @@ resource "time_sleep" "sleep_after_storage" {
 resource "google_storage_bucket_object" "gcs_customers_objects" {
   for_each = {
     format("%s/customer.csv", local._abs_tmpdir) : format("customers_data/dt=%s/customer.csv", var.date_partition),
-    format("%s/cc_customer.csv", local._abs_tmpdir) : format("cc_customers_data/dt=%s/cc_customer.csv", var.date_partition)
+    format("../resources/sample_data/cc_customer.csv", local._abs_tmpdir) : format("cc_customers_data/dt=%s/cc_customer.csv", var.date_partition)
   }
   name        = each.value
   source      = each.key
@@ -198,7 +215,7 @@ resource "google_storage_bucket_object" "cust_folder" {
 
 resource "google_storage_bucket_object" "gcs_merchants_objects" {
   for_each = {
-    format("%s/merchants.csv", local._abs_tmpdir) : format("merchants_data/dt=%s/merchants.csv", var.date_partition),
+    format("../resources/sample_data/merchants.csv", local._abs_tmpdir) : format("merchants_data/dt=%s/merchants.csv", var.date_partition),
     "./datamesh-datagenerator/merchant_data/data/ref_data/mcc_codes.csv" : format("mcc_codes/dt=%s/mcc_codes.csv", var.date_partition),
   }
   name        = each.value
@@ -223,7 +240,7 @@ resource "google_storage_bucket_object" "merchant_folder" {
 
 resource "google_storage_bucket_object" "gcs_transaction_objects" {
   for_each = {
-    format("%s/trans_data.csv", local._abs_tmpdir) : format("auth_data/dt=%s/trans_data.csv", var.date_partition)
+    format("../resources/sample_data/trans_data.csv", local._abs_tmpdir) : format("auth_data/dt=%s/trans_data.csv", var.date_partition)
   }
   name        = each.value
   source      = each.key
@@ -252,7 +269,7 @@ resource "google_storage_bucket_object" "gcs_transaction_refdata_objects" {
     "card_read_type"
   ])
   name        = format("ref_data/%s/%s.csv", each.key, each.key)
-  source      = format("./datamesh-datagenerator/transaction_data/data/ref_data/%s.csv", each.key)
+  source      = format("../resources/sample_data/%s.csv", each.key)
   bucket      = var.transactions_ref_bucket_name
   depends_on = [time_sleep.sleep_after_storage]
 }

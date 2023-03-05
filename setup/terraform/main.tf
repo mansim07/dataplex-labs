@@ -46,6 +46,10 @@ locals {
   _project_number = data.google_project.project.number
 }
 
+locals {
+  _project_number = data.google_project.project.number
+  _date_partition = formatdate("YYYY-MM-DD", timestamp())
+}
 
 
 ##########################################################################################################
@@ -58,7 +62,7 @@ module "stage_data" {
   project_id                            = var.project_id
   data_gen_git_repo                     = local._data_gen_git_repo
   location                              = var.location
-  date_partition                        = var.date_partition
+  date_partition                        = local._date_partition #var.date_partition
   tmpdir                                = var.tmpdir
   customers_bucket_name                 = local._customers_bucket_name
   customers_curated_bucket_name         = local._customers_curated_bucket_name
@@ -256,6 +260,7 @@ module "composer" {
   project_number                = local._project_number
   prefix                        = local._prefix_first_element
   dataplex_process_bucket_name  = local._dataplex_process_bucket_name
+  date_partition                        =  local._date_partition #var.date_partition
   
   depends_on = [null_resource.dataplex_iam]
 } 
