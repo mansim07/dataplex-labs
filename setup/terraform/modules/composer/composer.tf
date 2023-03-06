@@ -24,6 +24,7 @@ variable "location" {}
 variable "network_id" {}
 variable "prefix" {}
 variable "dataplex_process_bucket_name" {}
+variable "date_partition" {}
 
 
 locals {
@@ -193,8 +194,8 @@ resource "google_composer_environment" "composer_env" {
         AIRFLOW_VAR_MERCHANT_DX_INPUT_FILE = "data-product-exchange-tag-manual.yaml",
         AIRFLOW_VAR_MERCHANT_DX_INPUT_PATH = "gs://${var.dataplex_process_bucket_name}/code/merchant-source-configs",
         AIRFLOW_VAR_MERCHANT_ENTITY_LIST_FILE_PATH = "/home/airflow/gcs/data/merchant_data_products/entities.txt",
-        AIRFLOW_VAR_MERCHANT_PARTITION_DATE = "2022-12-01",
-        AIRFLOW_VAR_PARTITION_DATE = "2022-12-01",
+        AIRFLOW_VAR_MERCHANT_PARTITION_DATE = "${var.date_partition}",
+        AIRFLOW_VAR_PARTITION_DATE = "${var.date_partition}",
         AIRFLOW_VAR_TABLE_LIST_FILE_PATH = "/home/airflow/gcs/data/tablelist.txt",
         AIRFLOW_VAR_TAG_TEMPLATE_DATA_PRODUCT_CLASSIFICATION = "projects/${var.project_id}/locations/${var.location}/tagTemplates/data_product_classification",
         AIRFLOW_VAR_TAG_TEMPLATE_DATA_PRODUCT_EXCHANGE = "projects/${var.project_id}/locations/${var.location}/tagTemplates/data_product_exchange",
@@ -215,7 +216,7 @@ resource "google_composer_environment" "composer_env" {
         AIRFLOW_VAR_TRANSACTIONS_DX_INPUT_FILE = "data-product-exchange-tag-manual.yaml",
         AIRFLOW_VAR_TRANSACTIONS_DX_INPUT_PATH = "gs://${var.dataplex_process_bucket_name}/code/transactions-source-configs/",
         AIRFLOW_VAR_TRANSACTIONS_ENTITY_LIST_FILE_PATH = "/home/airflow/gcs/data/transactions_data_products/entities.txt",
-        AIRFLOW_VAR_TRANSACTIONS_PARTITION_DATE = "2022-12-01",
+        AIRFLOW_VAR_TRANSACTIONS_PARTITION_DATE = "${var.date_partition}",
         AIRFLOW_VAR_CUSTOMER_DQ_DP_INPUT_YAML="gs://${var.dataplex_process_bucket_name}/code/customer-source-configs/dq_customer_data_product.yaml",
         AIRFLOW_VAR_TOKCUSTOMER_DQ_DP_INPUT_YAML="gs://${var.dataplex_process_bucket_name}/code/customer-source-configs/dq_tokenized_customer_data_product.yaml",
         AIRFLOW_VAR_MERCHANT_DQ_DP_INPUT_YAML="gs://${var.dataplex_process_bucket_name}/code/merchant-source-configs/dq_merchant_data_product.yaml",

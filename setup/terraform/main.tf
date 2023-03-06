@@ -44,10 +44,6 @@ data "google_project" "project" {}
 
 locals {
   _project_number = data.google_project.project.number
-}
-
-locals {
-  _project_number = data.google_project.project.number
   _date_partition = formatdate("YYYY-MM-DD", timestamp())
 }
 
@@ -232,8 +228,8 @@ resource "null_resource" "dataplex_iam" {
     command = <<-EOT
       rm -rf /tmp/security.log
       rm -rf /tmp/createbqtable.log
-      bash ~/dataplex-labs/setup/resources/scripts/apply-security-policies.sh >> /tmp/security.log
-      bash ~/dataplex-labs/setup/resources/create-customer-dps.sh >> /tmp/createbqtable.log
+      bash ./resources/scripts/apply-security-policies.sh >> /tmp/security.log
+      bash ./resources/scripts/create-customer-dps.sh >> /tmp/createbqtable.log
     EOT
     }
     depends_on = [google_compute_firewall.user_firewall_rule

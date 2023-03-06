@@ -3,7 +3,7 @@
 export PROJECT_ID=$(gcloud config get-value project)
 
 bq mk \
-    --schema ~/dataplex-labs/setup/resources/customer-schema.json \
+    --schema ../resources/scripts/customer-schema.json \
     ${PROJECT_ID}:customer_data_product.customer_data
 
 
@@ -18,5 +18,5 @@ bq mk \
 ${PROJECT_ID_DW}:auth_data_product.auth_table
 
 bq mk \
-    --schema cc_number INT64,cc_expiry STRING,cc_provider STRING,cc_ccv INT64,cc_card_type STRING,client_id STRING,token STRING,ingest_date DATE \
+    --schema cc_number:INT64,cc_expiry:STRING,cc_provider:STRING,cc_ccv:INT64,cc_card_type:STRING,client_id:STRING,token:STRING,ingest_date:DATE \
     ${PROJECT_ID}:customer_data_product.cc_customer_data

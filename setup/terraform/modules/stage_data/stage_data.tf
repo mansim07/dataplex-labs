@@ -83,7 +83,7 @@ resource "null_resource" "run_datagen" {
       unzip -o synthetic_financial_data.zip
     EOT
     }
-    depends_on = [null_resource.git_clone_datagen]
+   # depends_on = [null_resource.git_clone_datagen]
 
   }
 
@@ -183,8 +183,8 @@ resource "time_sleep" "sleep_after_storage" {
 
 resource "google_storage_bucket_object" "gcs_customers_objects" {
   for_each = {
-    format("%s/customer.csv", local._abs_tmpdir) : format("customers_data/dt=%s/customer.csv", var.date_partition),
-    format("../resources/sample_data/cc_customer.csv", local._abs_tmpdir) : format("cc_customers_data/dt=%s/cc_customer.csv", var.date_partition)
+    format("../resources/sample_data/customer.csv") : format("customers_data/dt=%s/customer.csv", var.date_partition),
+    format("../resources/sample_data/cc_customer.csv") : format("cc_customers_data/dt=%s/cc_customer.csv", var.date_partition)
   }
   name        = each.value
   source      = each.key
@@ -215,8 +215,8 @@ resource "google_storage_bucket_object" "cust_folder" {
 
 resource "google_storage_bucket_object" "gcs_merchants_objects" {
   for_each = {
-    format("../resources/sample_data/merchants.csv", local._abs_tmpdir) : format("merchants_data/dt=%s/merchants.csv", var.date_partition),
-    "./datamesh-datagenerator/merchant_data/data/ref_data/mcc_codes.csv" : format("mcc_codes/dt=%s/mcc_codes.csv", var.date_partition),
+    format("../resources/sample_data/merchants.csv",) : format("merchants_data/dt=%s/merchants.csv", var.date_partition),
+    "../resources/sample_data/mcc_codes.csv" : format("mcc_codes/dt=%s/mcc_codes.csv", var.date_partition),
   }
   name        = each.value
   source      = each.key
@@ -240,7 +240,7 @@ resource "google_storage_bucket_object" "merchant_folder" {
 
 resource "google_storage_bucket_object" "gcs_transaction_objects" {
   for_each = {
-    format("../resources/sample_data/trans_data.csv", local._abs_tmpdir) : format("auth_data/dt=%s/trans_data.csv", var.date_partition)
+    format("../resources/sample_data/trans_data.csv") : format("auth_data/dt=%s/trans_data.csv", var.date_partition)
   }
   name        = each.value
   source      = each.key
@@ -307,8 +307,8 @@ resource "google_bigquery_dataset" "bigquery_datasets" {
 ####################################################################################
 
 resource "random_integer" "jobid" {
-  min     = 1000
-  max     = 1999
+  min     = 10
+  max     = 19999
 }
 
 resource "google_bigquery_job" "job" {
