@@ -122,7 +122,7 @@ In this lab, you learned how to use the built-in one-click templatized Dataplex 
 
 <hr>
 
-This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab4-data-products/README.md) you will use build the data products i.e move from refined to data product layer. 
+This concludes the lab module. Either proceed to the [main menu](../README.md) or to the [next module](../lab4-build-data-products/README.md) you will use build the data products i.e move from refined to data product layer. 
 
 <hr>
 
