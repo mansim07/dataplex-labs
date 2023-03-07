@@ -137,8 +137,7 @@ Here you will grant "customer-sa@" service account the data owner role for custo
              curl -X \
             GET -H \
             "Authorization: Bearer $(gcloud auth print-access-token)" -H \
-            "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain \
-            /zones/customer-raw-zone/assets/customer-raw-data
+            "Content-Type: application.json" https://dataplex.googleapis.com/v1/projects/${PROJECT_ID}/locations/us-central1/lakes/consumer-banking--customer--domain/zones/customer-raw-zone/assets/customer-raw-data
             ```
             
             ![Dataplex Verify Image](/lab2-data-security/resources/imgs/dataplex-security-status-api.png)
