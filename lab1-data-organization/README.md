@@ -66,7 +66,7 @@ gcloud dataplex lakes create ${LAKE_NM} \
  --project=${PROJECT_ID} \
  --location=${LOCATION} \
  --labels=domain_type=source \
- --display-name="Customer Domain" \
+ --display-name="Customer Domain"
 ```
 
 This takes about ~90 seconds<br>
