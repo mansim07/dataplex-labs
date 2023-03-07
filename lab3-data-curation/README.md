@@ -16,8 +16,6 @@ tbd
 ### 1.4. Scope of this lab
 As part of this lab we will curate the Customer Data using Dataplex's Curation Task 
 
-    Note: ADD "Service Account User Role" for active UI User before proceeeding
-
 
 ### 1.5. Note
 This lab is optional
