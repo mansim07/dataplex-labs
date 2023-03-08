@@ -98,7 +98,7 @@ The Customer Raw data has 2 feeds coming into the gcs raw bucket. We will conver
     - Scroll down to Resource details and click the External URL link
         ![external_url](/lab3-data-curation/resources/imgs/external_url.png)
     - Open customers_data folder 
-    - Open the dt=2022-01-01 folder
+    - Open the dt=2022-12-01 folder
     - You should see the "customer.parquet" file created here
 
 - **Step10:** Validate the metadata 
@@ -107,12 +107,12 @@ The Customer Raw data has 2 feeds coming into the gcs raw bucket. We will conver
 
     - Go to Dataplex UI 
 
-    - Navigate to the Discover menu, Search optin 
+    - Navigate to the Discover menu, Search option 
 
     - Open 'Consumer banking - Customer Domain' and select 'Customer Curated Zone' to filter the assets in the curated layer. 
      ![filtered search](/lab3-data-curation/resources/imgs/filter_search.png)
 
-    - Select **customer_curated_data** from the list of assets shown on the right panel to see the following display. Validate the entry details to see the parquet format file information 
+    - Select **customer_data** from the list of assets shown on the right panel to see the following display. Validate the entry details to see the parquet format file information 
     ![curated metadata](/lab3-data-curation/resources/imgs/curated_metadata.png)
 
 Suggestion: As a homework, try to curate the merchants data.  
