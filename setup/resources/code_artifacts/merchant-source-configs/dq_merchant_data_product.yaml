@@ -191,5 +191,5 @@ rule_bindings:
       - NO_REFERENTIAL_INTEGRITY_VIOLATION_IN_OPERATOR:
           ref_data_project: _project_datagov_
           ref_data_dataset: merchants_ref_data
-          ref_data_table_id: mcc_codes
+          ref_data_table_id: mcc_code
           ref_data_column_id: mcc
