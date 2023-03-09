@@ -183,7 +183,7 @@ Using “Secure View” to provide the credit card analytics consumer domain acc
 4. Expand on the **"**Consumer Banking -  Customer Domain"** lake
 5. Click on the **"Customer Data Product Zone"**
 6. Click on **+Grant Access**
-7. Choose "cc-trans-consumer-sa@<your-project-id>.iam.gserviceaccount.com as the principle
+7. Choose "cc-trans-consumer-sa@your-project-id.iam.gserviceaccount.com" as the principle
 8. Add the **Dataplex Data reader** roles
 9. Click on the Save button 
 10. Verify Dataplex Data Reader roles appear for the principal. Use one of the methods outlined in Step#3 above. 
