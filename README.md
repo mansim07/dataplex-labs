@@ -146,7 +146,7 @@ Go to Composer… Then Environments…  Click on <your-project-id>-composer link
 
 <hr>
 
-If all the above validations pass, you're setup is not complete. Please proceed to the Labs.
+If all the above validations pass, you're setup is complete. Please proceed to the Labs.
 
 ## 3. Labs 
 
