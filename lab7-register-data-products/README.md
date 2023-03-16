@@ -211,7 +211,7 @@ Above we learned how to create and update the tags manually, now let’s see how
     - **data_governance_merchant_dp_info_tag**
     - **data_governance_merchant_exchange_tag**
 
-### 2.4 Create bulk tags for Transactions Domain(Composer )  
+### 2.5 Create bulk tags for Transactions Domain(Composer )  
 This task is optional and finish this task only if you have time left for your lab. 
 
 - **Step1**: Follow the same steps you used above for triggering the below set of DAGs: and wait for its completion. Execute the below DAGs in airflow
