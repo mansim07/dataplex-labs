@@ -65,15 +65,16 @@ Make sure tag templates are created in ${PROJECT_ID}  created. Go to Dataplex â†
 
 #### 2.1.3  Validate the DLP results are populated
 Make sure Data is populated by the DLP job profiler into ${PROJECT_ID}.central_dlp_data dataset. If the data has not been populated the data classification tags will fail. 
-    ```bash 
-    export PROJECT_ID=$(gcloud config get-value project)
 
-    bq query --use_legacy_sql=false \
-    "SELECT
-    COUNT(*)
-    FROM
-    ${PROJECT_ID}.central_dlp_data.dlp_data_profiles"
-    ```
+```bash 
+export PROJECT_ID=$(gcloud config get-value project)
+
+bq query --use_legacy_sql=false \
+"SELECT
+COUNT(*)
+FROM
+${PROJECT_ID}.central_dlp_data.dlp_data_profiles"
+```
 
 ### 2.2 Data Ownership Tag for Customer Data Product(Custom Spark Task)  
 
